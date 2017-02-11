@@ -1,0 +1,11 @@
+*.egg-info/
+*.pyc
+.coverage
+/bin/
+/build/
+/dist/
+/htmlcov/
+/include/
+/lib/
+/local/
+/man/

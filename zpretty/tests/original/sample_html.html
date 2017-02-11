@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      lang="en"
+      i18n:domain="plone"
+>
+  <body>
+    <div></div>
+    <div></div><!-- -->
+    <div class="b"
+         id="a"
+    >test
+
+    </div><!-- #a -->
+    <tal:test define="
+                a;; a;
+                b b;
+              "
+              attributes="
+                hello;
+                world;
+              "
+    />
+    <!--
+      <strong>a</strong>
+    -->
+    <tal:example>
+      <p>
+        Inside a tal!
+      </p>
+    </tal:example>
+  </body>
+  <div tal:condition="nothing"
+       i18n:domain="test"
+  >
+    Whitelines are not stripped away
+
+    <input name="search"
+           type="text"
+    />
+  </div>
+</html>
