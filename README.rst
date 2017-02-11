@@ -1,5 +1,9 @@
 
 
+.. image:: https://travis-ci.org/collective/zpretty.svg?branch=master
+    :target: http://travis-ci.org/collective/zpretty.svg
+
+
 A tool to format in a **very opinionated** way
 HTML, XML and text containing XML snippets.
 
@@ -90,6 +94,8 @@ RUNNING TESTS
 ::
 
     $ make test
+
+
 
 
 TODO

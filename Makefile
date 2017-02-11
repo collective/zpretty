@@ -1,15 +1,16 @@
 .PHONY: nosetests test flake8
 
-all: bin/python test
+all: bin/python
 test: nosetests flake8
 
 bin/python:
 	@virtualenv .
-	@bin/python setup.py dev
+	@bin/pip install -U pip
+	@bin/pip install -U .[development,test]
 
 nosetests:
 	@echo "==== Running nosetests ===="
-	@bin/nosetests --rednose
+	@bin/nosetests
 
 flake8:
 	@echo "==== Running Flake8 ===="
