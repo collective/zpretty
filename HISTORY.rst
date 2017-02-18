@@ -5,7 +5,8 @@ Changelog
 0.9.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Initial support for zcml style guide (#3).
+  [ale-rt]
 
 
 0.9.0 (2017-02-11)
