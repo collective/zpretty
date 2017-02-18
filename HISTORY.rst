@@ -2,10 +2,10 @@ Changelog
 =========
 
 
-0.9.2 (unreleased)
-------------------
+0.9.1.1 (2017-02-18)
+--------------------
 
-- Nothing changed yet.
+- Fixed bad release.
 
 
 0.9.1 (2017-02-18)
