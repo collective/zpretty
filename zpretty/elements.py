@@ -59,6 +59,20 @@ class PrettyElement(object):
     indent = u'  '
     attribute_klass = PrettyAttributes
 
+    first_attribute_on_new_line = False
+    before_closing_multiline = u''
+
+    self_closing_singleline_template = u'{prefix}<{tag}{attributes}/>'
+    self_closing_multiline_template = u'\n'.join((
+        u'{prefix}<{tag}{attributes}',
+        u'{prefix}{before_closing_multiline}/>',
+    ))
+    start_tag_singleline_template = u'{prefix}<{tag}{attributes}>'
+    start_tag_multiline_template = u'\n'.join((
+        u'{prefix}<{tag}{attributes}',
+        u'{prefix}{before_closing_multiline}>',
+    ))
+
     def __init__(self, context, level=0):
         ''' Take something a (bs4) element and an indentation level
         '''
@@ -190,7 +204,7 @@ class PrettyElement(object):
         ''' Return the wrapped attributes
         '''
         attributes = getattr(self.context, 'attrs', {})
-        return self.attribute_klass(attributes)
+        return self.attribute_klass(attributes, self)
 
     @memo
     def render_content(self):
@@ -284,31 +298,51 @@ class PrettyElement(object):
         text = u''.join(rendered_lines)
         return text
 
+    def attributes_prefix(self):
+        ''' Return the prefix for the attributes
+        '''
+        if self.first_attribute_on_new_line:
+            return u' ' * 4
+        else:
+            return u' ' * (len(self.tag) + 2)
+
+    def indent_multiline_attributes(self, attributes):
+        ''' Indent the attributes to be rendered in a multiline tag
+        '''
+        prefix = self.indent * self.level
+        attribute_line_joiner = (
+            u'\n' + prefix + self.attributes_prefix()
+        )
+        attributes = attribute_line_joiner.join(
+            attributes.splitlines()
+        )
+        if self.first_attribute_on_new_line:
+            # prepend a new line and the appropriate space
+            attributes = attribute_line_joiner + attributes
+        else:
+            attributes = u' ' + attributes
+        return attributes
+
     def render_self_closing(self):
         ''' Render a properly indented a self closing tag
         '''
         attributes = self.attributes()
-        prefix = self.indent * self.level
-
-        if not attributes:
-            template = u'{prefix}<{tag} />'
+        multiline_attributes = '\n' in attributes
+        if multiline_attributes:
+            attributes = self.indent_multiline_attributes(attributes)
+            template = self.self_closing_multiline_template
         else:
-            multiline_attributes = '\n' in attributes
-            if multiline_attributes:
-                attribute_line_joiner = (
-                    u'\n' + prefix + u' ' * (len(self.tag) + 2)
-                )
-                attributes = attribute_line_joiner.join(
-                    attributes.splitlines()
-                )
-                template = u'\n'.join((
-                    u'{prefix}<{tag} {attributes}',
-                    u'{prefix}/>',
-                ))
+            if attributes:
+                # we need a space to separate the tag end
+                attributes = u' ' + attributes + u' '
             else:
-                template = u'{prefix}<{tag} {attributes} />'
+                attributes = u' '
+            template = self.self_closing_singleline_template
+
+        prefix = self.indent * self.level
         return template.format(
             attributes=attributes,
+            before_closing_multiline=self.before_closing_multiline,
             prefix=prefix,
             tag=self.tag,
         )
@@ -317,41 +351,35 @@ class PrettyElement(object):
         ''' Render a properly indented not self closing tag
         '''
         attributes = self.attributes()
-        prefix = self.indent * self.level
-
-        if not attributes:
-            open_tag = u'{prefix}<{tag}>'
+        attributes = self.attributes()
+        multiline_attributes = '\n' in attributes
+        if multiline_attributes:
+            attributes = self.indent_multiline_attributes(attributes)
+            open_tag_template = self.start_tag_multiline_template
         else:
-            multiline_attributes = '\n' in attributes
-            if multiline_attributes:
-                attribute_line_joiner = (
-                    u'\n' + prefix + u' ' * (len(self.tag) + 2)
-                )
-                attributes = attribute_line_joiner.join(
-                    attributes.splitlines()
-                )
-                open_tag = u'\n'.join((
-                    u'{prefix}<{tag} {attributes}',
-                    u'{prefix}>'
-                ))
-            else:
-                open_tag = u'{prefix}<{tag} {attributes}>'
+            if attributes:
+                # we need a space after separate from the tag
+                attributes = u' ' + attributes
+            open_tag_template = self.start_tag_singleline_template
+
+        prefix = self.indent * self.level
 
         text = self.text and self.render_text() or self.render_content()
 
         if endswith_whitespace(text):
             if text[-1] != u'\n':
                 text = rstrip_last_line(text) + u'\n'
-            close_tag = u'{prefix}</{tag}>'
+            close_tag_template = u'{prefix}</{tag}>'
         else:
-            close_tag = u'</{tag}>'
+            close_tag_template = u'</{tag}>'
 
-        open_tag = open_tag.format(
+        open_tag = open_tag_template.format(
+            before_closing_multiline=self.before_closing_multiline,
             attributes=attributes,
             prefix=prefix,
             tag=self.tag,
         )
-        close_tag = close_tag.format(
+        close_tag = close_tag_template.format(
             prefix=prefix,
             tag=self.tag,
         )

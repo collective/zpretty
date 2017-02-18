@@ -109,7 +109,7 @@ class TestZpretty(TestCase):
         # no attributes
         self.assertPrettified(
             '<root><p></p><!-- #a -->\n\n<p></p></root>',
-            u'<root><p></p><!-- #a -->\n  <p></p></root>',
+            u'<root><p></p><!-- #a -->\n\n  <p></p></root>',
         )
         self.assertPrettified(
             '<root><tal:test />a</root>',

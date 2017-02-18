@@ -1,0 +1,47 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n:domain="plone"
+    >
+
+  <include package="five.pt" />
+  <include
+      package="plone.app.upgrade"
+      zcml:condition="installed plone.app.upgrade"
+      />
+
+  <!-- wicked -->
+  <configure zcml:condition="installed wicked">
+    <include
+        package="wicked.plone"
+        file="selective-atct.zcml"
+        />
+  </configure>
+
+  <cmf:registerDirectory
+      name="skins"
+      directory="skins"
+      recursive="True"
+      />
+
+  <browser:page
+      name="view"
+      for="plone.app.collection.interfaces.ICollection"
+      class=".obj.View"
+      template="templates/view.pt"
+      permission="zope2.View"
+      layer=".mytheme.IThemeLayer"
+      zcml:condition="installed plone.app.collection"
+      />
+
+  <adapter
+      provides="Solgema.fullcalendar.interfaces.ISolgemaFullcalendarEventDict"
+      for="Products.ATContentTypes.interface.IATEvent
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".adapters.SolgemaFullcalendarEventDict"
+      />
+
+</configure>

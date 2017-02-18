@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 from sys import stdout
 from zpretty.prettifier import ZPrettifier
+from zpretty.zcml import ZCMLPrettifier
 
 
 def get_parser():
@@ -13,9 +14,16 @@ def get_parser():
     parser.add_argument(
         '-i',
         '--inplace',
-        help='Format in place (overwrite existing file)',
+        help='Format files in place (overwrite existing file)',
         action='store_true',
         dest='inplace',
+    )
+    parser.add_argument(
+        '-z',
+        '--zcml',
+        help='Follow the ZCML styleguide',
+        action='store_true',
+        dest='zcml',
     )
     parser.add_argument(
         'file',
@@ -32,7 +40,10 @@ def run():
     parser = get_parser()
     config = parser.parse_args()
     for infile in config.file:
-        prettifier = ZPrettifier(infile)
+        if config.zcml:
+            prettifier = ZCMLPrettifier(infile)
+        else:
+            prettifier = ZPrettifier(infile)
         prettified = prettifier().encode('utf8')
         if config.inplace:
             with open(infile, 'w') as f:

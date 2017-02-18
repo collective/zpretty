@@ -1,6 +1,7 @@
 # coding=utf-8
 from bs4 import BeautifulSoup
 from logging import getLogger
+from uuid import uuid4
 from zpretty.elements import PrettyElement
 
 
@@ -13,6 +14,9 @@ class ZPrettifier(object):
 
     encoding = 'utf8'
     pretty_element = PrettyElement
+    parser = 'html.parser'
+    builder = None
+    _newlines_marker = unicode(uuid4())
 
     def __init__(
         self,
@@ -27,7 +31,10 @@ class ZPrettifier(object):
             text = open(self.filename).read()
         if not isinstance(text, unicode):
             text = text.decode(self.encoding)
-        self.text = text
+        self.text = "\n".join(
+            line if line.strip() else self._newlines_marker
+            for line in text.splitlines()
+        )
         self.soup = self.get_soup(self.text)
         self.root = self.pretty_element(self.soup, -1)
 
@@ -44,7 +51,7 @@ class ZPrettifier(object):
             null=self.pretty_element.null_tag_name,
             text=text,
         )
-        wrapped_soup = BeautifulSoup(markup, 'html.parser')
+        wrapped_soup = BeautifulSoup(markup, self.parser, builder=self.builder)
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)
 
     def autofix(self):
@@ -54,7 +61,7 @@ class ZPrettifier(object):
     def pretty_print(self, el):
         ''' Pretty print an element indenting it based on level
         '''
-        return el()
+        return el().replace(self._newlines_marker, u'')
 
     def __call__(self):
         self.autofix()
