@@ -11,7 +11,7 @@ def read(*rnames):
 
 setup(
     name='zpretty',
-    version='0.9.1.1',
+    version='0.9.1.2.dev0',
     description='An opinionated HTML/XML soup formatter',
     keywords=[
         'Formatter',
