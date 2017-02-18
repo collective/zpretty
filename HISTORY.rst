@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.9.1 (unreleased)
+0.9.1 (2017-02-18)
 ------------------
 
 - Initial support for zcml style guide (#3).
