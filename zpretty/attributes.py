@@ -21,7 +21,8 @@ class PrettyAttributes(object):
         'required',
     )
     _multiline_prefix = u'  '
-    _multiline_attributes = (
+    _multiline_attributes = ()
+    _tal_multiline_attributes = (
         u'attributes',
         u'define',
         u'tal:attributes',
@@ -55,13 +56,14 @@ class PrettyAttributes(object):
         'i18n:ignore-attributes',
     )
 
-    def __init__(self, attributes):
+    def __init__(self, attributes, element=None):
         ''' attributes is a dict like object
         '''
         self.attributes = attributes
+        self.element = element
 
     def sort_attributes(self, name):
-        '''This sorts the attribute trying to group theme semantically
+        '''This sorts the attribute trying to group them semantically
 
         Starting from the top:
 
@@ -87,6 +89,13 @@ class PrettyAttributes(object):
         if name in self._i18n_attributes:
             return (900, name)
         return (200, name)
+
+    def format_multiline(self, name, value):
+        '''
+        '''
+        value_lines = filter(None, value.split())
+        line_joiner = u'\n%s' % (u' ' * (len(name) + 2))
+        return line_joiner.join(value_lines)
 
     def format_tal_multiline(self, value):
         ''' There are some tal specific attributes that contain ; separated
@@ -146,6 +155,8 @@ class PrettyAttributes(object):
                 # Happens, e.g., for the class attribute
                 value = u' '.join(value)
             if name in self._multiline_attributes:
+                value = self.format_multiline(name, value)
+            elif name in self._tal_multiline_attributes:
                 value = self.format_tal_multiline(value)
             if not value and self.can_be_valueless(name):
                 line = name

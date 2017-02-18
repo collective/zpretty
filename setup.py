@@ -42,6 +42,7 @@ setup(
     install_requires=[
         'setuptools',
         'beautifulsoup4',
+        'lxml',
     ],
     extras_require={
         'test': [

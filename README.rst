@@ -62,14 +62,15 @@ Basic usage:
 
 ::
 
-    zpretty [-h] [-i] [file [file ...]]
+    zpretty [-h] [-i] [-z] [file [file ...]]
 
     positional arguments:
       file           The list of files to prettify
 
     optional arguments:
       -h, --help     show this help message and exit
-      -i, --inplace  format files in place (overwrite)
+      -i, --inplace  Format files in place (overwrite existing file)
+      -z, --zcml     Follow the ZCML styleguide
 
 
 Example:
