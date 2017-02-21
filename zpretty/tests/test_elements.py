@@ -1,7 +1,6 @@
 # coding=utf-8
 from bs4 import BeautifulSoup
 from unittest import TestCase
-from zpretty.elements import OpenTagException
 from zpretty.elements import PrettyElement
 
 
@@ -100,12 +99,3 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el.render_text(), u'\n')
         el = self.get_element('\n')
         self.assertEqual(el.render_text(), u'\n')
-
-    def test_is_self_closing_open_raises(self):
-        ''' If we have a known self closing element not closed,
-        we raise an exception
-        '''
-        self.assertRaises(
-            OpenTagException,
-            self.get_element('<root><input><div /></root>'),
-        )

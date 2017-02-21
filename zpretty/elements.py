@@ -183,7 +183,16 @@ class PrettyElement(object):
         children = []
         next_level = self.level + 1
         for child in getattr(self.context, 'children', []):
-            children.append(self.__class__(child, next_level))
+            child = self.__class__(child, next_level)
+            try:
+                child.is_tag() and child.is_self_closing()
+            except OpenTagException:
+                # Fix open tags and repeat
+                nephews = reversed(tuple(child.context.children))
+                for nephew in nephews:
+                    child.context.insert_after(nephew)
+                return self.getchildren()
+            children.append(child)
         return children
 
     @property

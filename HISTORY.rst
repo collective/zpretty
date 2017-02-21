@@ -5,13 +5,15 @@ Changelog
 0.9.1.2 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Self heal open self closing tag.
+  [ale-rt]
 
 
 0.9.1.1 (2017-02-18)
 --------------------
 
 - Fixed bad release.
+  [ale-rt]
 
 
 0.9.1 (2017-02-18)

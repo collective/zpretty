@@ -166,6 +166,22 @@ class TestZpretty(TestCase):
             u'<root selected=""></root>',
         )
 
+    def test_fix_self_closing(self):
+        ''' Check if open self closing tags are rendered correctly
+        '''
+        self.assertPrettified(
+            u'<input><img><input>',
+            u'<input /><img /><input />',
+        )
+        self.assertPrettified(
+            u'<input><a /><b />',
+            u'<input /><a></a><b></b>',
+        )
+        self.assertPrettified(
+            u'<input><a /><b /></input>',
+            u'<input /><a></a><b></b>',
+        )
+
     def test_element_repr(self):
         prettifier = ZPrettifier(text='')
         self.assertEqual(
