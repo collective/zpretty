@@ -3,6 +3,9 @@
 .. image:: https://travis-ci.org/collective/zpretty.svg?branch=master
     :target: http://travis-ci.org/collective/zpretty.svg
 
+.. image:: https://coveralls.io/repos/github/collective/zpretty/badge.svg?branch=master
+    :target: https://coveralls.io/github/collective/zpretty?branch=master
+
 
 A tool to format in a **very opinionated** way
 HTML, XML and text containing XML snippets.
