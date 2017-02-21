@@ -149,7 +149,7 @@ class TestZpretty(TestCase):
         )
 
     def test_valueless_attributes(self):
-        ''' Test attributes wthout value
+        ''' Test attributes without value
         (hidden, required, data-attributes, ...)
         Some of them are rendered valueless, some other not.
         '''
