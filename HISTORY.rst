@@ -5,6 +5,7 @@ Changelog
 0.9.1.2 (unreleased)
 --------------------
 
+- Auto add a new line to the end of the prettified files
 - Self heal open self closing tag.
   [ale-rt]
 
