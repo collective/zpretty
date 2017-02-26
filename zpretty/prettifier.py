@@ -16,6 +16,7 @@ class ZPrettifier(object):
     pretty_element = PrettyElement
     parser = 'html.parser'
     builder = None
+    _end_with_newline = True
     _newlines_marker = unicode(uuid4())
 
     def __init__(
@@ -61,7 +62,10 @@ class ZPrettifier(object):
     def pretty_print(self, el):
         ''' Pretty print an element indenting it based on level
         '''
-        return el().replace(self._newlines_marker, u'')
+        prettified = el().replace(self._newlines_marker, u'')
+        if self._end_with_newline and not prettified.endswith(u'\n'):
+            prettified += u'\n'
+        return prettified
 
     def __call__(self):
         self.autofix()

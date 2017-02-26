@@ -29,7 +29,8 @@ and has some features dedicated to it.
     `xmllint <http://xmlsoft.org/xmllint.html>`_.
 
 .. note:: You may have parsing problems!
-    ``zpretty`` will require you to close some tags like ``input`` and ``img``.
+    ``zpretty`` will close for you some known self closing tags,
+    like ``input`` and ``img``, that are allowed to be open in HTML.
 
 .. note:: ``zpretty`` is not clever enough to understand correctly valueless attributes!
     Some work is ongoing, but it works best with "normal" attributes.
@@ -92,14 +93,13 @@ DEVELOP
     $ cd zpretty
     $ make
 
+
 RUNNING TESTS
 =============
 
 ::
 
     $ make test
-
-
 
 
 TODO
@@ -113,4 +113,3 @@ TODO
 - [ ] Valueless attributes are not allowed in XML
 - [ ] Attributes are aligned in a strange way if previous sibling has no spaces
 - [ ] TBD: Style attributes should be multiline
-- [ ] Fix Not Close exception
