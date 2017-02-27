@@ -9,12 +9,12 @@ class TestZpretty(TestCase):
     '''
     maxDiff = None
 
-    def assertPrettified(self, original, expected):
+    def assertPrettified(self, original, expected, encoding='utf8'):
         ''' Check if the original html has been prettified as expected
         '''
         if isinstance(expected, tuple):
             expected = u'\n'.join(expected)
-        prettifier = ZPrettifier(text=original)
+        prettifier = ZPrettifier(text=original, encoding=encoding)
         observed = prettifier()
         self.assertEqual(observed, expected)
 
@@ -199,6 +199,18 @@ class TestZpretty(TestCase):
         self.assertPrettified(
             u'<root>\n    Hello!   \n</root>',
             u'<root>\n    Hello!\n</root>\n',
+        )
+
+    def test_encoding(self):
+        self.assertPrettified(
+            '<root>à</root>',
+            u'<root>à</root>\n',
+        )
+        self.assertRaises(
+            AssertionError,
+            self.assertPrettified,
+            '<root>à</root>'.decode('latin1'),
+            u'<root>à</root>\n',
         )
 
     def test_sample_xml(self):

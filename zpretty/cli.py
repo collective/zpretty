@@ -12,11 +12,19 @@ def get_parser():
         epilog=None,
     )
     parser.add_argument(
+        '--encoding',
+        help='The file encoding (defaults to utf8)',
+        action='store',
+        dest='encoding',
+        default='utf8',
+    )
+    parser.add_argument(
         '-i',
         '--inplace',
         help='Format files in place (overwrite existing file)',
         action='store_true',
         dest='inplace',
+        default=False,
     )
     parser.add_argument(
         '-z',
@@ -24,6 +32,7 @@ def get_parser():
         help='Follow the ZCML styleguide',
         action='store_true',
         dest='zcml',
+        default=False,
     )
     parser.add_argument(
         'file',
@@ -39,12 +48,14 @@ def run():
     '''
     parser = get_parser()
     config = parser.parse_args()
+    encoding = config.encoding
     for infile in config.file:
         if config.zcml:
-            prettifier = ZCMLPrettifier(infile)
+            prettifier = ZCMLPrettifier(infile, encoding=encoding)
         else:
-            prettifier = ZPrettifier(infile)
-        prettified = prettifier().encode('utf8')
+            prettifier = ZPrettifier(infile, encoding=encoding)
+        prettifier.encoding
+        prettified = prettifier().encode(encoding)
         if config.inplace and not infile == '-':
             with open(infile, 'w') as f:
                 f.write(prettified)

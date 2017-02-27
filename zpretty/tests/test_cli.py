@@ -14,6 +14,7 @@ class TestCli(TestCase):
         self.assertEqual(parsed.file, '-')
         self.assertFalse(parsed.inplace)
         self.assertFalse(parsed.zcml)
+        self.assertEqual(parsed.encoding, 'utf8')
 
     def test_file(self):
         html = resource_filename(

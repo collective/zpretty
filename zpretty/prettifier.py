@@ -1,7 +1,6 @@
 # coding=utf-8
 from bs4 import BeautifulSoup
 from logging import getLogger
-from sys import stdout
 from uuid import uuid4
 from zpretty.elements import PrettyElement
 
@@ -15,7 +14,6 @@ class ZPrettifier(object):
     ''' Wraps and renders some text that may contain xml like stuff
     '''
 
-    encoding = 'utf8'
     pretty_element = PrettyElement
     parser = 'html.parser'
     builder = None
@@ -26,10 +24,12 @@ class ZPrettifier(object):
         self,
         filename='',
         text='',
+        encoding='utf8',
     ):
         ''' Create a prettifier instance taking the contents
         from a text or a filename
         '''
+        self.encoding = encoding
         self.filename = filename
         if self.filename:
             if self.filename == '-':

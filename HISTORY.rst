@@ -5,7 +5,8 @@ Changelog
 0.9.3 (unreleased)
 ------------------
 
-- Process stdin if '-' is in the arguments or no arguments are passed.
+- Added an `--encoding` parameter
+- Process stdin if '-' is in the arguments or no arguments are passed
   [ale-rt]
 
 
