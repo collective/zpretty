@@ -25,9 +25,12 @@ class ZCMLAttributes(PrettyAttributes):
         'provides',
         'for',
         'factory',
-        'class',
-        'template',
+        'manager',
         'permission',
+        'class',
+        'allowed_attributes',
+        'attribute',
+        'template',
         'layer',
     )
 

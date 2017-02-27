@@ -30,9 +30,9 @@
   <browser:page
       name="view"
       for="plone.app.collection.interfaces.ICollection"
+      permission="zope2.View"
       class=".obj.View"
       template="templates/view.pt"
-      permission="zope2.View"
       layer=".mytheme.IThemeLayer"
       zcml:condition="installed plone.app.collection"
       />
