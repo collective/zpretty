@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-0.9.1.2 (unreleased)
---------------------
+0.9.2 (2017-02-27)
+------------------
 
 - Small modification for the order of the zcml attributes
 - Auto add a new line to the end of the prettified files
