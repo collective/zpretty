@@ -69,7 +69,7 @@ Basic usage:
     zpretty [-h] [-i] [-z] [file [file ...]]
 
     positional arguments:
-      file           The list of files to prettify
+      file           The list of files to prettify (defaults to stdin)
 
     optional arguments:
       -h, --help     show this help message and exit

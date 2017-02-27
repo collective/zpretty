@@ -28,8 +28,8 @@ def get_parser():
     parser.add_argument(
         'file',
         nargs='*',
-        default=None,
-        help='The list of files to prettify',
+        default='-',
+        help='The list of files to prettify (defaults to stdin)',
     )
     return parser
 
@@ -45,7 +45,7 @@ def run():
         else:
             prettifier = ZPrettifier(infile)
         prettified = prettifier().encode('utf8')
-        if config.inplace:
+        if config.inplace and not infile == '-':
             with open(infile, 'w') as f:
                 f.write(prettified)
         else:

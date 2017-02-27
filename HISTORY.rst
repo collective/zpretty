@@ -5,7 +5,8 @@ Changelog
 0.9.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Process stdin if '-' is in the arguments or no arguments are passed.
+  [ale-rt]
 
 
 0.9.2 (2017-02-27)

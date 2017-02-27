@@ -1,8 +1,11 @@
 # coding=utf-8
 from bs4 import BeautifulSoup
 from logging import getLogger
+from sys import stdout
 from uuid import uuid4
 from zpretty.elements import PrettyElement
+
+import fileinput
 
 
 logger = getLogger(__name__)
@@ -29,7 +32,10 @@ class ZPrettifier(object):
         '''
         self.filename = filename
         if self.filename:
-            text = open(self.filename).read()
+            if self.filename == '-':
+                text = ''.join(fileinput.input())
+            else:
+                text = open(self.filename).read()
         if not isinstance(text, unicode):
             text = text.decode(self.encoding)
         self.text = "\n".join(
