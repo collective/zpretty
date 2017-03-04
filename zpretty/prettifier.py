@@ -33,7 +33,7 @@ class ZPrettifier(object):
         self.filename = filename
         if self.filename:
             if self.filename == '-':
-                text = ''.join(fileinput.input())
+                text = ''.join(fileinput.input([]))
             else:
                 text = open(self.filename).read()
         if not isinstance(text, unicode):
