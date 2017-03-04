@@ -32,10 +32,7 @@ class ZPrettifier(object):
         self.encoding = encoding
         self.filename = filename
         if self.filename:
-            if self.filename == '-':
-                text = ''.join(fileinput.input([]))
-            else:
-                text = open(self.filename).read()
+            text = ''.join(fileinput.input([filename]))
         if not isinstance(text, unicode):
             text = text.decode(self.encoding)
         self.text = "\n".join(
