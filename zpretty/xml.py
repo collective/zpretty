@@ -13,6 +13,7 @@ logger = getLogger(__name__)
 class XMLAttributes(PrettyAttributes):
     ''' Customized attribute formatter for zcml
     '''
+    _valueless_attributes_are_allowed = False
     _known_valueless_attributes = (
     )
     _multiline_attributes = (

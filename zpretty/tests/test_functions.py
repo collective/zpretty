@@ -1,7 +1,9 @@
 # coding=utf-8
 from unittest import TestCase
+from zpretty.text import endswith_whitespace
 from zpretty.text import lstrip_first_line
 from zpretty.text import rstrip_last_line
+from zpretty.text import startswith_whitespace
 
 
 class TestFunctions(TestCase):
@@ -33,3 +35,5 @@ class TestFunctions(TestCase):
     def test_none(self):
         self.assertEqual(lstrip_first_line(None), None)
         self.assertEqual(rstrip_last_line(None), None)
+        self.assertFalse(endswith_whitespace(None))
+        self.assertFalse(startswith_whitespace(None))
