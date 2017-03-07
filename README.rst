@@ -66,16 +66,22 @@ Basic usage:
 
 ::
 
-    zpretty [-h] [-i] [-z] [file [file ...]]
+    zpretty [-h] [--encoding ENCODING] [-i] [-x] [-z] [file [file ...]]
 
     positional arguments:
-      file           The list of files to prettify (defaults to stdin)
+      file                 The list of files to prettify (defaults to stdin)
 
     optional arguments:
-      -h, --help     show this help message and exit
+      -h, --help           show this help message and exit
       --encoding ENCODING  The file encoding (defaults to utf8)
-      -i, --inplace  Format files in place (overwrite existing file)
-      -z, --zcml     Follow the ZCML styleguide
+      -i, --inplace        Format files in place (overwrite existing file)
+      -x, --xml            Threat the input file(s) as XML
+      -z, --zcml           Threat the input file(s) as XML. Follow the ZCML
+                           styleguide
+
+
+Without parameters constraining the file type (e.g. `-x`, `-z`, ...)
+`zpretty` will try to guess the right options for you.
 
 
 Example:
@@ -109,8 +115,6 @@ TODO
 .. _todo_section:
 
 - [ ] Python 3 support ... ;)
-- [ ] Command line options
-- [ ] Improve performances
 - [ ] Valueless attributes are not allowed in XML
 - [ ] Attributes are aligned in a strange way if previous sibling has no spaces
 - [ ] TBD: Style attributes should be multiline

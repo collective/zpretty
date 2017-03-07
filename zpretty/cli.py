@@ -1,5 +1,6 @@
 # coding=utf-8
 from argparse import ArgumentParser
+from os.path import splitext
 from sys import stdout
 from zpretty.prettifier import ZPrettifier
 from zpretty.xml import XMLPrettifier
@@ -30,7 +31,7 @@ def get_parser():
     parser.add_argument(
         '-x',
         '--xml',
-        help='Render xml',
+        help='Threat the input file(s) as XML',
         action='store_true',
         dest='xml',
         default=False,
@@ -38,7 +39,7 @@ def get_parser():
     parser.add_argument(
         '-z',
         '--zcml',
-        help='Follow the ZCML styleguide',
+        help='Threat the input file(s) as XML. Follow the ZCML styleguide',
         action='store_true',
         dest='zcml',
         default=False,
@@ -52,6 +53,21 @@ def get_parser():
     return parser
 
 
+def choose_prettifier(config, infile):
+    ''' Choose the best prettifier given the config and the input file
+    '''
+    if config.zcml:
+        return ZCMLPrettifier
+    if config.xml:
+        return XMLPrettifier
+    ext = splitext(infile)[-1].lower()
+    if ext == '.xml':
+        return XMLPrettifier
+    if ext == '.zcml':
+        return ZCMLPrettifier
+    return ZPrettifier
+
+
 def run():
     ''' Prettify each filename passed in the command line
     '''
@@ -59,12 +75,7 @@ def run():
     config = parser.parse_args()
     encoding = config.encoding
     for infile in config.file:
-        if config.zcml:
-            Prettifier = ZCMLPrettifier
-        elif config.xml:
-            Prettifier = XMLPrettifier
-        else:
-            Prettifier = ZPrettifier
+        Prettifier = choose_prettifier(config, infile)
         prettifier = Prettifier(infile, encoding=encoding)
         prettified = prettifier().encode(encoding)
         if config.inplace and not infile == '-':
