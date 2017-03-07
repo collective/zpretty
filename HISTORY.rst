@@ -6,6 +6,9 @@ Changelog
 ------------------
 
 - Added an `--encoding` parameter
+- Added an `--xml` parameter to force xml parsing
+- Choose the better parser according to the given filename if no parser is
+  forced
 - Process stdin if '-' is in the arguments or no arguments are passed
   [ale-rt]
 
