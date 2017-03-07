@@ -13,8 +13,25 @@ class TestCli(TestCase):
         parsed = self.parser.parse_args([])
         self.assertEqual(parsed.file, '-')
         self.assertFalse(parsed.inplace)
+        self.assertFalse(parsed.xml)
         self.assertFalse(parsed.zcml)
         self.assertEqual(parsed.encoding, 'utf8')
+
+    def test_short_options(self):
+        parsed = self.parser.parse_args(['-i', '-x', '-z'])
+        self.assertTrue(all((
+            parsed.inplace,
+            parsed.xml,
+            parsed.zcml,
+        )))
+
+    def test_long_options(self):
+        parsed = self.parser.parse_args(['--inplace', '--xml', '--zcml'])
+        self.assertTrue(all((
+            parsed.inplace,
+            parsed.xml,
+            parsed.zcml,
+        )))
 
     def test_file(self):
         html = resource_filename(

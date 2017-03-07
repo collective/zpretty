@@ -259,7 +259,7 @@ class PrettyElement(object):
         ''' Render a properly indented processing instruction
         '''
         prefix = self.indent * self.level
-        return u'{prefix}<?{text}>'.format(
+        return u'{prefix}<?{text}?>'.format(
             prefix=prefix,
             text=self.text,
         )

@@ -213,9 +213,6 @@ class TestZpretty(TestCase):
             u'<root>à</root>\n',
         )
 
-    def test_sample_xml(self):
-        self.prettify('sample_xml.xml')
-
     def test_sample_html(self):
         self.prettify('sample_html.html')
 

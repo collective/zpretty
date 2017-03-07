@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 from sys import stdout
 from zpretty.prettifier import ZPrettifier
+from zpretty.xml import XMLPrettifier
 from zpretty.zcml import ZCMLPrettifier
 
 
@@ -24,6 +25,14 @@ def get_parser():
         help='Format files in place (overwrite existing file)',
         action='store_true',
         dest='inplace',
+        default=False,
+    )
+    parser.add_argument(
+        '-x',
+        '--xml',
+        help='Render xml',
+        action='store_true',
+        dest='xml',
         default=False,
     )
     parser.add_argument(
@@ -51,10 +60,12 @@ def run():
     encoding = config.encoding
     for infile in config.file:
         if config.zcml:
-            prettifier = ZCMLPrettifier(infile, encoding=encoding)
+            Prettifier = ZCMLPrettifier
+        elif config.xml:
+            Prettifier = XMLPrettifier
         else:
-            prettifier = ZPrettifier(infile, encoding=encoding)
-        prettifier.encoding
+            Prettifier = ZPrettifier
+        prettifier = Prettifier(infile, encoding=encoding)
         prettified = prettifier().encode(encoding)
         if config.inplace and not infile == '-':
             with open(infile, 'w') as f:
