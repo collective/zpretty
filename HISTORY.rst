@@ -5,6 +5,7 @@ Changelog
 0.9.3 (unreleased)
 ------------------
 
+- Preserve entities in text
 - Added an `--encoding` parameter
 - Added an `--xml` parameter to force xml parsing
 - Choose the better parser according to the given filename if no parser is

@@ -204,13 +204,19 @@ class TestZpretty(TestCase):
     def test_encoding(self):
         self.assertPrettified(
             '<root>à</root>',
-            u'<root>à</root>\n',
+            u'<root>&agrave;</root>\n',
         )
         self.assertRaises(
             AssertionError,
             self.assertPrettified,
             '<root>à</root>'.decode('latin1'),
-            u'<root>à</root>\n',
+            u'<root>&agrave;</root>\n',
+        )
+
+    def test_entities(self):
+        self.assertPrettified(
+            '<root>&nbsp;</root>',
+            u'<root>&nbsp;</root>\n',
         )
 
     def test_sample_html(self):

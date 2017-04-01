@@ -1,5 +1,6 @@
 # coding=utf-8
 from bs4 import BeautifulSoup
+from bs4.dammit import EntitySubstitution
 from bs4.element import Comment
 from bs4.element import Doctype
 from bs4.element import NavigableString
@@ -72,6 +73,7 @@ class PrettyElement(object):
         u'{prefix}<{tag}{attributes}',
         u'{prefix}{before_closing_multiline}>',
     ))
+    escaper = EntitySubstitution()
 
     def __init__(self, context, level=0):
         ''' Take something a (bs4) element and an indentation level
@@ -204,8 +206,13 @@ class PrettyElement(object):
     @property
     def text(self):
         ''' Return the text contained in this element (if any)
+
+        Convert the text characters to html entities
         '''
-        return self.context.string or u''
+        text = self.context.string or u''
+        if text and self.is_tag():
+            text = self.escaper.substitute_html(text)
+        return text
 
     @property
     @memo
