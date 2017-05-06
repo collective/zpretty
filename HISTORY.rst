@@ -5,6 +5,7 @@ Changelog
 0.9.3 (unreleased)
 ------------------
 
+- Fix text method
 - Preserve entities in text
 - Added an `--encoding` parameter
 - Added an `--xml` parameter to force xml parsing

@@ -209,10 +209,11 @@ class PrettyElement(object):
 
         Convert the text characters to html entities
         '''
-        text = self.context.string or u''
-        if text and self.is_tag():
-            text = self.escaper.substitute_html(text)
-        return text
+        if not isinstance(self.context, NavigableString):
+            return u''
+        if self.is_comment():
+            return unicode(self.context)
+        return self.escaper.substitute_html(self.context.string)
 
     @property
     @memo
