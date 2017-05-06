@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.9.3 (unreleased)
+0.9.3 (2017-05-06)
 ------------------
 
 - Fix text method
