@@ -104,6 +104,10 @@ class TestZpretty(TestCase):
             '<root> <div>a\n  </div> </root>',
             u'<root>\n  <div>a\n  </div>\n</root>\n',
         )
+        self.assertPrettified(
+            '<div><p>a</p></div>',
+            u'<div><p>a</p></div>\n',
+        )
 
     def test_nesting_with_tail(self):
         # no attributes
