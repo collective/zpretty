@@ -19,4 +19,4 @@ flake8:
 requirements: bin/python
 	@bin/pip install -U .[development,test]
 	@./bin/pip freeze --all|egrep -v '^(pkg-resources|zpretty)' > requirements-dev.txt
-	@git difftool -y -x "colordiff -y" | less -R
+	@git difftool -y -x "colordiff -y" requirements-dev.txt
