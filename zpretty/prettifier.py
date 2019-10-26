@@ -18,7 +18,7 @@ class ZPrettifier(object):
     parser = "html.parser"
     builder = None
     _end_with_newline = True
-    _newlines_marker = unicode(uuid4())
+    _newlines_marker = str(uuid4())
 
     def __init__(self, filename="", text="", encoding="utf8"):
         """ Create a prettifier instance taking the contents
@@ -28,7 +28,7 @@ class ZPrettifier(object):
         self.filename = filename
         if self.filename:
             text = "".join(fileinput.input([filename]))
-        if not isinstance(text, unicode):
+        if not isinstance(text, str):
             text = text.decode(self.encoding)
         self.text = "\n".join(
             line if line.strip() else self._newlines_marker

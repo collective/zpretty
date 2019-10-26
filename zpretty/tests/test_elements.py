@@ -24,6 +24,7 @@ class TestPrettyElements(TestCase):
         self.assertFalse(el.is_text())
         self.assertTrue(el.is_comment())
         self.assertEqual(el.text, u"a")
+        self.assertEqual(el.getparent().tag, "fake_root")
         self.assertEqual(el.getchildren(), [])
         self.assertEqual(el.attributes(), u"")
         self.assertEqual(el(), u"<!--a-->")
@@ -36,6 +37,7 @@ class TestPrettyElements(TestCase):
         self.assertFalse(el.is_tag())
         self.assertTrue(el.is_text())
         self.assertEqual(el.text, u"text")
+        self.assertEqual(el.getparent().tag, "fake_root")
         self.assertEqual(el.getchildren(), [])
         self.assertEqual(el.attributes(), u"")
         self.assertEqual(el(), u"text")
@@ -48,6 +50,7 @@ class TestPrettyElements(TestCase):
         self.assertFalse(el.is_text())
         self.assertTrue(el.is_tag())
         self.assertEqual(el.text, u"")
+        self.assertEqual(el.getparent().tag, "fake_root")
         self.assertEqual(el.getchildren(), [])
         self.assertEqual(el.attributes(), u"")
 
@@ -59,6 +62,7 @@ class TestPrettyElements(TestCase):
         self.assertFalse(el.is_text())
         self.assertTrue(el.is_tag())
         self.assertEqual(el.text, u"")
+        self.assertEqual(el.getparent().tag, "fake_root")
         self.assertEqual(el.getchildren(), [])
         self.assertEqual(el.attributes(), u'class="b"')
         self.assertEqual(el(), u'<root class="b"></root>')
@@ -70,6 +74,7 @@ class TestPrettyElements(TestCase):
         self.assertFalse(el.is_doctype())
         self.assertTrue(el.is_processing_instruction())
         self.assertEqual(el.text, u'xml version="1.0" encoding="utf-8"')
+        self.assertEqual(el.getparent().tag, "fake_root")
         self.assertEqual(el.getchildren(), [])
         self.assertEqual(el.attributes(), u"")
 
@@ -80,6 +85,7 @@ class TestPrettyElements(TestCase):
         self.assertFalse(el.is_processing_instruction())
         self.assertTrue(el.is_doctype())
         self.assertEqual(el.text, u"html")
+        self.assertEqual(el.getparent().tag, "fake_root")
         self.assertEqual(el.getchildren(), [])
         self.assertEqual(el.attributes(), u"")
         el = self.get_element(
@@ -99,3 +105,9 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el.render_text(), u"\n")
         el = self.get_element("\n")
         self.assertEqual(el.render_text(), u"\n")
+
+    def test_get_parent(self):
+        el = self.get_element(" a")
+        self.assertEqual(el.getparent().tag, "fake_root")
+        self.assertEqual(el.getparent().getparent().tag, "soup")
+        self.assertIsNone(el.getparent().getparent().getparent())

@@ -17,7 +17,7 @@ class TestZpretty(TestCase):
         resolved_filename = resource_filename("zpretty.tests", "original/%s" % filename)
         prettifier = ZCMLPrettifier(resolved_filename)
         observed = prettifier()
-        expected = open(resolved_filename).read().decode("utf8")
+        expected = open(resolved_filename).read()
         self.assertListEqual(observed.splitlines(), expected.splitlines())
 
     def test_zcml(self):

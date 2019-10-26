@@ -1,22 +1,29 @@
-.PHONY: nosetests test flake8
+.PHONY: nosetests test flake8 black
 
-all: bin/python
-test: nosetests flake8
+all: bin/pip
+test: nosetests flake8 black
 
-bin/python:
-	@virtualenv .
-	@bin/pip install -U pip
-	@bin/pip install -U .[development,test]
+bin/pip:
+	virtualenv -p python3 . || python3 -m venv .
+	./bin/pip install -U pip
+	./bin/pip install -U .[development,test]
 
-nosetests:
+nosetests: bin/pip
 	@echo "==== Running nosetests ===="
-	@bin/nosetests
+	./bin/nosetests
 
-flake8:
+flake8: bin/pip
 	@echo "==== Running Flake8 ===="
-	@bin/flake8 zpretty *.py
+	./bin/flake8 zpretty *.py
 
-requirements: bin/python
-	@bin/pip install -U .[development,test]
-	@./bin/pip freeze --all|egrep -v '^(pkg-resources|zpretty)' > requirements-dev.txt
+bin/black: requirements-dev.txt
+	./bin/pip install -r requirements-dev.txt
+	touch bin/black
+
+black: bin/black
+	./bin/black --check zpretty
+
+requirements: bin/pip
+	./bin/pip install -U .[development,test]
+	./bin/pip freeze --all|egrep -v '^(pkg-resources|zpretty|-f)' > requirements-dev.txt
 	@git difftool -y -x "colordiff -y" requirements-dev.txt

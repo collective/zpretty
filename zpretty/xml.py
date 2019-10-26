@@ -23,7 +23,7 @@ class XMLAttributes(PrettyAttributes):
         """Sort ZCML attributes in a consistent way
         """
         if name in self._xml_attribute_order:
-            return 100 + self._xml_attribute_order.index(name)
+            return (100 + self._xml_attribute_order.index(name), name)
         return super(XMLAttributes, self).sort_attributes(name)
 
 

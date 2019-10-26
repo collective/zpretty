@@ -26,7 +26,7 @@ class TestZpretty(TestCase):
         resolved_filename = resource_filename("zpretty.tests", "original/%s" % filename)
         prettifier = ZPrettifier(resolved_filename)
         observed = prettifier()
-        expected = open(resolved_filename).read().decode("utf8")
+        expected = open(resolved_filename).read()
         self.assertListEqual(observed.splitlines(), expected.splitlines())
 
     def test_format_self_closing_tag(self):
@@ -152,15 +152,6 @@ class TestZpretty(TestCase):
         self.assertPrettified(u"<root>\n</root>", u"<root>\n</root>\n")
         self.assertPrettified(
             u"<root>\n    Hello!   \n</root>", u"<root>\n    Hello!\n</root>\n"
-        )
-
-    def test_encoding(self):
-        self.assertPrettified("<root>à</root>", u"<root>&agrave;</root>\n")
-        self.assertRaises(
-            AssertionError,
-            self.assertPrettified,
-            "<root>à</root>".decode("latin1"),
-            u"<root>&agrave;</root>\n",
         )
 
     def test_entities(self):

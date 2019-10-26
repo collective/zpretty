@@ -1,8 +1,10 @@
 *.egg-info/
 *.pyc
 .coverage
+/.tox/
 /bin/
 /build/
+/cover/
 /dist/
 /htmlcov/
 /include/

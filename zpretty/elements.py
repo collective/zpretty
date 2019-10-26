@@ -205,7 +205,7 @@ class PrettyElement(object):
         if not isinstance(self.context, NavigableString):
             return u""
         if self.is_comment():
-            return unicode(self.context)
+            return self.context
         return self.escaper.substitute_html(self.context.string)
 
     @property
