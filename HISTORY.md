@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 (unreleased)
+
+- Nothing changed yet.
+
 ## 1.0.0 (2019-10-27)
 
 - Support Python3 only [ale-rt]
