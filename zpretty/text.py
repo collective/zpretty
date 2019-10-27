@@ -6,7 +6,7 @@ def startswith_whitespace(text):
 
     If text is not a string return False
     """
-    if not isinstance(text, basestring):
+    if not isinstance(text, str):
         return False
     return text[:1].isspace()
 
@@ -16,7 +16,7 @@ def endswith_whitespace(text):
 
     If text is not a string return False
     """
-    if not isinstance(text, basestring):
+    if not isinstance(text, str):
         return False
     return text[-1:].isspace()
 

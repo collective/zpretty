@@ -1,6 +1,12 @@
 # coding=utf-8
-from cgi import escape
 from logging import getLogger
+
+
+try:
+    from html import escape
+except ImportError:
+    # Python < 3.8
+    from cgi import escape
 
 
 logger = getLogger(__name__)
@@ -91,7 +97,7 @@ class PrettyAttributes(object):
         """
         """
         value_lines = filter(None, value.split())
-        line_joiner = u"\n%s" % (u" " * (len(name) + 2))
+        line_joiner = u"\n" + (u" " * (len(name) + 2))
         return line_joiner.join(value_lines)
 
     def format_tal_multiline(self, value):
