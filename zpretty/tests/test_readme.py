@@ -11,10 +11,10 @@ class TestReadme(TestCase):
     def extract_usage_from_readme(self):
         """ Extract the usage from the documentation
         """
-        resolved_filename = resource_filename("zpretty", "../README.rst")
+        resolved_filename = resource_filename("zpretty", "../README.md")
         readme = open(resolved_filename).read()
         start = readme.index("    zpretty [")
-        end = readme.index("\n\n\n", start)
+        end = readme.index("\n\nWithout", start)
         return readme[start:end].splitlines()
 
     def extract_usage_from_parser(self):
