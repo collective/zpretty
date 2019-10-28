@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.0.1 (unreleased)
+## 1.0.1 (2019-10-28)
 
-- Nothing changed yet.
+- Fix output on file [ale-rt]
 
 ## 1.0.0 (2019-10-27)
 
