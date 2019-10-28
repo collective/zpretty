@@ -79,7 +79,7 @@ def run():
         prettifier = Prettifier(infile, encoding=encoding)
         prettified = prettifier().encode(encoding)
         if config.inplace and not infile == "-":
-            with open(infile, "w") as f:
+            with open(infile, "wb") as f:
                 f.write(prettified)
         else:
             stdout.write(prettified)
