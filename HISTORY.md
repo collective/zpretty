@@ -2,7 +2,7 @@
 
 ## 1.0.2 (unreleased)
 
-- Nothing changed yet.
+- Fix output again on file and stdout [ale-rt]
 
 ## 1.0.1 (2019-10-28)
 

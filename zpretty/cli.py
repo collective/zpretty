@@ -77,9 +77,9 @@ def run():
     for infile in config.file:
         Prettifier = choose_prettifier(config, infile)
         prettifier = Prettifier(infile, encoding=encoding)
-        prettified = prettifier().encode(encoding)
+        prettified = prettifier()
         if config.inplace and not infile == "-":
-            with open(infile, "wb") as f:
+            with open(infile, "w") as f:
                 f.write(prettified)
         else:
             stdout.write(prettified)
