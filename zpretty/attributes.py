@@ -162,7 +162,7 @@ class PrettyAttributes(object):
             if not value and self.can_be_valueless(name):
                 line = name
             else:
-                line = self._attribute_template % (name, escape(value))
+                line = self._attribute_template % (name, escape(value, quote=False))
             lines.append(line)
         return lines
 

@@ -157,8 +157,14 @@ class TestZpretty(TestCase):
     def test_entities(self):
         self.assertPrettified("<root>&nbsp;</root>", u"<root>&nbsp;</root>\n")
 
+    def test_single_quotes_in_attrs(self):
+        self.assertPrettified('<root a="\'" />', '<root a="\'"></root>\n')
+
     def test_sample_html(self):
         self.prettify("sample_html.html")
+
+    def test_sample_pt(self):
+        self.prettify("sample_pt.pt")
 
     def test_text_with_markup(self):
         self.prettify("text_with_markup.md")
