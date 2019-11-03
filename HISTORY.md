@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.2 (unreleased)
+## 1.0.2 (2019-11-03)
 
 - In Python3.8 quotes in attributes were escaped
 - Fix output again on file and stdout [ale-rt]
