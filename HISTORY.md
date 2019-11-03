@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3 (unreleased)
+
+- Nothing changed yet.
+
+
 ## 1.0.2 (2019-11-03)
 
 - In Python3.8 quotes in attributes were escaped
