@@ -8,6 +8,8 @@ class TestReadme(TestCase):
     """ Test zpretty
     """
 
+    maxDiff = None
+
     def extract_usage_from_readme(self):
         """ Extract the usage from the documentation
         """
