@@ -24,6 +24,6 @@ black: bin/black
 	./bin/black --check zpretty
 
 requirements: bin/pip
-	./bin/pip install -U .[development,test]
-	./bin/pip freeze --all|egrep -v '^(pkg-resources|zpretty|-f)' > requirements-dev.txt
+	./bin/pip install -Ue .[development,test]
+	./bin/pip freeze --all|egrep -v '^(pip|pkg-resources|wheel|-e|-f)' > requirements-dev.txt
 	@git difftool -y -x "colordiff -y" requirements-dev.txt
