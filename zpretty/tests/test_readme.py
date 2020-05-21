@@ -3,6 +3,8 @@ from pkg_resources import resource_filename
 from unittest import TestCase
 from zpretty.cli import get_parser
 
+import argparse
+
 
 class TestReadme(TestCase):
     """ Test zpretty
@@ -23,6 +25,8 @@ class TestReadme(TestCase):
         """ Ask the parser for the usage and indent it
         """
         parser = get_parser()
+        # This is needed to keep the 80 lines limit
+        parser.formatter_class = lambda prog: argparse.HelpFormatter(prog, width=80)
         # temporarily remove the description
         parser.description = None
         parser_help = parser.format_help()
