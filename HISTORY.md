@@ -2,7 +2,7 @@
 
 ## 1.0.3 (unreleased)
 
-- Nothing changed yet.
+- Fix unwanted newlines (#20)
 
 
 ## 1.0.2 (2019-11-03)
