@@ -292,10 +292,15 @@ class PrettyElement(object):
                 rendered_lines.append(u"%s\n" % line.rstrip())
 
         if lines[-1].strip():
-            rendered_lines.append(u"%s\n" % lines[-1].rstrip())
+            if lines[-1].rstrip() == lines[-1]:
+                if lines[-1].lstrip() == lines[-1]:
+                    rendered_lines.append(lines[-1])
+                else:
+                    rendered_lines.append(prefix + lines[-1].lstrip())
+            else:
+                rendered_lines.append(u"%s\n" % lines[-1].rstrip())
         else:
             rendered_lines.append(u"")
-
         text = u"".join(rendered_lines)
         return text
 
@@ -347,7 +352,6 @@ class PrettyElement(object):
     def render_not_self_closing(self):
         """ Render a properly indented not self closing tag
         """
-        attributes = self.attributes()
         attributes = self.attributes()
         multiline_attributes = "\n" in attributes
         if multiline_attributes:

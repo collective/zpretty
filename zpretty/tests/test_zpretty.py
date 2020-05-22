@@ -154,6 +154,11 @@ class TestZpretty(TestCase):
             u"<root>\n    Hello!   \n</root>", u"<root>\n    Hello!\n</root>\n"
         )
 
+    def test_text_close_to_an_element(self):
+        self.assertPrettified(
+            u"<root>\n (<a></a>)\n</root>", u"<root>\n  (<a></a>)\n</root>\n"
+        )
+
     def test_entities(self):
         self.assertPrettified("<root>&nbsp;</root>", u"<root>&nbsp;</root>\n")
 
