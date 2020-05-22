@@ -1,5 +1,11 @@
 # Changelog
 
+1.0.4 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 1.0.3 (2020-05-22)
 
 - Fix unwanted newlines (#20)
