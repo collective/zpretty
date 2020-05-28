@@ -21,8 +21,35 @@ class PrettyAttributes(object):
     """
 
     _attribute_template = u'%s="%s"'
-    _valueless_attributes_are_allowed = True
-    _known_valueless_attributes = ("hidden", "required")
+    _boolean_attributes_are_allowed = True
+
+    _known_boolean_attributes = (
+        "allowfullscreen",
+        "allowpaymentrequest",
+        "async",
+        "autofocus",
+        "autoplay",
+        "checked",
+        "controls",
+        "default",
+        "disabled",
+        "formnovalidate",
+        "hidden",
+        "ismap",
+        "itemscope",
+        "loop",
+        "multiple",
+        "muted",
+        "nomodule",
+        "novalidate",
+        "open",
+        "playsinline",
+        "readonly",
+        "required",
+        "reversed",
+        "selected",
+        "truespeed",
+    )
     _multiline_prefix = u"  "
     _multiline_attributes = ()
     _tal_multiline_attributes = (
@@ -136,11 +163,11 @@ class PrettyAttributes(object):
     def can_be_valueless(self, name):
         """ Check if the attribute name can be without a value
         """
-        if not self._valueless_attributes_are_allowed:
+        if not self._boolean_attributes_are_allowed:
             return False
         if name.startswith("data-"):
             return True
-        if name in self._known_valueless_attributes:
+        if name in self._known_boolean_attributes:
             return True
         return False
 

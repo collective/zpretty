@@ -51,6 +51,7 @@ class PrettyElement(object):
         "basefont",
         "br",
         "col",
+        "embed",
         "frame",
         "hr",
         "img",
@@ -58,6 +59,9 @@ class PrettyElement(object):
         "link",
         "meta",
         "param",
+        "source",
+        "track",
+        "wbr",
     ]
     indent = u"  "
     attribute_klass = PrettyAttributes

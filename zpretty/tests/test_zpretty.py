@@ -124,7 +124,7 @@ class TestZpretty(TestCase):
             u"<root><tal:test />\n  <div></div></root>\n",
         )
 
-    def test_valueless_attributes(self):
+    def test_boolean_attributes(self):
         """ Test attributes without value
         (hidden, required, data-attributes, ...)
         Some of them are rendered valueless, some other not.
@@ -133,7 +133,7 @@ class TestZpretty(TestCase):
             u'<root data-attribute=""></root>', u"<root data-attribute></root>\n"
         )
         self.assertPrettified(u"<root hidden></root>", u"<root hidden></root>\n")
-        self.assertPrettified(u"<root selected></root>", u'<root selected=""></root>\n')
+        self.assertPrettified(u"<root class></root>", u'<root class=""></root>\n')
 
     def test_fix_self_closing(self):
         """ Check if open self closing tags are rendered correctly

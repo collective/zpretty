@@ -14,8 +14,8 @@ class XMLAttributes(PrettyAttributes):
     """ Customized attribute formatter for zcml
     """
 
-    _valueless_attributes_are_allowed = False
-    _known_valueless_attributes = ()
+    _boolean_attributes_are_allowed = False
+    _known_boolean_attributes = ()
     _multiline_attributes = ()
     _xml_attribute_order = ()
 
