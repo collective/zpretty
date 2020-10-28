@@ -10,7 +10,7 @@ check-manifest==0.40
 Click==7.0
 colorama==0.4.1
 coverage==4.5.4
-cryptography==2.9.2
+cryptography==3.2
 docutils==0.15.2
 entrypoints==0.3
 flake8==3.7.8
