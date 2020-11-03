@@ -8,7 +8,7 @@
 
 ## 2.0.0 (2020-05-28)
 
-- Updated the list of self closing elements and bollean attributes [ale-rt]
+- Updated the list of self closing elements and boolean attributes [ale-rt]
 
 
 ## 1.0.3 (2020-05-22)
