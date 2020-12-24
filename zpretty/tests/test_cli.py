@@ -9,8 +9,7 @@ from zpretty.zcml import ZCMLPrettifier
 
 
 class TestCli(TestCase):
-    """ Test the cli options
-    """
+    """Test the cli options"""
 
     parser = get_parser()
 
@@ -37,8 +36,7 @@ class TestCli(TestCase):
         self.assertEqual(parsed.file, [html, xml])
 
     def test_choose_prettifier(self):
-        """ Check the for the given options and file the best choice is made
-        """
+        """Check the for the given options and file the best choice is made"""
         parsed = self.parser.parse_args(["--xml", "--zcml"])
         self.assertEqual(choose_prettifier(parsed, ""), ZCMLPrettifier)
         parsed = self.parser.parse_args(["--xml"])

@@ -7,14 +7,12 @@ import argparse
 
 
 class TestReadme(TestCase):
-    """ Test zpretty
-    """
+    """Test zpretty"""
 
     maxDiff = None
 
     def extract_usage_from_readme(self):
-        """ Extract the usage from the documentation
-        """
+        """Extract the usage from the documentation"""
         resolved_filename = resource_filename("zpretty", "../README.md")
         readme = open(resolved_filename).read()
         start = readme.index("    zpretty [")
@@ -22,8 +20,7 @@ class TestReadme(TestCase):
         return readme[start:end].splitlines()
 
     def extract_usage_from_parser(self):
-        """ Ask the parser for the usage and indent it
-        """
+        """Ask the parser for the usage and indent it"""
         parser = get_parser()
         # This is needed to keep the 80 lines limit
         parser.formatter_class = lambda prog: argparse.HelpFormatter(prog, width=80)

@@ -13,7 +13,7 @@ logger = getLogger(__name__)
 
 
 class PrettyAttributes(object):
-    """ Render attributes in a pretty way.
+    """Render attributes in a pretty way.
 
     - one per line
     - sorted semantically and alphabetically
@@ -87,8 +87,7 @@ class PrettyAttributes(object):
     )
 
     def __init__(self, attributes, element=None):
-        """ attributes is a dict like object
-        """
+        """attributes is a dict like object"""
         self.attributes = attributes
         self.element = element
 
@@ -121,14 +120,13 @@ class PrettyAttributes(object):
         return (200, name)
 
     def format_multiline(self, name, value):
-        """
-        """
+        """"""
         value_lines = filter(None, value.split())
         line_joiner = u"\n" + (u" " * (len(name) + 2))
         return line_joiner.join(value_lines)
 
     def format_tal_multiline(self, value):
-        """ There are some tal specific attributes that contain ; separated
+        """There are some tal specific attributes that contain ; separated
         statements.
         They are used to define variables or set other attributes.
         You can define many variables by adding statements separated by ';'.
@@ -161,8 +159,7 @@ class PrettyAttributes(object):
         return new_value.replace("<>", ";;")
 
     def can_be_valueless(self, name):
-        """ Check if the attribute name can be without a value
-        """
+        """Check if the attribute name can be without a value"""
         if not self._boolean_attributes_are_allowed:
             return False
         if name.startswith("data-"):
@@ -172,8 +169,7 @@ class PrettyAttributes(object):
         return False
 
     def lines(self):
-        """ Take the attributes, sort them and prettify their values
-        """
+        """Take the attributes, sort them and prettify their values"""
         attributes = self.attributes
         sorted_names = sorted(attributes, key=self.sort_attributes)
         lines = []
@@ -194,6 +190,5 @@ class PrettyAttributes(object):
         return lines
 
     def __call__(self):
-        """ Render the attributes as text
-        """
+        """Render the attributes as text"""
         return u"\n".join(self.lines())

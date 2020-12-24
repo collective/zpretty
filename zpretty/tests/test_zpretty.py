@@ -5,14 +5,12 @@ from zpretty.prettifier import ZPrettifier
 
 
 class TestZpretty(TestCase):
-    """ Test zpretty
-    """
+    """Test zpretty"""
 
     maxDiff = None
 
     def assertPrettified(self, original, expected, encoding="utf8"):
-        """ Check if the original html has been prettified as expected
-        """
+        """Check if the original html has been prettified as expected"""
         if isinstance(expected, tuple):
             expected = u"\n".join(expected)
         prettifier = ZPrettifier(text=original, encoding=encoding)
@@ -20,7 +18,7 @@ class TestZpretty(TestCase):
         self.assertEqual(observed, expected)
 
     def prettify(self, filename):
-        """ Run prettify on filename and check that the output is equal to
+        """Run prettify on filename and check that the output is equal to
         the file content itself
         """
         resolved_filename = resource_filename("zpretty.tests", "original/%s" % filename)
@@ -113,8 +111,7 @@ class TestZpretty(TestCase):
         )
 
     def test_many_children(self):
-        """
-        """
+        """"""
         self.assertPrettified(
             u"<root><tal:test /><div></div></root>",
             u"<root><tal:test /><div></div></root>\n",
@@ -125,7 +122,7 @@ class TestZpretty(TestCase):
         )
 
     def test_boolean_attributes(self):
-        """ Test attributes without value
+        """Test attributes without value
         (hidden, required, data-attributes, ...)
         Some of them are rendered valueless, some other not.
         """
@@ -136,8 +133,7 @@ class TestZpretty(TestCase):
         self.assertPrettified(u"<root class></root>", u'<root class=""></root>\n')
 
     def test_fix_self_closing(self):
-        """ Check if open self closing tags are rendered correctly
-        """
+        """Check if open self closing tags are rendered correctly"""
         self.assertPrettified(u"<input><img><input>", u"<input /><img /><input />\n")
         self.assertPrettified(u"<input><a /><b />", u"<input /><a></a><b></b>\n")
         self.assertPrettified(

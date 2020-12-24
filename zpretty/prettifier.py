@@ -11,8 +11,7 @@ logger = getLogger(__name__)
 
 
 class ZPrettifier(object):
-    """ Wraps and renders some text that may contain xml like stuff
-    """
+    """Wraps and renders some text that may contain xml like stuff"""
 
     pretty_element = PrettyElement
     parser = "html.parser"
@@ -21,7 +20,7 @@ class ZPrettifier(object):
     _newlines_marker = str(uuid4())
 
     def __init__(self, filename="", text="", encoding="utf8"):
-        """ Create a prettifier instance taking the contents
+        """Create a prettifier instance taking the contents
         from a text or a filename
         """
         self.encoding = encoding
@@ -38,7 +37,7 @@ class ZPrettifier(object):
         self.root = self.pretty_element(self.soup, -1)
 
     def get_soup(self, text):
-        """ Tries to get the soup from the given test
+        """Tries to get the soup from the given test
 
         At first it will try to parse the text:
 
@@ -53,12 +52,10 @@ class ZPrettifier(object):
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)
 
     def autofix(self):
-        """ Do various autofx on the soup
-        """
+        """Do various autofx on the soup"""
 
     def pretty_print(self, el):
-        """ Pretty print an element indenting it based on level
-        """
+        """Pretty print an element indenting it based on level"""
         prettified = el().replace(self._newlines_marker, u"")
         if self._end_with_newline and not prettified.endswith(u"\n"):
             prettified += u"\n"

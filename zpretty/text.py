@@ -2,7 +2,7 @@
 
 
 def startswith_whitespace(text):
-    """ Check if text starts with a whitespace
+    """Check if text starts with a whitespace
 
     If text is not a string return False
     """
@@ -12,7 +12,7 @@ def startswith_whitespace(text):
 
 
 def endswith_whitespace(text):
-    """ Check if text ends with a whitespace
+    """Check if text ends with a whitespace
 
     If text is not a string return False
     """
@@ -22,8 +22,7 @@ def endswith_whitespace(text):
 
 
 def lstrip_first_line(text):
-    """ lstrip only the first line of text
-    """
+    """lstrip only the first line of text"""
     if not text:
         return text
     if endswith_whitespace(text):
@@ -34,8 +33,7 @@ def lstrip_first_line(text):
 
 
 def rstrip_last_line(text):
-    """ rstrip only the last line of text
-    """
+    """rstrip only the last line of text"""
     if not text:
         return text
     if endswith_whitespace(text):

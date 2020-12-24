@@ -14,12 +14,10 @@ from zpretty.text import startswith_whitespace
 
 
 class OpenTagException(Exception):
-    """ We want this element to be closed
-    """
+    """We want this element to be closed"""
 
     def __init__(self, el):
-        """ el is a PrettyElement instance
-        """
+        """el is a PrettyElement instance"""
         self.el = el
 
     def __str__(self):
@@ -27,8 +25,7 @@ class OpenTagException(Exception):
 
 
 def memo(f):
-    """ Simple memoize
-    """
+    """Simple memoize"""
     key = "__zpretty_memo__" + f.__name__
 
     def wrapped(obj):
@@ -40,8 +37,7 @@ def memo(f):
 
 
 class PrettyElement(object):
-    """ A pretty element class that can render prettified html
-    """
+    """A pretty element class that can render prettified html"""
 
     null_tag_name = u"null_tag_name"
 
@@ -80,18 +76,16 @@ class PrettyElement(object):
     escaper = EntitySubstitution()
 
     def __init__(self, context, level=0):
-        """ Take something a (bs4) element and an indentation level
-        """
+        """Take something a (bs4) element and an indentation level"""
         self.context = context
         self.level = level
 
     def __str__(self):
-        """ Reuse the context method
-        """
+        """Reuse the context method"""
         return str(self.context)
 
     def __repr__(self):
-        """ Try to make evident:
+        """Try to make evident:
 
         - the element type
         - the level
@@ -105,17 +99,15 @@ class PrettyElement(object):
         return "<pretty:{level}:{tag} />".format(tag=tag, level=self.level)
 
     def is_comment(self):
-        """ Check if this element is a comment
-        """
+        """Check if this element is a comment"""
         return isinstance(self.context, Comment)
 
     def is_doctype(self):
-        """ Check if this element is a doctype
-        """
+        """Check if this element is a doctype"""
         return isinstance(self.context, Doctype)
 
     def is_text(self):
-        """ Check if this element is a text
+        """Check if this element is a text
 
         Also comments and processing instructions
         are instances of NavigableString,
@@ -128,13 +120,11 @@ class PrettyElement(object):
         return True
 
     def is_tag(self):
-        """ Check if this element is a notmal tag
-        """
+        """Check if this element is a notmal tag"""
         return isinstance(self.context, Tag)
 
     def is_self_closing(self):
-        """ Is this element self closing?
-        """
+        """Is this element self closing?"""
         if not self.is_tag():
             raise ValueError("This is not a tag")
         # First check if element has some content.
@@ -157,19 +147,16 @@ class PrettyElement(object):
         return False
 
     def is_null(self):
-        """ We define a special tag null_tag_name to wrap text
-        """
+        """We define a special tag null_tag_name to wrap text"""
         return self.context.name == self.null_tag_name
 
     def is_processing_instruction(self):
-        """ Check if this element is a processing instruction like <?xml...>
-        """
+        """Check if this element is a processing instruction like <?xml...>"""
         return isinstance(self.context, ProcessingInstruction)
 
     @memo
     def getparent(self):
-        """ Return the element parent as an instance of this class
-        """
+        """Return the element parent as an instance of this class"""
         parent = self.context.parent
         if not parent or parent.name == BeautifulSoup.ROOT_TAG_NAME:
             return None
@@ -177,8 +164,7 @@ class PrettyElement(object):
 
     @memo
     def getchildren(self):
-        """ Return this element children as instances of this class
-        """
+        """Return this element children as instances of this class"""
         children = []
         next_level = self.level + 1
         for child in getattr(self.context, "children", []):
@@ -196,13 +182,12 @@ class PrettyElement(object):
 
     @property
     def tag(self):
-        """ Return the tag name
-        """
+        """Return the tag name"""
         return self.context.name
 
     @property
     def text(self):
-        """ Return the text contained in this element (if any)
+        """Return the text contained in this element (if any)
 
         Convert the text characters to html entities
         """
@@ -215,15 +200,13 @@ class PrettyElement(object):
     @property
     @memo
     def attributes(self):
-        """ Return the wrapped attributes
-        """
+        """Return the wrapped attributes"""
         attributes = getattr(self.context, "attrs", {})
         return self.attribute_klass(attributes, self)
 
     @memo
     def render_content(self):
-        """ Render a properly indented the contents of this element
-        """
+        """Render a properly indented the contents of this element"""
         parts = []
         previous_part = ""
         for idx, child in enumerate(self.getchildren()):
@@ -243,25 +226,22 @@ class PrettyElement(object):
         return content
 
     def render_comment(self):
-        """ Render a properly indented comment
-        """
+        """Render a properly indented comment"""
         prefix = self.indent * self.level
         return u"{prefix}<!--{text}-->".format(prefix=prefix, text=self.text)
 
     def render_doctype(self):
-        """ Render a properly indented comment
-        """
+        """Render a properly indented comment"""
         prefix = self.indent * self.level
         return u"{prefix}<!DOCTYPE {text}>".format(prefix=prefix, text=self.text)
 
     def render_processing_instruction(self):
-        """ Render a properly indented processing instruction
-        """
+        """Render a properly indented processing instruction"""
         prefix = self.indent * self.level
         return u"{prefix}<?{text}?>".format(prefix=prefix, text=self.text)
 
     def render_text(self):
-        """ Render a properly indented text
+        """Render a properly indented text
 
         If the text starts with spaces, strip them and add a newline.
         If the text end with spaces, strip them.
@@ -309,16 +289,14 @@ class PrettyElement(object):
         return text
 
     def attributes_prefix(self):
-        """ Return the prefix for the attributes
-        """
+        """Return the prefix for the attributes"""
         if self.first_attribute_on_new_line:
             return u" " * 4
         else:
             return u" " * (len(self.tag) + 2)
 
     def indent_multiline_attributes(self, attributes):
-        """ Indent the attributes to be rendered in a multiline tag
-        """
+        """Indent the attributes to be rendered in a multiline tag"""
         prefix = self.indent * self.level
         attribute_line_joiner = u"\n" + prefix + self.attributes_prefix()
         attributes = attribute_line_joiner.join(attributes.splitlines())
@@ -330,8 +308,7 @@ class PrettyElement(object):
         return attributes
 
     def render_self_closing(self):
-        """ Render a properly indented a self closing tag
-        """
+        """Render a properly indented a self closing tag"""
         attributes = self.attributes()
         multiline_attributes = "\n" in attributes
         if multiline_attributes:
@@ -354,8 +331,7 @@ class PrettyElement(object):
         )
 
     def render_not_self_closing(self):
-        """ Render a properly indented not self closing tag
-        """
+        """Render a properly indented not self closing tag"""
         attributes = self.attributes()
         multiline_attributes = "\n" in attributes
         if multiline_attributes:
@@ -391,8 +367,7 @@ class PrettyElement(object):
 
     @memo
     def __call__(self):
-        """ Render the element and its contents properly indented
-        """
+        """Render the element and its contents properly indented"""
         if self.is_null():
             return self.render_content()
 

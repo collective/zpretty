@@ -11,8 +11,7 @@ logger = getLogger(__name__)
 
 
 class XMLAttributes(PrettyAttributes):
-    """ Customized attribute formatter for zcml
-    """
+    """Customized attribute formatter for zcml"""
 
     _boolean_attributes_are_allowed = False
     _known_boolean_attributes = ()
@@ -20,8 +19,7 @@ class XMLAttributes(PrettyAttributes):
     _xml_attribute_order = ()
 
     def sort_attributes(self, name):
-        """Sort ZCML attributes in a consistent way
-        """
+        """Sort ZCML attributes in a consistent way"""
         if name in self._xml_attribute_order:
             return (100 + self._xml_attribute_order.index(name), name)
         return super(XMLAttributes, self).sort_attributes(name)
@@ -31,8 +29,7 @@ class XMLElement(PrettyElement):
     attribute_klass = XMLAttributes
 
     def is_self_closing(self):
-        """ Is this element self closing?
-        """
+        """Is this element self closing?"""
         if not self.is_tag():
             raise ValueError("This is not a tag")
         # Just check if the element has some content.
@@ -40,22 +37,19 @@ class XMLElement(PrettyElement):
 
     @property
     def tag(self):
-        """ Return the tag name
-        """
+        """Return the tag name"""
         if not self.context.prefix:
             return self.context.name
         else:
             return u":".join((self.context.prefix, self.context.name))
 
     def render_text(self):
-        """ Add an empty line between each element
-        """
+        """Add an empty line between each element"""
         return super(XMLElement, self).render_text()
 
 
 class XMLTreeBuilder(LXMLTreeBuilderForXML):
-    """ Override the default Tree builder
-    """
+    """Override the default Tree builder"""
 
     def default_parser(self, encoding):
         # This can either return a parser object or a class, which
@@ -82,8 +76,7 @@ class XMLTreeBuilder(LXMLTreeBuilderForXML):
 
 
 class XMLPrettifier(ZPrettifier):
-    """ Prettify according to the ZCML style guide
-    """
+    """Prettify according to the ZCML style guide"""
 
     parser = "xml"
     pretty_element = XMLElement
