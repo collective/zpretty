@@ -1,4 +1,4 @@
-[![image](https://travis-ci.org/collective/zpretty.svg?branch=master)](https://travis-ci.org/collective/zpretty/)
+![tests](https://github.com/collective/zpretty/workflows/tests/badge.svg)
 
 [![image](https://coveralls.io/repos/github/collective/zpretty/badge.svg?branch=master)](https://coveralls.io/github/collective/zpretty?branch=master)
 
