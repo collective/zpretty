@@ -9,8 +9,7 @@ logger = getLogger(__name__)
 
 
 class ZCMLAttributes(XMLAttributes):
-    """ Customized attribute formatter for zcml
-    """
+    """Customized attribute formatter for zcml"""
 
     _multiline_attributes = ("for",)
     _xml_attribute_order = (
@@ -38,13 +37,11 @@ class ZCMLElement(XMLElement):
     attribute_klass = ZCMLAttributes
 
     def render_text(self):
-        """ Add an empty line between each element
-        """
+        """Add an empty line between each element"""
         return super(ZCMLElement, self).render_text()
 
 
 class ZCMLPrettifier(XMLPrettifier):
-    """ Prettify according to the ZCML style guide
-    """
+    """Prettify according to the ZCML style guide"""
 
     pretty_element = ZCMLElement

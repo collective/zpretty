@@ -4,12 +4,10 @@ from zpretty.attributes import PrettyAttributes
 
 
 class TestZPrettyAttributess(TestCase):
-    """ Test zpretty
-    """
+    """Test zpretty"""
 
     def assertPrettifiedAttributes(self, attributes, expected, level=0):
-        """ Check if the attributes are properly sorted and formatted
-        """
+        """Check if the attributes are properly sorted and formatted"""
         pretty_attribute = PrettyAttributes(attributes)
         observed = pretty_attribute()
         self.assertEqual(observed, expected)

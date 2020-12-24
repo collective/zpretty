@@ -5,13 +5,12 @@ from zpretty.xml import XMLPrettifier
 
 
 class TestZpretty(TestCase):
-    """ Test zpretty
-    """
+    """Test zpretty"""
 
     maxDiff = None
 
     def prettify(self, filename):
-        """ Run prettify on filename and check that the output is equal to
+        """Run prettify on filename and check that the output is equal to
         the file content itself
         """
         resolved_filename = resource_filename("zpretty.tests", "original/%s" % filename)

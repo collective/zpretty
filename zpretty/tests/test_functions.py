@@ -7,8 +7,7 @@ from zpretty.text import startswith_whitespace
 
 
 class TestFunctions(TestCase):
-    """ Test functions used by zpretty
-    """
+    """Test functions used by zpretty"""
 
     def test_lstrip_first_line_oneline(self):
         self.assertEqual(lstrip_first_line(u" a"), u"a")

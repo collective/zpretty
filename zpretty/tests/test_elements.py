@@ -5,12 +5,10 @@ from zpretty.elements import PrettyElement
 
 
 class TestPrettyElements(TestCase):
-    """ Test basic funtionalities of the PrettyElement class
-    """
+    """Test basic funtionalities of the PrettyElement class"""
 
     def get_element(self, text):
-        """ Given a text return a PrettyElement
-        """
+        """Given a text return a PrettyElement"""
         soup = BeautifulSoup(
             u"<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )

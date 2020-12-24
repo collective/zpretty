@@ -54,8 +54,7 @@ def get_parser():
 
 
 def choose_prettifier(config, infile):
-    """ Choose the best prettifier given the config and the input file
-    """
+    """Choose the best prettifier given the config and the input file"""
     if config.zcml:
         return ZCMLPrettifier
     if config.xml:
@@ -69,8 +68,7 @@ def choose_prettifier(config, infile):
 
 
 def run():
-    """ Prettify each filename passed in the command line
-    """
+    """Prettify each filename passed in the command line"""
     parser = get_parser()
     config = parser.parse_args()
     encoding = config.encoding
