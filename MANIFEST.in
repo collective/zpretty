@@ -1,3 +1,3 @@
 global-exclude *.pyc __pycache__ pyvenv.cfg
 graft zpretty
-include *.cfg *.txt *.md *.in LICENSE Makefile .pre-commit-config.yaml tox.ini
+include *.cfg *.txt *.md *.in LICENSE Makefile .pre-commit-config.yaml tox.ini pyproject.toml

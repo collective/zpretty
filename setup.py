@@ -33,14 +33,7 @@ setup(
     packages=find_packages(),
     install_requires=["setuptools", "beautifulsoup4", "lxml"],
     extras_require={
-        "test": [
-            "nose",
-            "nose-selecttests",
-            "rednose",
-            "coverage",
-            "unittest2",
-            "flake8",
-        ],
+        "test": ["flake8", "pytest-cov", "pytest"],
         "development": ["zest.releaser", "check-manifest", "pyroma"],
     },
     test_suite="zpretty.tests",

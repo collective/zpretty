@@ -4,6 +4,8 @@
 ------------------
 
 - Code is compliant with black 20.8b1 [ale-rt]
+- Switch to pytest for running tests [ale-rt]
+- Upgrade dev requirements [ale-rt]
 
 
 ## 2.0.0 (2020-05-28)
