@@ -1,16 +1,16 @@
-.PHONY: nosetests test flake8 black
+.PHONY: pytests test flake8 black
 
 all: bin/pip
-test: nosetests flake8 black
+test: pytest
 
 bin/pip:
 	virtualenv -p python3 . || python3 -m venv .
 	./bin/pip install -U pip
 	./bin/pip install -U .[development,test]
 
-nosetests: bin/pip
+pytest: bin/pip
 	@echo "==== Running nosetests ===="
-	./bin/nosetests
+	./bin/pytest
 
 flake8: bin/pip
 	@echo "==== Running Flake8 ===="
