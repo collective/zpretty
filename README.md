@@ -56,7 +56,7 @@ Python2.7 use `zpretty` 0.9.x.
 
 Basic usage:
 
-    zpretty [-h] [--encoding ENCODING] [-i] [-x] [-z] [file [file ...]]
+    zpretty [-h] [--encoding ENCODING] [-i] [-x] [-z] [file ...]
 
     positional arguments:
       file                 The list of files to prettify (defaults to stdin)

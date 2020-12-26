@@ -4,6 +4,7 @@ from unittest import TestCase
 from zpretty.cli import get_parser
 
 import argparse
+import sys
 
 
 class TestReadme(TestCase):
@@ -14,7 +15,11 @@ class TestReadme(TestCase):
     def extract_usage_from_readme(self):
         """Extract the usage from the documentation"""
         resolved_filename = resource_filename("zpretty", "../README.md")
-        readme = open(resolved_filename).read()
+        with open(resolved_filename) as f:
+            readme = f.read()
+            if sys.version_info < (3, 9):
+                # Small change in the argparse output for Python >= 3.9
+                readme = readme.replace("[file ...]", "[file [file ...]]")
         start = readme.index("    zpretty [")
         end = readme.index("\n\nWithout", start)
         return readme[start:end].splitlines()
