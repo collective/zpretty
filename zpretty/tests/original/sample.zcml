@@ -3,11 +3,19 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:cmf="http://namespaces.zope.org/cmf"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n:domain="plone"
     >
 
-  <include package="five.pt" />
+  <include
+      package="five.pt"
+      file="."
+      files="foo bar"
+      />
+
+  <excude file="." />
+
   <include
       package="plone.app.upgrade"
       zcml:condition="installed plone.app.upgrade"
@@ -25,23 +33,34 @@
       name="skins"
       directory="skins"
       recursive="True"
+      ignore="/.?*"
       />
 
   <browser:page
       name="view"
       for="plone.app.collection.interfaces.ICollection"
-      permission="zope2.View"
       class=".obj.View"
+      allowed_interface="foo.bar.IFooBar"
       template="templates/view.pt"
+      permission="zope2.View"
       layer=".mytheme.IThemeLayer"
+      menu="foo"
+      title="bar"
       zcml:condition="installed plone.app.collection"
+      i18n:attributes="title"
+      />
+
+  <plone:static
+      directory="/"
+      name="/"
+      type="/"
       />
 
   <adapter
+      factory=".adapters.SolgemaFullcalendarEventDict"
       provides="Solgema.fullcalendar.interfaces.ISolgemaFullcalendarEventDict"
       for="Products.ATContentTypes.interface.IATEvent
            zope.publisher.interfaces.browser.IBrowserRequest"
-      factory=".adapters.SolgemaFullcalendarEventDict"
       />
 
 </configure>

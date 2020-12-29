@@ -1,8 +1,9 @@
 # Changelog
 
-2.0.1 (unreleased)
+2.1.0 (unreleased)
 ------------------
 
+- Improved sorting for zcml attributes (Refs. #11) [ale-rt]
 - Code is compliant with black 20.8b1 [ale-rt]
 - Switch to pytest for running tests [ale-rt]
 - Upgrade dev requirements [ale-rt]
