@@ -3,3 +3,14 @@ testpaths = [
     "zpretty/tests",
 ]
 addopts = "--cov=zpretty"
+
+[tool.isort]
+combine_as_imports=true
+force_alphabetical_sort = true
+force_grid_wrap=0
+force_single_line = true
+include_trailing_comma=true
+known_future_library = "future,pies"
+line_length=88
+lines_after_imports = 2
+multi_line_output=3
