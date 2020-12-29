@@ -17,7 +17,7 @@ class TestReadme(TestCase):
         resolved_filename = resource_filename("zpretty", "../README.md")
         with open(resolved_filename) as f:
             readme = f.read()
-            if sys.version_info < (3, 9):
+            if sys.version_info < (3, 9):  # pragma: no cover
                 # Small change in the argparse output for Python >= 3.9
                 readme = readme.replace("[file ...]", "[file [file ...]]")
         start = readme.index("    zpretty [")

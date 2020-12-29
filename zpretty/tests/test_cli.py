@@ -3,6 +3,7 @@ from pkg_resources import resource_filename
 from unittest import TestCase
 from zpretty.cli import choose_prettifier
 from zpretty.cli import get_parser
+from zpretty.cli import run
 from zpretty.prettifier import ZPrettifier
 from zpretty.xml import XMLPrettifier
 from zpretty.zcml import ZCMLPrettifier
@@ -49,3 +50,10 @@ class TestCli(TestCase):
         # The default one is returned if the extension is not recognized
         parsed = self.parser.parse_args([])
         self.assertEqual(choose_prettifier(parsed, "a.txt"), ZPrettifier)
+
+    def test_run(self):
+        # XXX increase coverage by improving the mock
+        from unittest import mock
+
+        with mock.patch("zpretty.cli.get_parser"):
+            run()
