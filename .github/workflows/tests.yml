@@ -10,7 +10,7 @@ on:
     - cron: "0 12 * * 0" # run once a week on Sunday
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -34,3 +34,16 @@ jobs:
           python -m pip install tox tox-gh-actions
       - name: Run tox
         run: tox
+      - name: Coveralls Parallel
+        uses: AndreMiras/coveralls-python-action@master
+        with:
+          parallel: true
+
+  finish:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: AndreMiras/coveralls-python-action@master
+        with:
+          parallel-finished: true
