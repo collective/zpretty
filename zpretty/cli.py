@@ -1,4 +1,3 @@
-# coding=utf-8
 from argparse import ArgumentParser
 from os.path import splitext
 from sys import stdout

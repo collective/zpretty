@@ -1,4 +1,3 @@
-# coding=utf-8
 from logging import getLogger
 from zpretty.xml import XMLAttributes
 from zpretty.xml import XMLElement
@@ -491,7 +490,7 @@ class ZCMLAttributes(XMLAttributes):
 
 class ZCMLElement(XMLElement):
     first_attribute_on_new_line = True
-    before_closing_multiline = u"    "
+    before_closing_multiline = "    "
     attribute_klass = ZCMLAttributes
 
     def render_text(self):

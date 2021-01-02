@@ -1,4 +1,3 @@
-# coding=utf-8
 from logging import getLogger
 
 
@@ -20,7 +19,7 @@ class PrettyAttributes(object):
     - with properly indented and escaped values
     """
 
-    _attribute_template = u'%s="%s"'
+    _attribute_template = '%s="%s"'
     _boolean_attributes_are_allowed = True
 
     _known_boolean_attributes = (
@@ -50,13 +49,13 @@ class PrettyAttributes(object):
         "selected",
         "truespeed",
     )
-    _multiline_prefix = u"  "
+    _multiline_prefix = "  "
     _multiline_attributes = ()
     _tal_multiline_attributes = (
-        u"attributes",
-        u"define",
-        u"tal:attributes",
-        u"tal:define",
+        "attributes",
+        "define",
+        "tal:attributes",
+        "tal:define",
     )
 
     _tal_attribute_order = (
@@ -122,7 +121,7 @@ class PrettyAttributes(object):
     def format_multiline(self, name, value):
         """"""
         value_lines = filter(None, value.split())
-        line_joiner = u"\n" + (u" " * (len(name) + 2))
+        line_joiner = "\n" + (u" " * (len(name) + 2))
         return line_joiner.join(value_lines)
 
     def format_tal_multiline(self, value):
@@ -149,12 +148,12 @@ class PrettyAttributes(object):
             statement = statement.strip()
             if statement:
                 if not statement.endswith(";"):
-                    statement += u";"
+                    statement += ";"
                 lines.append(self._multiline_prefix + statement)
         # ... and at the end
         lines.append(u"")
 
-        new_value = u"\n".join(lines)
+        new_value = "\n".join(lines)
         # restore ';;'
         return new_value.replace("<>", ";;")
 
@@ -177,7 +176,7 @@ class PrettyAttributes(object):
             value = attributes[name]
             if isinstance(value, list):
                 # Happens, e.g., for the class attribute
-                value = u" ".join(value)
+                value = " ".join(value)
             if name in self._multiline_attributes:
                 value = self.format_multiline(name, value)
             elif name in self._tal_multiline_attributes:
@@ -191,4 +190,4 @@ class PrettyAttributes(object):
 
     def __call__(self):
         """Render the attributes as text"""
-        return u"\n".join(self.lines())
+        return "\n".join(self.lines())

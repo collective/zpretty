@@ -1,4 +1,3 @@
-# coding=utf-8
 from pkg_resources import resource_filename
 from unittest import TestCase
 from zpretty.cli import choose_prettifier

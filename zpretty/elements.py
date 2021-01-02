@@ -1,4 +1,3 @@
-# coding=utf-8
 from bs4 import BeautifulSoup
 from bs4.dammit import EntitySubstitution
 from bs4.element import Comment
@@ -39,7 +38,7 @@ def memo(f):
 class PrettyElement(object):
     """A pretty element class that can render prettified html"""
 
-    null_tag_name = u"null_tag_name"
+    null_tag_name = "null_tag_name"
 
     knownself_closing_elements = [
         "area",
@@ -59,19 +58,19 @@ class PrettyElement(object):
         "track",
         "wbr",
     ]
-    indent = u"  "
+    indent = "  "
     attribute_klass = PrettyAttributes
 
     first_attribute_on_new_line = False
-    before_closing_multiline = u""
+    before_closing_multiline = ""
 
-    self_closing_singleline_template = u"{prefix}<{tag}{attributes}/>"
-    self_closing_multiline_template = u"\n".join(
-        (u"{prefix}<{tag}{attributes}", u"{prefix}{before_closing_multiline}/>")
+    self_closing_singleline_template = "{prefix}<{tag}{attributes}/>"
+    self_closing_multiline_template = "\n".join(
+        (u"{prefix}<{tag}{attributes}", "{prefix}{before_closing_multiline}/>")
     )
-    start_tag_singleline_template = u"{prefix}<{tag}{attributes}>"
-    start_tag_multiline_template = u"\n".join(
-        (u"{prefix}<{tag}{attributes}", u"{prefix}{before_closing_multiline}>")
+    start_tag_singleline_template = "{prefix}<{tag}{attributes}>"
+    start_tag_multiline_template = "\n".join(
+        (u"{prefix}<{tag}{attributes}", "{prefix}{before_closing_multiline}>")
     )
     escaper = EntitySubstitution()
 
@@ -192,7 +191,7 @@ class PrettyElement(object):
         Convert the text characters to html entities
         """
         if not isinstance(self.context, NavigableString):
-            return u""
+            return ""
         if self.is_comment():
             return self.context
         return self.escaper.substitute_html(self.context.string)
@@ -219,7 +218,7 @@ class PrettyElement(object):
                 parts[-1] = rstrip_last_line(parts[-1])
             parts.append(part)
             previous_part = child()
-        content = u"".join(parts)
+        content = "".join(parts)
 
         if endswith_whitespace(content):
             content = rstrip_last_line(content)
@@ -228,17 +227,17 @@ class PrettyElement(object):
     def render_comment(self):
         """Render a properly indented comment"""
         prefix = self.indent * self.level
-        return u"{prefix}<!--{text}-->".format(prefix=prefix, text=self.text)
+        return "{prefix}<!--{text}-->".format(prefix=prefix, text=self.text)
 
     def render_doctype(self):
         """Render a properly indented comment"""
         prefix = self.indent * self.level
-        return u"{prefix}<!DOCTYPE {text}>".format(prefix=prefix, text=self.text)
+        return "{prefix}<!DOCTYPE {text}>".format(prefix=prefix, text=self.text)
 
     def render_processing_instruction(self):
         """Render a properly indented processing instruction"""
         prefix = self.indent * self.level
-        return u"{prefix}<?{text}?>".format(prefix=prefix, text=self.text)
+        return "{prefix}<?{text}?>".format(prefix=prefix, text=self.text)
 
     def render_text(self):
         """Render a properly indented text
@@ -249,17 +248,17 @@ class PrettyElement(object):
         text = self.text
         lines = text.split(u"\n")
         if not lines:
-            return u""
+            return ""
 
         prefix = self.indent * (self.level)
         if len(lines) == 1:
             line = lines[0]
             if not line.strip():
-                return u"\n"
+                return "\n"
             if startswith_whitespace(line):
-                line = u"\n" + prefix + "%s" % line.lstrip()
+                line = "\n" + prefix + "%s" % line.lstrip()
             if endswith_whitespace(line):
-                line = line.rstrip() + u"\n"
+                line = line.rstrip() + "\n"
             return line
 
         if not lines[0].strip():
@@ -285,26 +284,26 @@ class PrettyElement(object):
                 rendered_lines.append(u"%s\n" % lines[-1].rstrip())
         else:
             rendered_lines.append(u"")
-        text = u"".join(rendered_lines)
+        text = "".join(rendered_lines)
         return text
 
     def attributes_prefix(self):
         """Return the prefix for the attributes"""
         if self.first_attribute_on_new_line:
-            return u" " * 4
+            return " " * 4
         else:
-            return u" " * (len(self.tag) + 2)
+            return " " * (len(self.tag) + 2)
 
     def indent_multiline_attributes(self, attributes):
         """Indent the attributes to be rendered in a multiline tag"""
         prefix = self.indent * self.level
-        attribute_line_joiner = u"\n" + prefix + self.attributes_prefix()
+        attribute_line_joiner = "\n" + prefix + self.attributes_prefix()
         attributes = attribute_line_joiner.join(attributes.splitlines())
         if self.first_attribute_on_new_line:
             # prepend a new line and the appropriate space
             attributes = attribute_line_joiner + attributes
         else:
-            attributes = u" " + attributes
+            attributes = " " + attributes
         return attributes
 
     def render_self_closing(self):
@@ -317,9 +316,9 @@ class PrettyElement(object):
         else:
             if attributes:
                 # we need a space to separate the tag end
-                attributes = u" " + attributes + u" "
+                attributes = " " + attributes + " "
             else:
-                attributes = u" "
+                attributes = " "
             template = self.self_closing_singleline_template
 
         prefix = self.indent * self.level
@@ -340,7 +339,7 @@ class PrettyElement(object):
         else:
             if attributes:
                 # we need a space after separate from the tag
-                attributes = u" " + attributes
+                attributes = " " + attributes
             open_tag_template = self.start_tag_singleline_template
 
         prefix = self.indent * self.level
@@ -348,11 +347,11 @@ class PrettyElement(object):
         text = self.text and self.render_text() or self.render_content()
 
         if endswith_whitespace(text):
-            if text[-1] != u"\n":
-                text = rstrip_last_line(text) + u"\n"
-            close_tag_template = u"{prefix}</{tag}>"
+            if text[-1] != "\n":
+                text = rstrip_last_line(text) + "\n"
+            close_tag_template = "{prefix}</{tag}>"
         else:
-            close_tag_template = u"</{tag}>"
+            close_tag_template = "</{tag}>"
 
         open_tag = open_tag_template.format(
             before_closing_multiline=self.before_closing_multiline,
@@ -361,7 +360,7 @@ class PrettyElement(object):
             tag=self.tag,
         )
         close_tag = close_tag_template.format(prefix=prefix, tag=self.tag)
-        return u"{open_tag}{text}{close_tag}".format(
+        return "{open_tag}{text}{close_tag}".format(
             close_tag=close_tag, open_tag=open_tag, text=text
         )
 
