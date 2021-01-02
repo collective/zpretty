@@ -11,7 +11,7 @@ class TestZpretty(TestCase):
     def assertPrettified(self, original, expected, encoding="utf8"):
         """Check if the original html has been prettified as expected"""
         if isinstance(expected, tuple):
-            expected = u"\n".join(expected)
+            expected = "\n".join(expected)
         prettifier = ZPrettifier(text=original, encoding=encoding)
         observed = prettifier()
         self.assertEqual(observed, expected)
@@ -27,97 +27,97 @@ class TestZpretty(TestCase):
         self.assertListEqual(observed.splitlines(), expected.splitlines())
 
     def test_format_self_closing_tag(self):
-        self.assertPrettified("<tal:test />", u"<tal:test />\n")
+        self.assertPrettified("<tal:test />", "<tal:test />\n")
 
     def test_nesting_no_text(self):
         # no attributes
         self.assertPrettified(
-            "<root><tal:test /></root>", u"<root><tal:test /></root>\n"
+            "<root><tal:test /></root>", "<root><tal:test /></root>\n"
         )
 
         self.assertPrettified(
-            "<root><tal:test /> </root>", u"<root><tal:test />\n</root>\n"
+            "<root><tal:test /> </root>", "<root><tal:test />\n</root>\n"
         )
 
         self.assertPrettified(
-            "<root> <tal:test /> </root>", u"<root>\n  <tal:test />\n</root>\n"
+            "<root> <tal:test /> </root>", "<root>\n  <tal:test />\n</root>\n"
         )
 
         self.assertPrettified(
-            "<root> <tal:test /></root>", u"<root>\n  <tal:test /></root>\n"
+            "<root> <tal:test /></root>", "<root>\n  <tal:test /></root>\n"
         )
         self.assertPrettified(
             "<root><tal:test><child /></tal:test></root>",
-            u"<root><tal:test><child></child></tal:test></root>\n",
+            "<root><tal:test><child></child></tal:test></root>\n",
         )
 
     def test_nesting_with_text(self):
         # no attributes
         self.assertPrettified(
-            "<root> a<tal:test /></root>", u"<root>\n  a<tal:test /></root>\n"
+            "<root> a<tal:test /></root>", "<root>\n  a<tal:test /></root>\n"
         )
 
         self.assertPrettified(
-            "<root>a <tal:test /> </root>", u"<root>a\n  <tal:test />\n</root>\n"
+            "<root>a <tal:test /> </root>", "<root>a\n  <tal:test />\n</root>\n"
         )
 
         self.assertPrettified(
-            "<root> a <tal:test /> </root>", u"<root>\n  a\n  <tal:test />\n</root>\n"
+            "<root> a <tal:test /> </root>", "<root>\n  a\n  <tal:test />\n</root>\n"
         )
 
         self.assertPrettified(
-            "<root> a <div /> </root>", u"<root>\n  a\n  <div></div>\n</root>\n"
+            "<root> a <div /> </root>", "<root>\n  a\n  <div></div>\n</root>\n"
         )
         self.assertPrettified(
             "<root> a <div /> <div /> </root>",
-            u"<root>\n  a\n  <div></div>\n  <div></div>\n</root>\n",
+            "<root>\n  a\n  <div></div>\n  <div></div>\n</root>\n",
         )
         self.assertPrettified(
             "<root> a <div />\n <div /> </root>",
-            u"<root>\n  a\n  <div></div>\n  <div></div>\n</root>\n",
+            "<root>\n  a\n  <div></div>\n  <div></div>\n</root>\n",
         )
         self.assertPrettified(
             "<root> a <div />\na <div /> </root>",
-            u"<root>\n  a\n  <div></div>\na\n  <div></div>\n</root>\n",
+            "<root>\n  a\n  <div></div>\na\n  <div></div>\n</root>\n",
         )
         self.assertPrettified(
-            "<root> <div>a</div> </root>", u"<root>\n  <div>a</div>\n</root>\n"
+            "<root> <div>a</div> </root>", "<root>\n  <div>a</div>\n</root>\n"
         )
         self.assertPrettified(
-            "<root> <div>a\n  </div> </root>", u"<root>\n  <div>a\n  </div>\n</root>\n"
+            "<root> <div>a\n  </div> </root>", "<root>\n  <div>a\n  </div>\n</root>\n"
         )
-        self.assertPrettified("<div><p>a</p></div>", u"<div><p>a</p></div>\n")
+        self.assertPrettified("<div><p>a</p></div>", "<div><p>a</p></div>\n")
 
     def test_nesting_with_tail(self):
         # no attributes
         self.assertPrettified(
             "<root><p></p><!-- #a -->\n\n<p></p></root>",
-            u"<root><p></p><!-- #a -->\n\n  <p></p></root>\n",
+            "<root><p></p><!-- #a -->\n\n  <p></p></root>\n",
         )
         self.assertPrettified(
-            "<root><tal:test />a</root>", u"<root><tal:test />a</root>\n"
+            "<root><tal:test />a</root>", "<root><tal:test />a</root>\n"
         )
         self.assertPrettified(
-            "<root><tal:test />a </root>", (u"<root><tal:test />a", u"</root>", u"")
+            "<root><tal:test />a </root>", (u"<root><tal:test />a", "</root>", "")
         )
 
         self.assertPrettified(
             "<root><tal:test /> a </root>",
-            (u"<root><tal:test />", u"  a", u"</root>", u""),
+            (u"<root><tal:test />", "  a", "</root>", ""),
         )
         self.assertPrettified(
-            "<root><tal:test /> a </root>", u"<root><tal:test />\n  a\n</root>\n"
+            "<root><tal:test /> a </root>", "<root><tal:test />\n  a\n</root>\n"
         )
 
     def test_many_children(self):
         """"""
         self.assertPrettified(
-            u"<root><tal:test /><div></div></root>",
-            u"<root><tal:test /><div></div></root>\n",
+            "<root><tal:test /><div></div></root>",
+            "<root><tal:test /><div></div></root>\n",
         )
         self.assertPrettified(
-            u"<root><tal:test /> <div></div></root>",
-            u"<root><tal:test />\n  <div></div></root>\n",
+            "<root><tal:test /> <div></div></root>",
+            "<root><tal:test />\n  <div></div></root>\n",
         )
 
     def test_boolean_attributes(self):
@@ -126,36 +126,34 @@ class TestZpretty(TestCase):
         Some of them are rendered valueless, some other not.
         """
         self.assertPrettified(
-            u'<root data-attribute=""></root>', u"<root data-attribute></root>\n"
+            '<root data-attribute=""></root>', "<root data-attribute></root>\n"
         )
-        self.assertPrettified(u"<root hidden></root>", u"<root hidden></root>\n")
-        self.assertPrettified(u"<root class></root>", u'<root class=""></root>\n')
+        self.assertPrettified(u"<root hidden></root>", "<root hidden></root>\n")
+        self.assertPrettified(u"<root class></root>", '<root class=""></root>\n')
 
     def test_fix_self_closing(self):
         """Check if open self closing tags are rendered correctly"""
-        self.assertPrettified(u"<input><img><input>", u"<input /><img /><input />\n")
-        self.assertPrettified(u"<input><a /><b />", u"<input /><a></a><b></b>\n")
-        self.assertPrettified(
-            u"<input><a /><b /></input>", u"<input /><a></a><b></b>\n"
-        )
+        self.assertPrettified(u"<input><img><input>", "<input /><img /><input />\n")
+        self.assertPrettified(u"<input><a /><b />", "<input /><a></a><b></b>\n")
+        self.assertPrettified("<input><a /><b /></input>", "<input /><a></a><b></b>\n")
 
     def test_element_repr(self):
         prettifier = ZPrettifier(text="")
         self.assertEqual(repr(prettifier.root), "<pretty:-1:null_tag_name />")
 
     def test_whitelines_not_stripped(self):
-        self.assertPrettified(u"<root>\n</root>", u"<root>\n</root>\n")
+        self.assertPrettified(u"<root>\n</root>", "<root>\n</root>\n")
         self.assertPrettified(
-            u"<root>\n    Hello!   \n</root>", u"<root>\n    Hello!\n</root>\n"
+            "<root>\n    Hello!   \n</root>", "<root>\n    Hello!\n</root>\n"
         )
 
     def test_text_close_to_an_element(self):
         self.assertPrettified(
-            u"<root>\n (<a></a>)\n</root>", u"<root>\n  (<a></a>)\n</root>\n"
+            "<root>\n (<a></a>)\n</root>", "<root>\n  (<a></a>)\n</root>\n"
         )
 
     def test_entities(self):
-        self.assertPrettified("<root>&nbsp;</root>", u"<root>&nbsp;</root>\n")
+        self.assertPrettified("<root>&nbsp;</root>", "<root>&nbsp;</root>\n")
 
     def test_single_quotes_in_attrs(self):
         self.assertPrettified('<root a="\'" />', '<root a="\'"></root>\n')

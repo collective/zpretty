@@ -40,7 +40,7 @@ class XMLElement(PrettyElement):
         if not self.context.prefix:
             return self.context.name
         else:
-            return u":".join((self.context.prefix, self.context.name))
+            return ":".join((self.context.prefix, self.context.name))
 
     def render_text(self):
         """Add an empty line between each element"""

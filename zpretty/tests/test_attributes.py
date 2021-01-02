@@ -12,29 +12,29 @@ class TestZPrettyAttributess(TestCase):
         self.assertEqual(observed, expected)
 
     def test_no_attributes(self):
-        self.assertPrettifiedAttributes({}, u"")
+        self.assertPrettifiedAttributes({}, "")
 
     def test_one_attribute(self):
-        self.assertPrettifiedAttributes({u"a": u"1"}, u'a="1"')
+        self.assertPrettifiedAttributes({u"a": "1"}, 'a="1"')
 
     def test_tal_define(self):
         self.assertPrettifiedAttributes(
-            {u"tal:define": u"a 1; b 2"},
-            u"\n".join((u'tal:define="', u"  a 1;", u"  b 2;", u'"')),
+            {u"tal:define": "a 1; b 2"},
+            "\n".join((u'tal:define="', "  a 1;", "  b 2;", '"')),
         )
 
     def test_format_attributes_many_attribute(self):
         self.assertPrettifiedAttributes(
-            {u"a": u"1", u"b": u"2", u"class": u"hidden", u"tal:define": u"a 1; b 2"},
-            u"\n".join(
+            {u"a": "1", "b": "2", "class": "hidden", "tal:define": "a 1; b 2"},
+            "\n".join(
                 (
-                    u'class="hidden"',
-                    u'a="1"',
-                    u'b="2"',
-                    u'tal:define="',
-                    u"  a 1;",
-                    u"  b 2;",
-                    u'"',
+                    'class="hidden"',
+                    'a="1"',
+                    'b="2"',
+                    'tal:define="',
+                    "  a 1;",
+                    "  b 2;",
+                    '"',
                 )
             ),
         )

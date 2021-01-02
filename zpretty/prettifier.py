@@ -44,7 +44,7 @@ class ZPrettifier(object):
         2. as an html
         3. will just return the unparsed text
         """
-        markup = u"<{null}>{text}</{null}>".format(
+        markup = "<{null}>{text}</{null}>".format(
             null=self.pretty_element.null_tag_name, text=text
         )
         wrapped_soup = BeautifulSoup(markup, self.parser, builder=self.builder)
@@ -55,9 +55,9 @@ class ZPrettifier(object):
 
     def pretty_print(self, el):
         """Pretty print an element indenting it based on level"""
-        prettified = el().replace(self._newlines_marker, u"")
+        prettified = el().replace(self._newlines_marker, "")
         if self._end_with_newline and not prettified.endswith(u"\n"):
-            prettified += u"\n"
+            prettified += "\n"
         return prettified
 
     def __call__(self):

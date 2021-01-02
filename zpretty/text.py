@@ -23,10 +23,10 @@ def lstrip_first_line(text):
     if not text:
         return text
     if endswith_whitespace(text):
-        text += u" "
+        text += " "
     lines = text.splitlines()
     lines[0] = lines[0].lstrip()
-    return u"\n".join(lines)
+    return "\n".join(lines)
 
 
 def rstrip_last_line(text):
@@ -34,7 +34,7 @@ def rstrip_last_line(text):
     if not text:
         return text
     if endswith_whitespace(text):
-        text += u" "
+        text += " "
     lines = text.splitlines()
     lines[-1] = lines[-1].rstrip()
-    return u"\n".join(lines)
+    return "\n".join(lines)
