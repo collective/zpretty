@@ -1,4 +1,3 @@
-# coding=utf-8
 from unittest import TestCase
 from zpretty.text import endswith_whitespace
 from zpretty.text import lstrip_first_line

@@ -1,4 +1,3 @@
-# coding=utf-8
 from logging import getLogger
 from zpretty.xml import XMLAttributes
 from zpretty.xml import XMLElement

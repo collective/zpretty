@@ -1,4 +1,3 @@
-# coding=utf-8
 from bs4.builder._lxml import LXMLTreeBuilderForXML
 from logging import getLogger
 from lxml import etree

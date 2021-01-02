@@ -1,4 +1,3 @@
-# coding=utf-8
 from bs4 import BeautifulSoup
 from bs4.dammit import EntitySubstitution
 from bs4.element import Comment

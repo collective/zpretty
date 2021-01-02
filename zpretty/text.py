@@ -1,6 +1,3 @@
-# coding=utf-8
-
-
 def startswith_whitespace(text):
     """Check if text starts with a whitespace
 
