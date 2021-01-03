@@ -90,6 +90,24 @@ class PrettyAttributes(object):
         self.attributes = attributes
         self.element = element
 
+    def __len__(self):
+        return len(self.attributes)
+
+    @property
+    def prefix(self):
+        """Return the prefix for the attributes
+
+        The returned value will be a number of spaces equal to the tag name length + 2,
+        e.g., in this case it will be 8
+        (6 for foobar + 2 (the leading < and the space after foobar)):
+        <foobar foo="1"
+        ________bar="2"
+        />
+        """
+        if not self.element:
+            return "  "
+        return " " * (len(self.element.tag or "") + 2)
+
     def sort_attributes(self, name):
         """This sorts the attribute trying to group them semantically
 
@@ -121,7 +139,7 @@ class PrettyAttributes(object):
     def format_multiline(self, name, value):
         """"""
         value_lines = filter(None, value.split())
-        line_joiner = "\n" + (u" " * (len(name) + 2))
+        line_joiner = "\n" + (" " * (len(name) + 2))
         return line_joiner.join(value_lines)
 
     def format_tal_multiline(self, value):
@@ -143,15 +161,20 @@ class PrettyAttributes(object):
         statements = value.replace(";;", "<>").split(";")
 
         # We always want an empty line first...
-        lines = [u""]
+        lines = [""]
+        try:
+            line_prefix = self.element.prefix + self.prefix + self._multiline_prefix
+        except AttributeError:
+            line_prefix = self._multiline_prefix
+
         for statement in statements:
             statement = statement.strip()
             if statement:
                 if not statement.endswith(";"):
                     statement += ";"
-                lines.append(self._multiline_prefix + statement)
-        # ... and at the end
-        lines.append(u"")
+                lines.append(line_prefix + statement)
+        # ... and at the end dedent
+        lines.append(line_prefix[:-2])
 
         new_value = "\n".join(lines)
         # restore ';;'
@@ -188,6 +211,24 @@ class PrettyAttributes(object):
             lines.append(line)
         return lines
 
+    def lstrip(self):
+        """This returns the attributes with the left spaces removed"""
+        return self().lstrip()
+
     def __call__(self):
-        """Render the attributes as text"""
-        return "\n".join(self.lines())
+        """Render the attributes as text
+
+        Render and an empty string if no attributes
+        If we have one attribute we do not indent it
+        If we have many we indent them
+        """
+        if len(self) == 0:
+            return ""
+        if len(self) == 1:
+            for line in self.lines():
+                return line
+        if self.element:
+            prefix = self.element.prefix + self.prefix
+        else:
+            prefix = ""
+        return prefix + f"\n{prefix}".join(self.lines())

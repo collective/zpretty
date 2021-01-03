@@ -10,6 +10,8 @@ logger = getLogger(__name__)
 class ZCMLAttributes(XMLAttributes):
     """Customized attribute formatter for zcml"""
 
+    # The ZCML guides wants attributes indented by 4 spaces
+    prefix = 4 * " "
     _multiline_attributes = ("for",)
     _xml_attribute_order_by_ns_and_tag = {
         "http://namespaces.plone.org/monkey": {
@@ -480,22 +482,87 @@ class ZCMLAttributes(XMLAttributes):
         - name, title, description are usually sorted first (except for view
           where the title is sorted after the menu attribute)
         """
-        mapping_by_namespace = self._xml_attribute_order_by_ns_and_tag.get(
-            self.element.context.namespace, {}
-        )
-        return mapping_by_namespace.get(
-            self.element.context.name, self._xml_attribute_order_fallback
-        )
+        try:
+            ns = self.element.context.namespace
+            name = self.element.context.name
+        except AttributeError:
+            ns = ""
+            name = ""
+
+        mapping_by_namespace = self._xml_attribute_order_by_ns_and_tag.get(ns, {})
+        return mapping_by_namespace.get(name, self._xml_attribute_order_fallback)
+
+    def format_multiline(self, name, value):
+        """We have two cases according if we have just one attribute or more
+
+        1. single attribute
+          1.1 the the element prefix (if any)
+          1.2 as many spaces as the element name
+          1.2 as many spaces as the attribute name
+          1.3 four spaces spaces (leading `<` and space between element and attribute
+              the `="`)
+
+        2. many attributes we need to add:
+          2.1 the the element prefix (if any)
+          2.2 attribute indentation (4 spaces)
+          2.3 as many spaces as the attribute name
+          2.4 2 spaces to take into account the leading `="`
+        """
+        value_lines = filter(None, value.split())
+        if len(self) == 1:
+            line_joiner = (
+                "\n"
+                + getattr(self.element, "prefix", "")
+                + " " * len(getattr(self.element, "tag", ""))
+                + " " * len(name)
+                + " " * 4
+            )
+        else:
+            line_joiner = (
+                "\n"
+                + getattr(self.element, "prefix", "")
+                + self.prefix
+                + " " * len(name)
+                + " " * 2
+            )
+        return line_joiner.join(value_lines)
+
+    def lstrip(self):
+        """Actually we do not want to remove the spaces"""
+        return self()
+
+    def __call__(self):
+        """Render the attributes as text
+
+        Render and an empty string if no attributes
+        If we have one attribute we do not indent it
+        If we have many we indent them by 4 spaces + the indentation of the element
+        """
+        if len(self) == 0:
+            return ""
+        if len(self) == 1:
+            for line in self.lines():
+                return line
+
+        if self.element:
+            prefix = self.element.prefix + self.prefix
+        else:
+            prefix = self.prefix
+
+        lines = self.lines()
+        return prefix + f"\n{prefix}".join(lines)
 
 
 class ZCMLElement(XMLElement):
-    first_attribute_on_new_line = True
     before_closing_multiline = "    "
     attribute_klass = ZCMLAttributes
 
-    def render_text(self):
-        """Add an empty line between each element"""
-        return super(ZCMLElement, self).render_text()
+    self_closing_multiline_template = "\n".join(
+        ("{prefix}<{tag}\n{attributes}", "{prefix}{before_closing_multiline}/>")
+    )
+    start_tag_multiline_template = "\n".join(
+        ("{prefix}<{tag}\n{attributes}", "{prefix}{before_closing_multiline}>")
+    )
 
 
 class ZCMLPrettifier(XMLPrettifier):

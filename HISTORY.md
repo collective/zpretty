@@ -3,6 +3,10 @@
 2.1.0 (unreleased)
 ------------------
 
+- The attributes renderer knows about the element indentation
+  and for indents the attributes consequently [ale-rt]
+- The ZCML element has now its custom tag templates, this simplifies the code [ale-rt]
+- Attributes content spanning multiple lines is not indented anymore (Refs. #17) [ale-rt]
 - Improved sorting for zcml attributes (Refs. #11) [ale-rt]
 - Code is compliant with black 20.8b1 [ale-rt]
 - Switch to pytest for running tests [ale-rt]
