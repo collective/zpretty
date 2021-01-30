@@ -55,9 +55,6 @@ class ZPrettifier(object):
         wrapped_soup = BeautifulSoup(markup, self.parser, builder=self.builder)
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)
 
-    def autofix(self):
-        """Do various autofx on the soup"""
-
     def pretty_print(self, el):
         """Pretty print an element indenting it based on level"""
         prettified = el().replace(self._newlines_marker, "")
@@ -66,5 +63,4 @@ class ZPrettifier(object):
         return prettified
 
     def __call__(self):
-        self.autofix()
         return self.pretty_print(self.root)
