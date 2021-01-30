@@ -33,6 +33,11 @@ class ZPrettifier(object):
             for line in text.splitlines()
         )
         self.soup = self.get_soup(self.text)
+
+        # Cleanup all spurious self._newlines_marker attributes, see #35
+        for el in self.soup.find_all(attrs={self._newlines_marker: ""}):
+            el.attrs.pop(self._newlines_marker, None)
+
         self.root = self.pretty_element(self.soup, -1)
 
     def get_soup(self, text):

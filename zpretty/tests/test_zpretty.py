@@ -152,6 +152,17 @@ class TestZpretty(TestCase):
             "<root>\n (<a></a>)\n</root>", "<root>\n  (<a></a>)\n</root>\n"
         )
 
+    def test_elements_with_new_lines(self):
+        self.assertPrettified("<root\n></root>", "<root></root>\n")
+        self.assertPrettified(
+            '<root\na="b"\n\n></root>',
+            ('<root a="b"></root>\n'),
+        )
+        self.assertPrettified(
+            '<root\na="b"\n\nc="d"></root>',
+            ('<root a="b"\n      c="d"\n></root>\n'),
+        )
+
     def test_entities(self):
         self.assertPrettified("<root>&nbsp;</root>", "<root>&nbsp;</root>\n")
 
