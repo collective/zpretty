@@ -3,6 +3,7 @@
 2.1.0 (unreleased)
 ------------------
 
+- Remove unused `autofix` method [ale-rt]
 - Do not render a spurious `=""` when new lines appear inside a tag (Refs. #35) [ale-rt]
 - The attributes renderer knows about the element indentation
   and for indents the attributes consequently [ale-rt]
