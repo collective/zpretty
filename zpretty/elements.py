@@ -260,23 +260,23 @@ class PrettyElement(object):
             if not line.strip():
                 return "\n"
             if startswith_whitespace(line):
-                line = "\n" + prefix + "%s" % line.lstrip()
+                line = f"\n{prefix}{line.lstrip()}"
             if endswith_whitespace(line):
-                line = line.rstrip() + "\n"
+                line = f"{line.rstrip()}\n"
             return line
 
         if not lines[0].strip():
             rendered_lines = ["\n"]
         elif startswith_whitespace(lines[0]):
-            rendered_lines = ["\n" + prefix + "%s\n" % lines[0].rstrip()]
+            rendered_lines = [f"\n{prefix}{lines[0].rstrip()}\n"]
         else:
-            rendered_lines = ["%s\n" % lines[0]]
+            rendered_lines = [f"{lines[0]}\n"]
 
         for line in lines[1:-1]:
             if not line.strip():
                 rendered_lines.append("\n")
             else:
-                rendered_lines.append("%s\n" % line.rstrip())
+                rendered_lines.append(f"{line.rstrip()}\n")
 
         if lines[-1].strip():
             if lines[-1].rstrip() == lines[-1]:
@@ -324,7 +324,7 @@ class PrettyElement(object):
 
         if endswith_whitespace(text):
             if text[-1] != "\n":
-                text = rstrip_last_line(text) + "\n"
+                text = f"{rstrip_last_line(text)}\n"
             close_tag_template = "{prefix}</{tag}>"
         else:
             close_tag_template = "</{tag}>"
