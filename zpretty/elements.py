@@ -156,9 +156,6 @@ class PrettyElement(object):
         """Check if this element is a processing instruction like <?xml...>"""
         return isinstance(self.context, ProcessingInstruction)
 
-    def has_many_attributes(self):
-        return len(self.attributes) > 1
-
     @memo
     def getparent(self):
         """Return the element parent as an instance of this class"""
