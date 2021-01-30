@@ -58,7 +58,7 @@ class ZPrettifier(object):
     def pretty_print(self, el):
         """Pretty print an element indenting it based on level"""
         prettified = el().replace(self._newlines_marker, "")
-        if self._end_with_newline and not prettified.endswith(u"\n"):
+        if self._end_with_newline and not prettified.endswith("\n"):
             prettified += "\n"
         return prettified
 

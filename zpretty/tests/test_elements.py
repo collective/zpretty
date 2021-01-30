@@ -65,7 +65,7 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el(), '<root class="b"></root>')
 
     def test_processing_instruction(self):
-        el = self.get_element(u'<?xml version="1.0" encoding="utf-8">')
+        el = self.get_element('<?xml version="1.0" encoding="utf-8">')
         self.assertFalse(el.is_tag())
         self.assertFalse(el.is_text())
         self.assertFalse(el.is_doctype())
@@ -76,7 +76,7 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el.attributes(), "")
 
     def test_doctype(self):
-        el = self.get_element(u"<!DOCTYPE html>")
+        el = self.get_element("<!DOCTYPE html>")
         self.assertFalse(el.is_tag())
         self.assertFalse(el.is_text())
         self.assertFalse(el.is_processing_instruction())
