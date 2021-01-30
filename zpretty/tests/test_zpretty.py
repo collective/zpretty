@@ -98,12 +98,12 @@ class TestZpretty(TestCase):
             "<root><tal:test />a</root>", "<root><tal:test />a</root>\n"
         )
         self.assertPrettified(
-            "<root><tal:test />a </root>", (u"<root><tal:test />a", "</root>", "")
+            "<root><tal:test />a </root>", ("<root><tal:test />a", "</root>", "")
         )
 
         self.assertPrettified(
             "<root><tal:test /> a </root>",
-            (u"<root><tal:test />", "  a", "</root>", ""),
+            ("<root><tal:test />", "  a", "</root>", ""),
         )
         self.assertPrettified(
             "<root><tal:test /> a </root>", "<root><tal:test />\n  a\n</root>\n"
@@ -128,13 +128,13 @@ class TestZpretty(TestCase):
         self.assertPrettified(
             '<root data-attribute=""></root>', "<root data-attribute></root>\n"
         )
-        self.assertPrettified(u"<root hidden></root>", "<root hidden></root>\n")
-        self.assertPrettified(u"<root class></root>", '<root class=""></root>\n')
+        self.assertPrettified("<root hidden></root>", "<root hidden></root>\n")
+        self.assertPrettified("<root class></root>", '<root class=""></root>\n')
 
     def test_fix_self_closing(self):
         """Check if open self closing tags are rendered correctly"""
-        self.assertPrettified(u"<input><img><input>", "<input /><img /><input />\n")
-        self.assertPrettified(u"<input><a /><b />", "<input /><a></a><b></b>\n")
+        self.assertPrettified("<input><img><input>", "<input /><img /><input />\n")
+        self.assertPrettified("<input><a /><b />", "<input /><a></a><b></b>\n")
         self.assertPrettified("<input><a /><b /></input>", "<input /><a></a><b></b>\n")
 
     def test_element_repr(self):
@@ -142,7 +142,7 @@ class TestZpretty(TestCase):
         self.assertEqual(repr(prettifier.root), "<pretty:-1:null_tag_name />")
 
     def test_whitelines_not_stripped(self):
-        self.assertPrettified(u"<root>\n</root>", "<root>\n</root>\n")
+        self.assertPrettified("<root>\n</root>", "<root>\n</root>\n")
         self.assertPrettified(
             "<root>\n    Hello!   \n</root>", "<root>\n    Hello!\n</root>\n"
         )

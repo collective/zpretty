@@ -29,29 +29,29 @@ class TestZPrettyAttributess(TestCase):
         self.assertPrettifiedAttributes({}, "", level=2)
 
     def test_one_attribute(self):
-        self.assertPrettifiedAttributes({u"a": "1"}, 'a="1"')
-        self.assertPrettifiedAttributes({u"a": "1"}, 'a="1"', level=1)
-        self.assertPrettifiedAttributes({u"a": "1"}, 'a="1"', level=2)
+        self.assertPrettifiedAttributes({"a": "1"}, 'a="1"')
+        self.assertPrettifiedAttributes({"a": "1"}, 'a="1"', level=1)
+        self.assertPrettifiedAttributes({"a": "1"}, 'a="1"', level=2)
 
     def test_many_attributes_attribute(self):
-        self.assertPrettifiedAttributes({u"a": "1", u"b": "2"}, 'a="1"\nb="2"')
+        self.assertPrettifiedAttributes({"a": "1", "b": "2"}, 'a="1"\nb="2"')
         self.assertPrettifiedAttributes(
-            {u"a": "1", u"b": "2"}, '    a="1"\n    b="2"', level=1
+            {"a": "1", "b": "2"}, '    a="1"\n    b="2"', level=1
         )
         self.assertPrettifiedAttributes(
-            {u"a": "1", u"b": "2"}, '      a="1"\n      b="2"', level=2
+            {"a": "1", "b": "2"}, '      a="1"\n      b="2"', level=2
         )
 
     def test_tal_define(self):
         self.assertPrettifiedAttributes(
-            {u"tal:define": "a 1; b 2"},
-            "\n".join((u'tal:define="', "  a 1;", "  b 2;", '"')),
+            {"tal:define": "a 1; b 2"},
+            "\n".join(('tal:define="', "  a 1;", "  b 2;", '"')),
         )
 
     def test_format_attributes_many_attribute(self):
         self.assertPrettifiedAttributes(
             {
-                u"a": "1",
+                "a": "1",
                 "b": "2",
                 "class": "hidden",
                 "tal:define": "a 1; b 2",
