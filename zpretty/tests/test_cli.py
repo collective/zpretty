@@ -20,6 +20,7 @@ class TestCli(TestCase):
         self.assertFalse(parsed.xml)
         self.assertFalse(parsed.zcml)
         self.assertEqual(parsed.encoding, "utf8")
+        self.assertFalse(parsed.check)
 
     def test_short_options(self):
         parsed = self.parser.parse_args(["-i", "-x", "-z"])
@@ -50,9 +51,51 @@ class TestCli(TestCase):
         parsed = self.parser.parse_args([])
         self.assertEqual(choose_prettifier(parsed, "a.txt"), ZPrettifier)
 
+    def test_check(self):
+        parsed = self.parser.parse_args(["--check"])
+        self.assertTrue(parsed.check)
+
     def test_run(self):
         # XXX increase coverage by improving the mock
         from unittest import mock
 
-        with mock.patch("zpretty.cli.get_parser"):
+        parser = mock.Mock(
+            **{"parse_args.return_value": mock.Mock(encoding="utf8", file=[])}
+        )
+
+        with mock.patch("zpretty.cli.get_parser", return_value=parser) as mocked:
             run()
+            mocked.assert_called_once()
+            parser.parse_args.assert_called_once()
+
+    def test_run_check(self):
+        # XXX increase coverage by improving the mock
+        from unittest import mock
+
+        parser = mock.Mock(
+            **{
+                "parse_args.return_value": mock.Mock(
+                    check=True,
+                    encoding="utf8",
+                    file=["zpretty/tests/original/sample_xml.xml"],
+                )
+            }
+        )
+
+        with mock.patch("zpretty.cli.get_parser", return_value=parser):
+            with mock.patch("builtins.exit", return_value=parser) as mocked:
+                run()
+                mocked.assert_not_called()
+
+        parser = mock.Mock(
+            **{
+                "parse_args.return_value": mock.Mock(
+                    check=True, encoding="utf8", file=["README.md"]
+                )
+            }
+        )
+
+        with mock.patch("zpretty.cli.get_parser", return_value=parser):
+            with mock.patch("builtins.exit", return_value=parser) as mocked:
+                run()
+                self.assertTupleEqual(mocked.call_args.args, (1,))

@@ -1,9 +1,9 @@
 # Changelog
 
-2.1.1 (unreleased)
+2.2.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add a `--check` command line parameter (Fixes #49) [ale-rt]
 
 
 2.1.0 (2021-02-12)

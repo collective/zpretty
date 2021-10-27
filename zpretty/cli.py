@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from os.path import splitext
+from sys import stderr
 from sys import stdout
 from zpretty.prettifier import ZPrettifier
 from zpretty.xml import XMLPrettifier
@@ -44,6 +45,16 @@ def get_parser():
         default=False,
     )
     parser.add_argument(
+        "--check",
+        help=(
+            "Return code 0 if nothing would be changed, "
+            "1 if some files would be reformatted"
+        ),
+        action="store_true",
+        dest="check",
+        default=False,
+    )
+    parser.add_argument(
         "file",
         nargs="*",
         default="-",
@@ -74,12 +85,17 @@ def run():
     for infile in config.file:
         Prettifier = choose_prettifier(config, infile)
         prettifier = Prettifier(infile, encoding=encoding)
-        prettified = prettifier()
-        if config.inplace and not infile == "-":
-            with open(infile, "w") as f:
-                f.write(prettified)
+        if config.check:
+            if not prettifier.check():
+                stderr.write(f"This file would be rewritten: {infile}\n")
+                exit(1)
         else:
-            stdout.write(prettified)
+            prettified = prettifier()
+            if config.inplace and not infile == "-":
+                with open(infile, "w") as f:
+                    f.write(prettified)
+            else:
+                stdout.write(prettified)
 
 
 if __name__ == "__main__":
