@@ -56,7 +56,7 @@ Python2.7 use `zpretty` 0.9.x.
 
 Basic usage:
 
-    zpretty [-h] [--encoding ENCODING] [-i] [-x] [-z] [file ...]
+    zpretty [-h] [--encoding ENCODING] [-i] [-x] [-z] [--check] [file ...]
 
     positional arguments:
       file                 The list of files to prettify (defaults to stdin)
@@ -68,6 +68,9 @@ Basic usage:
       -x, --xml            Threat the input file(s) as XML
       -z, --zcml           Threat the input file(s) as XML. Follow the ZCML
                            styleguide
+      --check              Return code 0 if nothing would be changed, 1 if some
+                           files would be reformatted
+
 
 Without parameters constraining the file type (e.g. [-x]{.title-ref},
 [-z]{.title-ref}, \...) `zpretty` will try to guess the right options

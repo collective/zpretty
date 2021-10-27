@@ -13,6 +13,7 @@ class TestZpretty(TestCase):
         if isinstance(expected, tuple):
             expected = "\n".join(expected)
         prettifier = ZPrettifier(text=original, encoding=encoding)
+        self.assertFalse(prettifier.check())
         observed = prettifier()
         self.assertEqual(observed, expected)
 
@@ -22,6 +23,7 @@ class TestZpretty(TestCase):
         """
         resolved_filename = resource_filename("zpretty.tests", "original/%s" % filename)
         prettifier = ZPrettifier(resolved_filename)
+        self.assertTrue(prettifier.check())
         observed = prettifier()
         expected = open(resolved_filename).read()
         self.assertListEqual(observed.splitlines(), expected.splitlines())

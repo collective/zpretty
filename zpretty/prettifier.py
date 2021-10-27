@@ -28,6 +28,7 @@ class ZPrettifier(object):
             text = "".join(fileinput.input([filename]))
         if not isinstance(text, str):
             text = text.decode(self.encoding)
+        self.original_text = text
         self.text = "\n".join(
             line if line.strip() else self._newlines_marker
             for line in text.splitlines()
@@ -61,6 +62,10 @@ class ZPrettifier(object):
         if self._end_with_newline and not prettified.endswith("\n"):
             prettified += "\n"
         return prettified
+
+    def check(self):
+        """Checks if the input object should be prettified"""
+        return self.original_text == self()
 
     def __call__(self):
         return self.pretty_print(self.root)
