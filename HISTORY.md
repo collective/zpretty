@@ -4,6 +4,7 @@
 ------------------
 
 - Add a `--check` command line parameter (Fixes #49) [ale-rt]
+- Now the package is `pre-commit` compatibile (Fixes #50) [ale-rt]
 
 
 2.1.0 (2021-02-12)
