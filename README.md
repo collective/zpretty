@@ -44,7 +44,7 @@ The source code and the issue tracker are hosted on
 
 # INSTALL
 
-The suggested instal method is using
+The suggested installation method is using
 [pip](https://pypi.python.org/pypi/pip/):
 
     $ pip install zpretty
