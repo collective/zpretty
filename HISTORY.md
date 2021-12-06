@@ -1,5 +1,11 @@
 # Changelog
 
+2.2.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 2.2.0 (2021-12-06)
 ------------------
 
