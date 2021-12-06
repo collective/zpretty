@@ -90,7 +90,9 @@ class TestCli(TestCase):
         parser = mock.Mock(
             **{
                 "parse_args.return_value": mock.Mock(
-                    check=True, encoding="utf8", file=["README.md"]
+                    check=True,
+                    encoding="utf8",
+                    file=[resource_filename("zpretty.tests", "broken/broken.xml")],
                 )
             }
         )

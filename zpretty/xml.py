@@ -26,6 +26,7 @@ class XMLAttributes(PrettyAttributes):
 
 class XMLElement(PrettyElement):
     attribute_klass = XMLAttributes
+    escaper = None
 
     def is_self_closing(self):
         """Is this element self closing?"""
