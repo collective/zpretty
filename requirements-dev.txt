@@ -18,7 +18,7 @@ idna==2.10
 iniconfig==1.1.1
 jeepney==0.6.0
 keyring==21.7.0
-lxml==4.6.3
+lxml==4.6.5
 mccabe==0.6.1
 mypy-extensions==0.4.3
 packaging==20.8
