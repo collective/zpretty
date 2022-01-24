@@ -171,6 +171,9 @@ class TestZpretty(TestCase):
     def test_single_quotes_in_attrs(self):
         self.assertPrettified('<root a="\'" />', '<root a="\'"></root>\n')
 
+    def test_sample_dtml(self):
+        self.prettify("sample_dtml.dtml")
+
     def test_sample_html(self):
         self.prettify("sample_html.html")
 

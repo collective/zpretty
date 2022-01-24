@@ -150,7 +150,7 @@ class PrettyElement(object):
 
     def is_null(self):
         """We define a special tag null_tag_name to wrap text"""
-        return self.context.name == self.null_tag_name
+        return self.context.name in (self.null_tag_name, BeautifulSoup.ROOT_TAG_NAME)
 
     def is_processing_instruction(self):
         """Check if this element is a processing instruction like <?xml...>"""
@@ -241,7 +241,7 @@ class PrettyElement(object):
 
     def render_processing_instruction(self):
         """Render a properly indented processing instruction"""
-        return f"{self.prefix}<?{self.text}?>"
+        return f"{self.prefix}<?{self.text.rstrip('?')}?>"
 
     def render_text(self):
         """Render a properly indented text

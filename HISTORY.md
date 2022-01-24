@@ -3,6 +3,7 @@
 2.2.1 (unreleased)
 ------------------
 
+- Do not kill XML documents with a doctype (Fixes #47) [ale-rt]
 - Support Python 3.10 [ale-rt]
 
 
