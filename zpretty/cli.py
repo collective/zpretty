@@ -89,13 +89,13 @@ def run():
             if not prettifier.check():
                 stderr.write(f"This file would be rewritten: {infile}\n")
                 exit(1)
-        else:
-            prettified = prettifier()
-            if config.inplace and not infile == "-":
-                with open(infile, "w") as f:
-                    f.write(prettified)
-            else:
-                stdout.write(prettified)
+            continue
+        prettified = prettifier()
+        if config.inplace and not infile == "-":
+            with open(infile, "w") as f:
+                f.write(prettified)
+            continue
+        stdout.write(prettified)
 
 
 if __name__ == "__main__":
