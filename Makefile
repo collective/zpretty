@@ -7,8 +7,8 @@ test: pre-commit pytest
 requirements := $(wildcard requirements-dev.txt requirements.d/*.txt)
 py3/bin/pip: $(requirements)
 	python3 -m venv py3
-	./py3/bin/pip install -U pip
-	./py3/bin/pip install -U .[development,test]
+	./py3/bin/pip install -IU pip
+	./py3/bin/pip install -IU .[development,test]
 
 
 ./py3/bin/pre-commit: py3/bin/pip
