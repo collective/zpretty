@@ -61,7 +61,7 @@ Basic usage:
     positional arguments:
       file                 The list of files to prettify (defaults to stdin)
 
-    optional arguments:
+    options:
       -h, --help           show this help message and exit
       --encoding ENCODING  The file encoding (defaults to utf8)
       -i, --inplace        Format files in place (overwrite existing file)
