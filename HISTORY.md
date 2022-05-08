@@ -3,7 +3,7 @@
 2.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Support Python 3.10 [ale-rt]
 
 
 2.2.0 (2021-12-06)
