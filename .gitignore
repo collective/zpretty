@@ -2,12 +2,9 @@
 *.pyc
 .coverage
 /.tox/
-/bin/
 /build/
 /cover/
 /dist/
 /htmlcov/
-/include/
-/lib/
-/local/
 /man/
+/py3/

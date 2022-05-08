@@ -1,29 +1,29 @@
 .PHONY: pytests test flake8 black
 
-all: bin/pip
+all: py3/bin/pip
 test: pytest
 
-bin/pip:
-	virtualenv -p python3 . || python3 -m venv .
-	./bin/pip install -U pip
-	./bin/pip install -U .[development,test]
+py3/bin/pip:
+	python3 -m venv py3
+	./py3/bin/pip install -U pip
+	./py3/bin/pip install -U .[development,test]
 
-pytest: bin/pip
+pytest: py3/bin/pip
 	@echo "==== Running nosetests ===="
-	./bin/pytest
+	./py3/bin/pytest
 
-flake8: bin/pip
+flake8: py3/bin/pip
 	@echo "==== Running Flake8 ===="
 	./bin/flake8 zpretty *.py
 
-bin/black: requirements-dev.txt
+py3/bin/black: requirements-dev.txt
 	./bin/pip install -r requirements-dev.txt
 	touch bin/black
 
-black: bin/black
-	./bin/black --check zpretty
+black: py3/bin/black
+	./py3/bin/black --check zpretty
 
-requirements: bin/pip
-	./bin/pip install -Ue .[development,test]
-	./bin/pip freeze --all|egrep -v '^(pip|pkg-resources|wheel|-e|-f)' > requirements-dev.txt
+requirements: py3/bin/pip
+	./py3/bin/pip install -Ue .[development,test]
+	./py3/bin/pip freeze --all|egrep -v '^(pip|pkg-resources|wheel|-e|-f)' > requirements-dev.txt
 	@git difftool -y -x "colordiff -y" requirements-dev.txt
