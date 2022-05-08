@@ -18,7 +18,12 @@ class TestReadme(TestCase):
             readme = f.read()
             if sys.version_info < (3, 9):  # pragma: no cover
                 # Small change in the argparse output for Python >= 3.9
-                readme = readme.replace("[file ...]", "[file [file ...]]")
+                readme = readme.replace(
+                    " [file ...]", "\n                   [file [file ...]]"
+                )
+            if sys.version_info < (3, 10):  # pragma: no cover
+                # Small change in the argparse output for Python >= 3.10
+                readme = readme.replace("    options:", "    optional arguments:")
         start = readme.index("    zpretty [")
         end = readme.index("\n\nWithout", start)
         return readme[start:end].splitlines()

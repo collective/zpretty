@@ -98,4 +98,4 @@ class TestCli(TestCase):
         with mock.patch("zpretty.cli.get_parser", return_value=parser):
             with mock.patch("builtins.exit", return_value=parser) as mocked:
                 run()
-                self.assertTupleEqual(mocked.call_args.args, (1,))
+                mocked.assert_called_once_with(1)
