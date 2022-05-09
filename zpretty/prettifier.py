@@ -1,4 +1,6 @@
 from bs4 import BeautifulSoup
+from bs4.element import Doctype
+from bs4.element import ProcessingInstruction
 from logging import getLogger
 from uuid import uuid4
 from zpretty.elements import PrettyElement
@@ -44,12 +46,16 @@ class ZPrettifier(object):
     def get_soup(self, text):
         """Tries to get the soup from the given test
 
-        At first it will try to parse the text:
-
-        1. as an xml
-        2. as an html
-        3. will just return the unparsed text
+        If the text is not some xml like think a dummy element will be used to wrap it.
         """
+        original_soup = BeautifulSoup(text, self.parser, builder=self.builder)
+        try:
+            first_el = next(original_soup.children)
+        except StopIteration:
+            first_el = None
+        if isinstance(first_el, (Doctype, ProcessingInstruction)):
+            return original_soup
+
         markup = "<{null}>{text}</{null}>".format(
             null=self.pretty_element.null_tag_name, text=text
         )

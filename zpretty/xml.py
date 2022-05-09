@@ -37,10 +37,10 @@ class XMLElement(PrettyElement):
     @property
     def tag(self):
         """Return the tag name"""
-        if not self.context.prefix:
+        prefix = getattr(self.context, "prefix", "")
+        if not prefix:
             return self.context.name
-        else:
-            return ":".join((self.context.prefix, self.context.name))
+        return f"{prefix}:{self.context.name}"
 
     def render_text(self):
         """Add an empty line between each element"""
