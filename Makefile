@@ -20,8 +20,11 @@ pre-commit:
 
 .PHONY: pytests
 pytest: py3/bin/pip
-	@echo "==== Running nosetests ===="
 	./py3/bin/pytest
+
+.PHONY: htmlreport
+htmlreport: py3/bin/pip
+	./py3/bin/pytest --cov-report html
 
 .PHONY: requirements
 requirements: py3/bin/pip
