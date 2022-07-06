@@ -23,7 +23,7 @@ importlib-metadata==4.11.3
 iniconfig==1.1.1
 jeepney==0.8.0
 keyring==23.5.0
-lxml==4.8.0
+lxml==4.9.1
 mccabe==0.6.1
 mypy-extensions==0.4.3
 nodeenv==1.6.0
