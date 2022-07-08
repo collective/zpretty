@@ -1,7 +1,7 @@
 # Changelog
 
-2.2.1 (unreleased)
-------------------
+2.3.0a1 (2022-07-08)
+--------------------
 
 - Do not kill XML documents with a doctype (Fixes #47) [ale-rt]
 - Support Python 3.10 [ale-rt]
