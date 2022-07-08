@@ -18,6 +18,10 @@
            href="#"
         >whatever</b>
         "<c href="#">whatever</c>"
+        <pre>
+          Foo
+            Bar
+        </pre>
       </metal:content-core>
     </metal:main>
   </body>
