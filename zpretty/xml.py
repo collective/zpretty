@@ -9,6 +9,11 @@ from zpretty.prettifier import ZPrettifier
 logger = getLogger(__name__)
 
 
+class AnyIn(object):
+    def __contains__(self, item):
+        return True
+
+
 class XMLAttributes(PrettyAttributes):
     """Customized attribute formatter for zcml"""
 
@@ -27,6 +32,7 @@ class XMLAttributes(PrettyAttributes):
 class XMLElement(PrettyElement):
     attribute_klass = XMLAttributes
     escaper = None
+    preserve_text_whitespace_elements = AnyIn()
 
     def is_self_closing(self):
         """Is this element self closing?"""

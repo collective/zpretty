@@ -76,6 +76,7 @@ class PrettyElement(object):
         ("{prefix}<{tag} {attributes}", "{prefix}{before_closing_multiline}>")
     )
     escaper = EntitySubstitution()
+    preserve_text_whitespace_elements = ["pre"]
 
     def __init__(self, context, level=0):
         """Take something a (bs4) element and an indentation level"""
@@ -212,11 +213,26 @@ class PrettyElement(object):
         attributes = getattr(self.context, "attrs", {})
         return self.attribute_klass(attributes, self)
 
+    @property
+    @memo
+    def preserve_text_whitespace(self):
+        children = self.getchildren()
+        return (
+            self.tag in self.preserve_text_whitespace_elements
+            and len(children) == 1
+            and children[0].is_text()
+        )
+
     @memo
     def render_content(self):
         """Render a properly indented the contents of this element"""
         parts = []
         previous_part = ""
+
+        if self.preserve_text_whitespace:
+            for child in self.getchildren():
+                return child.text
+
         for idx, child in enumerate(self.getchildren()):
             part = child()
             if child.is_text():
@@ -339,7 +355,7 @@ class PrettyElement(object):
 
         text = self.text and self.render_text() or self.render_content()
 
-        if endswith_whitespace(text):
+        if not self.preserve_text_whitespace and endswith_whitespace(text):
             if text[-1] != "\n":
                 text = f"{rstrip_last_line(text)}\n"
             close_tag_template = "{prefix}</{tag}>"

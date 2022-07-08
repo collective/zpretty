@@ -3,6 +3,7 @@
 2.2.1 (unreleased)
 ------------------
 
+- Preserve whitespace in XML documents and `pre` elements (Fixes #64) [ale-rt]
 - Improve doctype handling [ale-rt]
 - Do not kill XML documents with a doctype (Fixes #47) [ale-rt]
 - Support Python 3.10 [ale-rt]
