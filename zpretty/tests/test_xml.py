@@ -20,3 +20,6 @@ class TestZpretty(TestCase):
 
     def test_zcml(self):
         self.prettify("sample_xml.xml")
+
+    def test_sample_dtml(self):
+        self.prettify("sample_dtml.dtml")

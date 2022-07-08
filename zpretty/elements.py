@@ -150,7 +150,11 @@ class PrettyElement(object):
 
     def is_null(self):
         """We define a special tag null_tag_name to wrap text"""
-        return self.context.name in (self.null_tag_name, BeautifulSoup.ROOT_TAG_NAME)
+        return self.context.name == self.null_tag_name
+
+    def is_soup(self):
+        """Check if this element is a BeautifulSoup instance"""
+        return isinstance(self.context, BeautifulSoup)
 
     def is_processing_instruction(self):
         """Check if this element is a processing instruction like <?xml...>"""
@@ -197,6 +201,8 @@ class PrettyElement(object):
             return ""
         if self.is_comment():
             return self.context
+        if not self.escaper:
+            return self.context.string
         return self.escaper.substitute_html(self.context.string)
 
     @property
@@ -237,11 +243,22 @@ class PrettyElement(object):
 
     def render_doctype(self):
         """Render a properly indented comment"""
-        return f"{self.prefix}<!DOCTYPE {self.text}>"
+        doctype = f"{self.prefix}{self.context.PREFIX}{self.text}{self.context.SUFFIX}"
+        if isinstance(
+            self.context.nextSibling, NavigableString
+        ) and self.context.nextSibling.startswith("\n"):
+            doctype = doctype.rstrip()
+        return doctype
 
     def render_processing_instruction(self):
         """Render a properly indented processing instruction"""
         return f"{self.prefix}<?{self.text.rstrip('?')}?>"
+
+    def render_soup(self):
+        first_child = next(self.context.children)
+        if isinstance(first_child, Doctype) and first_child.string == "html":
+            return self.render_content()
+        return f'<?xml version="1.0" encoding="utf-8"?>\n{self.render_content()}'
 
     def render_text(self):
         """Render a properly indented text
@@ -338,6 +355,9 @@ class PrettyElement(object):
     @memo
     def __call__(self):
         """Render the element and its contents properly indented"""
+        if self.is_soup():
+            return self.render_soup()
+
         if self.is_null():
             return self.render_content()
 

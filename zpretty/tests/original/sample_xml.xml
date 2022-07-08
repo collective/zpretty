@@ -2,4 +2,5 @@
 <root>
   <pretty a="b">1</pretty>
   <closeme hidden="" />
+  <fòò attribute="bàr">bàz</fòò>
 </root>
