@@ -77,6 +77,7 @@ class PrettyElement(object):
     )
     escaper = EntitySubstitution()
     preserve_text_whitespace_elements = ["pre"]
+    skip_text_escaping_elements = ["script", "style"]
 
     def __init__(self, context, level=0):
         """Take something a (bs4) element and an indentation level"""
@@ -202,7 +203,10 @@ class PrettyElement(object):
             return ""
         if self.is_comment():
             return self.context
-        if not self.escaper:
+        if (
+            not self.escaper
+            or self.context.parent.name in self.skip_text_escaping_elements
+        ):
             return self.context.string
         return self.escaper.substitute_html(self.context.string)
 
