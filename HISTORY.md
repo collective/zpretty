@@ -3,7 +3,7 @@
 2.3.0a3 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Do not escape entities inside the script and style tags (Fixes #57) [ale-rt]
 
 
 2.3.0a2 (2022-07-08)
