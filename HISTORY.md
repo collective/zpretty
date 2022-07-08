@@ -1,9 +1,9 @@
 # Changelog
 
-2.3.0a2 (unreleased)
+2.3.0a2 (2022-07-08)
 --------------------
 
-- Nothing changed yet.
+- Fix release
 
 
 2.3.0a1 (2022-07-08)
