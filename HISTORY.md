@@ -1,6 +1,6 @@
 # Changelog
 
-2.3.0a3 (unreleased)
+2.3.0a3 (2022-07-08)
 --------------------
 
 - Do not escape entities inside the script and style tags (Fixes #57) [ale-rt]
