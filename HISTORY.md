@@ -1,7 +1,7 @@
 # Changelog
 
-2.2.1 (unreleased)
-------------------
+2.3.0a1 (2022-07-08)
+--------------------
 
 - Preserve whitespace in XML documents and `pre` elements (Fixes #64) [ale-rt]
 - Improve doctype handling [ale-rt]
