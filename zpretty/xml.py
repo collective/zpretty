@@ -43,10 +43,6 @@ class XMLElement(PrettyElement):
             return self.context.name
         return f"{prefix}:{self.context.name}"
 
-    def render_text(self):
-        """Add an empty line between each element"""
-        return super(XMLElement, self).render_text()
-
 
 class XMLTreeBuilder(LXMLTreeBuilderForXML):
     """Override the default Tree builder"""
