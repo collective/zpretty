@@ -1,6 +1,4 @@
-from bs4.builder._lxml import LXMLTreeBuilderForXML
 from logging import getLogger
-from lxml import etree
 from zpretty.attributes import PrettyAttributes
 from zpretty.elements import PrettyElement
 from zpretty.prettifier import ZPrettifier
@@ -50,36 +48,8 @@ class XMLElement(PrettyElement):
         return f"{prefix}:{self.context.name}"
 
 
-class XMLTreeBuilder(LXMLTreeBuilderForXML):
-    """Override the default Tree builder"""
-
-    def default_parser(self, encoding):
-        # This can either return a parser object or a class, which
-        # will be instantiated with default arguments.
-        if self._default_parser is not None:
-            return self._default_parser
-        return etree.XMLParser(
-            target=self,
-            strip_cdata=False,
-            recover=True,
-            encoding=encoding,
-            remove_blank_text=False,
-            attribute_defaults=False,
-            dtd_validation=False,
-            load_dtd=False,
-            no_network=True,
-            ns_clean=True,
-            resolve_entities=False,
-            remove_comments=False,
-            remove_pis=False,
-            collect_ids=False,
-            compact=False,
-        )
-
-
 class XMLPrettifier(ZPrettifier):
     """Prettify according to the ZCML style guide"""
 
     parser = "xml"
     pretty_element = XMLElement
-    builder = XMLTreeBuilder()

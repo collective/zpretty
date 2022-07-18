@@ -48,7 +48,7 @@ class ZPrettifier(object):
 
         If the text is not some xml like think a dummy element will be used to wrap it.
         """
-        original_soup = BeautifulSoup(text, self.parser, builder=self.builder)
+        original_soup = BeautifulSoup(text, self.parser)
         try:
             first_el = next(original_soup.children)
         except StopIteration:
@@ -59,7 +59,7 @@ class ZPrettifier(object):
         markup = "<{null}>{text}</{null}>".format(
             null=self.pretty_element.null_tag_name, text=text
         )
-        wrapped_soup = BeautifulSoup(markup, self.parser, builder=self.builder)
+        wrapped_soup = BeautifulSoup(markup, self.parser)
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)
 
     def pretty_print(self, el):

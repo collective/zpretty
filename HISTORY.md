@@ -3,7 +3,7 @@
 2.3.0a4 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Remove custom tree builder which is not used anymore [ale-rt]
 
 
 2.3.0a3 (2022-07-08)
