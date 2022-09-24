@@ -47,7 +47,9 @@ The source code and the issue tracker are hosted on
 The suggested installation method is using
 [pip](https://pypi.python.org/pypi/pip/):
 
-    $ pip install zpretty
+```bash
+python3 -m pip install --user zpretty
+```
 
 The latest release of `zpretty` requires Python3. If you need to use
 Python2.7 use `zpretty` 0.9.x.
@@ -56,39 +58,48 @@ Python2.7 use `zpretty` 0.9.x.
 
 Basic usage:
 
-    zpretty [-h] [--encoding ENCODING] [-i] [-x] [-z] [--check] [file ...]
+```console
+$ zpretty -h
+usage: zpretty [-h] [--encoding ENCODING] [-i] [-v] [-x] [-z] [--check]
+               [file ...]
 
-    positional arguments:
-      file                 The list of files to prettify (defaults to stdin)
+positional arguments:
+    file                 The list of files to prettify (defaults to stdin)
 
-    options:
-      -h, --help           show this help message and exit
-      --encoding ENCODING  The file encoding (defaults to utf8)
-      -i, --inplace        Format files in place (overwrite existing file)
-      -x, --xml            Threat the input file(s) as XML
-      -z, --zcml           Threat the input file(s) as XML. Follow the ZCML
-                           styleguide
-      --check              Return code 0 if nothing would be changed, 1 if some
-                           files would be reformatted
+options:
+    -h, --help           show this help message and exit
+    --encoding ENCODING  The file encoding (defaults to utf8)
+    -i, --inplace        Format files in place (overwrite existing file)
+    -v, --version        Show zpretty version number
+    -x, --xml            Threat the input file(s) as XML
+    -z, --zcml           Threat the input file(s) as XML. Follow the ZCML
+                        styleguide
+    --check              Return code 0 if nothing would be changed, 1 if some
+                        files would be reformatted
+```
 
-
-Without parameters constraining the file type (e.g. [-x]{.title-ref},
-[-z]{.title-ref}, \...) `zpretty` will try to guess the right options
-for you.
+Without parameters constraining the file type (e.g. `-x`, `-z`, \...)
+`zpretty` will try to guess the right options for you.
 
 Example:
 
-    zpretty hello_world.html
+```console
+zpretty hello_world.html
+```
 
 # DEVELOP
 
-    $ git clone ...
-    $ cd zpretty
-    $ make
+```bash
+git clone ...
+cd zpretty
+make
+```
 
 # RUNNING TESTS
 
-    $ make test
+```bash
+make test
+```
 
 # TODO
 
