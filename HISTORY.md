@@ -1,6 +1,6 @@
 # Changelog
 
-2.3.0a4 (unreleased)
+2.3.0a4 (2022-09-24)
 --------------------
 
 - Remove custom tree builder which is not used anymore [ale-rt]
