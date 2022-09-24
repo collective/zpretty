@@ -3,7 +3,7 @@
 2.3.0a5 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Added a -v/--version option [ale-rt]
 
 
 2.3.0a4 (2022-09-24)
