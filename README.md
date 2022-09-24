@@ -19,7 +19,7 @@ language](https://en.wikipedia.org/wiki/Template_Attribute_Language) and
 has some features dedicated to it.
 
 This tool is not a linter! If you are looking for linters safe bets are
-[Tidy](http://www.html-tidy.org/) and
+[Tidy](https://www.html-tidy.org/) and
 [xmllint](http://xmlsoft.org/xmllint.html).
 
 You may have parsing problems! `zpretty` will close for you some known
