@@ -7,5 +7,8 @@
 
       </preserve_space>
   <fòò attribute="bàr">bàz</fòò>
-  <property name="model_source">&lt;a</property>
+  <property name="model_source">&lt;model&quot;teste&lt;/model&gt;</property>
+  <property bar="&quot;"
+            foo="&amp;"
+  >Top Level Container f&uuml;r alle Reviere</property>
 </root>
