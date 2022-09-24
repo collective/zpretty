@@ -19,6 +19,7 @@ class ZPrettifier(object):
     builder = None
     _end_with_newline = True
     _newlines_marker = str(uuid4())
+    _ampersand_marker = str(uuid4())
 
     def __init__(self, filename="", text="", encoding="utf8"):
         """Create a prettifier instance taking the contents
@@ -34,7 +35,7 @@ class ZPrettifier(object):
         self.text = "\n".join(
             line if line.strip() else self._newlines_marker
             for line in text.splitlines()
-        )
+        ).replace("&", self._ampersand_marker)
         self.soup = self.get_soup(self.text)
 
         # Cleanup all spurious self._newlines_marker attributes, see #35
@@ -64,7 +65,9 @@ class ZPrettifier(object):
 
     def pretty_print(self, el):
         """Pretty print an element indenting it based on level"""
-        prettified = el().replace(self._newlines_marker, "")
+        prettified = (
+            el().replace(self._newlines_marker, "").replace(self._ampersand_marker, "&")
+        )
         if self._end_with_newline and not prettified.endswith("\n"):
             prettified += "\n"
         return prettified
