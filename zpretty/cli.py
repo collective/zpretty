@@ -7,6 +7,18 @@ from zpretty.xml import XMLPrettifier
 from zpretty.zcml import ZCMLPrettifier
 
 
+try:
+    # Python >= 3.8
+    from importlib.metadata import version
+
+    version = version("zpretty")
+except ImportError:
+    # Python < 3.8
+    from pkg_resources import get_distribution
+
+    version = get_distribution("zpretty").version
+
+
 def get_parser():
     parser = ArgumentParser(
         prog="zpretty",
@@ -27,6 +39,13 @@ def get_parser():
         action="store_true",
         dest="inplace",
         default=False,
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        help="Show zpretty version number",
+        action="version",
+        version=f"zpretty {version}",
     )
     parser.add_argument(
         "-x",
