@@ -7,4 +7,5 @@
 
       </preserve_space>
   <fòò attribute="bàr">bàz</fòò>
+  <property name="model_source">&lt;a</property>
 </root>

@@ -75,6 +75,7 @@ class TestCli(TestCase):
         parser = mock.Mock(
             **{
                 "parse_args.return_value": mock.Mock(
+                    zcml=False,
                     check=True,
                     encoding="utf8",
                     file=["zpretty/tests/original/sample_xml.xml"],

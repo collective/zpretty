@@ -4,6 +4,7 @@
 --------------------
 
 - Remove custom tree builder which is not used anymore [ale-rt]
+- Fix entity sustitution in XML (Refs #71) [ale-rt]
 
 
 2.3.0a3 (2022-07-08)
