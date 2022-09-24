@@ -1,3 +1,5 @@
+from bs4 import BeautifulSoup
+from bs4.element import NavigableString
 from logging import getLogger
 from zpretty.attributes import PrettyAttributes
 from zpretty.elements import PrettyElement
@@ -29,7 +31,6 @@ class XMLAttributes(PrettyAttributes):
 
 class XMLElement(PrettyElement):
     attribute_klass = XMLAttributes
-    escaper = None
     preserve_text_whitespace_elements = AnyIn()
 
     def is_self_closing(self):
@@ -47,9 +48,36 @@ class XMLElement(PrettyElement):
             return self.context.name
         return f"{prefix}:{self.context.name}"
 
+    @property
+    def text(self):
+        """Return the text contained in this element (if any)
+
+        Convert the text characters to html entities
+        """
+        if not isinstance(self.context, NavigableString):
+            return ""
+        if self.is_comment():
+            return self.context
+        return self.escaper.substitute_xml(self.context.string)
+
 
 class XMLPrettifier(ZPrettifier):
     """Prettify according to the ZCML style guide"""
 
     parser = "xml"
     pretty_element = XMLElement
+
+    def get_soup(self, text):
+        """Tries to get the soup from the given test
+
+        If the text is not some xml like think a dummy element will be used to wrap it.
+        """
+        original_soup = BeautifulSoup(text, self.parser)
+        if original_soup.is_xml:
+            return original_soup
+
+        markup = "<{null}>{text}</{null}>".format(
+            null=self.pretty_element.null_tag_name, text=text
+        )
+        wrapped_soup = BeautifulSoup(markup, self.parser)
+        return getattr(wrapped_soup, self.pretty_element.null_tag_name)
