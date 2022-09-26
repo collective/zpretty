@@ -1,7 +1,7 @@
 # Changelog
 
-2.3.0a5 (unreleased)
---------------------
+2.3.0 (2022-09-26)
+------------------
 
 - Added a -v/--version option [ale-rt]
 
