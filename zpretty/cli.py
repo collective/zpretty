@@ -50,7 +50,7 @@ def get_parser():
     parser.add_argument(
         "-x",
         "--xml",
-        help="Threat the input file(s) as XML",
+        help="Treat the input file(s) as XML",
         action="store_true",
         dest="xml",
         default=False,
@@ -58,7 +58,7 @@ def get_parser():
     parser.add_argument(
         "-z",
         "--zcml",
-        help="Threat the input file(s) as XML. Follow the ZCML styleguide",
+        help="Treat the input file(s) as XML. Follow the ZCML styleguide",
         action="store_true",
         dest="zcml",
         default=False,

@@ -71,8 +71,8 @@ options:
     --encoding ENCODING  The file encoding (defaults to utf8)
     -i, --inplace        Format files in place (overwrite existing file)
     -v, --version        Show zpretty version number
-    -x, --xml            Threat the input file(s) as XML
-    -z, --zcml           Threat the input file(s) as XML. Follow the ZCML
+    -x, --xml            Treat the input file(s) as XML
+    -z, --zcml           Treat the input file(s) as XML. Follow the ZCML
                         styleguide
     --check              Return code 0 if nothing would be changed, 1 if some
                         files would be reformatted
