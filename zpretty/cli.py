@@ -74,6 +74,13 @@ def get_parser():
         default=False,
     )
     parser.add_argument(
+        "--cdata",
+        help="Preserve CDATA tags in XML files",
+        action="store_true",
+        dest="cdata",
+        default=False,
+    )
+    parser.add_argument(
         "file",
         nargs="*",
         default="-",
@@ -103,7 +110,7 @@ def run():
     encoding = config.encoding
     for infile in config.file:
         Prettifier = choose_prettifier(config, infile)
-        prettifier = Prettifier(infile, encoding=encoding)
+        prettifier = Prettifier(infile, encoding=encoding, cdata=config.cdata)
         if config.check:
             if not prettifier.check():
                 stderr.write(f"This file would be rewritten: {infile}\n")

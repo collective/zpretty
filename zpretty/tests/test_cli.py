@@ -27,7 +27,7 @@ class TestCli(TestCase):
         self.assertTrue(all((parsed.inplace, parsed.xml, parsed.zcml)))
 
     def test_long_options(self):
-        parsed = self.parser.parse_args(["--inplace", "--xml", "--zcml"])
+        parsed = self.parser.parse_args(["--inplace", "--xml", "--zcml", "--cdata"])
         self.assertTrue(all((parsed.inplace, parsed.xml, parsed.zcml)))
 
     def test_file(self):
@@ -54,6 +54,12 @@ class TestCli(TestCase):
     def test_check(self):
         parsed = self.parser.parse_args(["--check"])
         self.assertTrue(parsed.check)
+
+    def test_cdata(self):
+        parsed = self.parser.parse_args([])
+        self.assertFalse(parsed.cdata)
+        parsed = self.parser.parse_args(["--cdata"])
+        self.assertTrue(parsed.cdata)
 
     def test_run(self):
         # XXX increase coverage by improving the mock

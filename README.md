@@ -61,6 +61,7 @@ Basic usage:
 ```console
 $ zpretty -h
 usage: zpretty [-h] [--encoding ENCODING] [-i] [-v] [-x] [-z] [--check]
+               [--cdata]
                [file ...]
 
 positional arguments:
@@ -76,6 +77,7 @@ options:
                         styleguide
     --check              Return code 0 if nothing would be changed, 1 if some
                         files would be reformatted
+    --cdata              Preserve CDATA tags in XML files
 ```
 
 Without parameters constraining the file type (e.g. `-x`, `-z`, \...)
