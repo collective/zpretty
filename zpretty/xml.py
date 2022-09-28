@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from bs4.element import NavigableString
+from bs4.element import CData, NavigableString
 from logging import getLogger
 from zpretty.attributes import PrettyAttributes
 from zpretty.elements import PrettyElement
@@ -54,6 +54,8 @@ class XMLElement(PrettyElement):
 
         Convert the text characters to html entities
         """
+        if isinstance(self.context, CData):
+            return f"<![CDATA[{self.context}]]>"
         if not isinstance(self.context, NavigableString):
             return ""
         if self.is_comment():

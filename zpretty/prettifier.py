@@ -21,12 +21,15 @@ class ZPrettifier(object):
     _newlines_marker = str(uuid4())
     _ampersand_marker = str(uuid4())
 
-    def __init__(self, filename="", text="", encoding="utf8"):
+    def __init__(self, filename="", text="", encoding="utf8", cdata=False):
         """Create a prettifier instance taking the contents
         from a text or a filename
         """
         self.encoding = encoding
         self.filename = filename
+        self.cdata = cdata
+        if self.cdata:
+            self.parser = "html.parser"
         if self.filename:
             text = "".join(fileinput.input([filename]))
         if not isinstance(text, str):
