@@ -3,7 +3,8 @@
 2.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Do not try to do anything on CDATAs (Fixes #76)
+  [ale-rt]
 
 
 2.3.0 (2022-09-26)

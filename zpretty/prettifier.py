@@ -6,6 +6,7 @@ from uuid import uuid4
 from zpretty.elements import PrettyElement
 
 import fileinput
+import re
 
 
 logger = getLogger(__name__)
@@ -20,6 +21,9 @@ class ZPrettifier(object):
     _end_with_newline = True
     _newlines_marker = str(uuid4())
     _ampersand_marker = str(uuid4())
+    _cdata_marker = str(uuid4())
+    _cdata_pattern = re.compile(r"<!\[CDATA\[(.*?)\]\]>", re.DOTALL)
+    _cdatas = []
 
     def __init__(self, filename="", text="", encoding="utf8"):
         """Create a prettifier instance taking the contents
@@ -32,10 +36,7 @@ class ZPrettifier(object):
         if not isinstance(text, str):
             text = text.decode(self.encoding)
         self.original_text = text
-        self.text = "\n".join(
-            line if line.strip() else self._newlines_marker
-            for line in text.splitlines()
-        ).replace("&", self._ampersand_marker)
+        self.text = self._prepare_text()
         self.soup = self.get_soup(self.text)
 
         # Cleanup all spurious self._newlines_marker attributes, see #35
@@ -43,6 +44,20 @@ class ZPrettifier(object):
             el.attrs.pop(self._newlines_marker, None)
 
         self.root = self.pretty_element(self.soup, -1)
+
+    def _prepare_text(self):
+        """This tweaks the text passed to the prettifier
+        to overcome some limitations of the BeautifulSoup parser
+        that wants to strip what he does not understand
+        (e.g. CDATAs or funny entities).
+        """
+        text = self.original_text
+        self._cdatas = re.findall(self._cdata_pattern, text)
+        text = re.sub(self._cdata_pattern, self._cdata_marker, text)
+        return "\n".join(
+            line if line.strip() else self._newlines_marker
+            for line in text.splitlines()
+        ).replace("&", self._ampersand_marker)
 
     def get_soup(self, text):
         """Tries to get the soup from the given test
@@ -68,6 +83,11 @@ class ZPrettifier(object):
         prettified = (
             el().replace(self._newlines_marker, "").replace(self._ampersand_marker, "&")
         )
+        # Restore CDATAs
+        for cdata in self._cdatas:
+            prettified = prettified.replace(
+                self._cdata_marker, f"<![CDATA[{cdata}]]>", 1
+            )
         if self._end_with_newline and not prettified.endswith("\n"):
             prettified += "\n"
         return prettified

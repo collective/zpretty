@@ -6,9 +6,21 @@
   <preserve_space>
 
       </preserve_space>
+  <cdata><![CDATA[ <>& ]]>
+
+  </cdata>
   <fòò attribute="bàr">bàz</fòò>
   <property name="model_source">&lt;model&quot;teste&lt;/model&gt;</property>
   <property bar="&quot;"
             foo="&amp;"
   >Top Level Container f&uuml;r alle Reviere</property>
+  <![CDATA[
+      This
+        should
+          be
+
+            preserved
+              as
+                is
+  ]]>
 </root>

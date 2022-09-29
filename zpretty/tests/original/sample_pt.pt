@@ -6,7 +6,7 @@
       metal:use-macro="context/@@main_template/macros/master"
       xml:lang="en"
       i18n:domain="plone"
->
+><![CDATA[ <>& ]]>
   <body>
     <metal:main fill-slot="content-core">
       <metal:content-core define-macro="content-core">
@@ -24,5 +24,14 @@
         </pre>
       </metal:content-core>
     </metal:main>
+    <![CDATA[
+      This
+        should
+          be
+
+            preserved
+              as
+                is
+  ]]>
   </body>
 </html>
