@@ -1,6 +1,6 @@
 # Changelog
 
-2.3.1 (unreleased)
+2.3.1 (2022-09-30)
 ------------------
 
 - Do not try to do anything on CDATAs (Fixes #76)
