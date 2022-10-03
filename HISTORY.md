@@ -3,6 +3,8 @@
 2.4.0 (unreleased)
 ------------------
 
+- Prevent fiddling around with custom entity declaration (Fixes #80)
+  [ale-rt]
 - Add support for Python 3.11.
   [ale-rt]
 - Drop support for Python 3.6.
