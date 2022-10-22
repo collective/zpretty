@@ -1,9 +1,12 @@
 # Changelog
 
-2.3.2 (unreleased)
+2.4.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add support for Python 3.11.
+  [ale-rt]
+- Drop support for Python 3.6.
+  [ale-rt]
 
 
 2.3.1 (2022-09-30)
