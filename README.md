@@ -87,6 +87,26 @@ Example:
 zpretty hello_world.html
 ```
 
+# pre-commit support
+
+`zpretty` can be used as a [pre-commit](https://pre-commit.com/) hook.
+To do so, add the following to your `.pre-commit-config.yaml`:
+
+```yaml
+- repo: https://github.com/collective/zpretty
+  rev: FIXME
+  hooks:
+    - id: zpretty
+```
+
+# VSCode extension
+
+There is a VSCode extension that uses `zpretty`:
+
+- [https://marketplace.visualstudio.com/items?itemName=erral.erral-zcmlLanguageConfiguration](https://marketplace.visualstudio.com/items?itemName=erral.erral-zcmlLanguageConfiguration)
+
+Thanks to @erral for the work!
+
 # DEVELOP
 
 ```bash
