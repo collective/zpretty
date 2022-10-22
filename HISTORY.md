@@ -1,6 +1,6 @@
 # Changelog
 
-2.4.0 (unreleased)
+2.4.0 (2022-10-22)
 ------------------
 
 - Prevent fiddling around with custom entity declaration (Fixes #80)
