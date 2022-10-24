@@ -3,6 +3,9 @@
 2.4.1 (unreleased)
 ------------------
 
+- XML files with newlines between attributes are properly formatted
+  (Fixes #84)
+  [ale-rt]
 - Do not tamper attributes in XML as if they were a page template attribute
   (Fixes #85)
   [ale-rt]
