@@ -19,7 +19,7 @@ class ZPrettifier(object):
     parser = "html.parser"
     builder = None
     _end_with_newline = True
-    _newlines_marker = str(uuid4())
+    _newlines_marker = f'new-line-{str(uuid4())}=""'
     _ampersand_marker = str(uuid4())
     _cdata_marker = str(uuid4())
     _cdata_pattern = re.compile(r"<!\[CDATA\[(.*?)\]\]>", re.DOTALL)
@@ -45,8 +45,9 @@ class ZPrettifier(object):
         self.soup = self.get_soup(self.text)
 
         # Cleanup all spurious self._newlines_marker attributes, see #35
-        for el in self.soup.find_all(attrs={self._newlines_marker: ""}):
-            el.attrs.pop(self._newlines_marker, None)
+        key = self._newlines_marker.partition("=")[0]
+        for el in self.soup.find_all(attrs={key: ""}):
+            el.attrs.pop(key, None)
 
         self.root = self.pretty_element(self.soup, -1)
 
