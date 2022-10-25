@@ -20,7 +20,9 @@ class XMLAttributes(PrettyAttributes):
     _boolean_attributes_are_allowed = False
     _known_boolean_attributes = ()
     _multiline_attributes = ()
+    _tal_multiline_attributes = ()
     _xml_attribute_order = ()
+    _tal_attribute_order = ()
 
     def sort_attributes(self, name):
         """Sort ZCML attributes in a consistent way"""

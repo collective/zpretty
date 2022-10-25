@@ -3,7 +3,9 @@
 2.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Do not tamper attributes in XML as if they were a page template attribute
+  (Fixes #85)
+  [ale-rt]
 
 
 2.4.0 (2022-10-22)
