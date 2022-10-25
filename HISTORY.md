@@ -1,6 +1,6 @@
 # Changelog
 
-2.4.1 (unreleased)
+2.4.1 (2022-10-25)
 ------------------
 
 - XML files with newlines between attributes are properly formatted
