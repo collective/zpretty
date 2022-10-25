@@ -1,5 +1,11 @@
 # Changelog
 
+2.4.2 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 2.4.1 (2022-10-25)
 ------------------
 
