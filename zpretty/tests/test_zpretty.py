@@ -174,6 +174,9 @@ class TestZpretty(TestCase):
     def test_sample_html(self):
         self.prettify("sample_html.html")
 
+    def test_sample_html4(self):
+        self.prettify("sample_html4.html")
+
     def test_sample_pt(self):
         self.prettify("sample_pt.pt")
 

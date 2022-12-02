@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      lang="en"
+      i18n:domain="plone"
+>
+  <head>
+    <title>Sample HTML</title>
+    <script>
+      function doSomething() {
+        alert("Hello, world!");
+      }
+    </script>
+    <script>
+      var form = jQuery("<form>");
+
+    </script>
+    <style>
+      .foo {
+        color: red;
+      }
+      #bar {
+        content: " <&";
+      }
+    </style>
+        <![CDATA[ <>& ]]>
+  </head>
+  <body>
+    <div class="hero"></div>
+    <hr data-sep="1" />
+    <div></div><!-- -->
+    <div class="b"
+         id="a"
+         data-multiline="
+  foo
+    bar
+      baz
+        "
+    >test
+
+    </div><!-- #a -->
+    <tal:test define="
+                a;; a;
+                b b;
+              "
+              attributes="
+                hello;
+                world;
+              "
+    />
+    <div><p>Loading...</p></div>
+    <!--
+      <strong>a</strong>
+    -->
+    <video controls
+           width="250"
+    >
+
+      <source src="/media/examples/flower.webm"
+              type="video/webm"
+      />
+
+      <source src="/media/examples/flower.mp4"
+              type="video/mp4"
+      />
+
+      Sorry, your browser doesn't support embedded videos.
+    </video>
+
+    <pre> </pre>
+
+    <tal:example>
+      <p>
+        Inside a tal!
+      </p>
+      (<a herf="#">whatever</a>)
+      a<b herf="#">whatever</b>
+      "<c href="#">whatever</c>"
+    </tal:example>
+    <metal:hello />
+  </body>
+  <div tal:condition="nothing"
+       i18n:domain="test"
+  >
+    Whitelines are not stripped away
+    <a>&nbsp;</a>
+    <input name="search"
+           type="text"
+    />
+    <![CDATA[
+      This
+        should
+          be
+
+            preserved
+              as
+                is
+  ]]>
+    <ul><li><a></a></li></ul>
+  </div>
+</html>

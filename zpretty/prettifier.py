@@ -65,11 +65,7 @@ class ZPrettifier(object):
             # No match
             pass
         text = re.sub(self._cdata_pattern, self._cdata_marker, text)
-        # Replace whatever the doctype is with a dummy one except when the doctype is
-        # html, in that case keep it so that BeautifulSoup knows
-        # it has to use an html parser
-        if self._doctype and "html" not in self._doctype.lower().rstrip(">").split():
-            text = re.sub(self._doctype_pattern, self._doctype_marker, text)
+        text = re.sub(self._doctype_pattern, self._doctype_marker, text)
         return "\n".join(
             line if line.strip() else self._newlines_marker
             for line in text.splitlines()
