@@ -3,7 +3,9 @@
 2.4.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Improve the check that sniffs html files
+  (Fixes #89)
+  [ale-rt]
 
 
 2.4.1 (2022-10-25)
