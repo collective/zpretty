@@ -276,7 +276,7 @@ class PrettyElement(object):
 
     def render_soup(self):
         first_child = next(self.context.children)
-        if isinstance(first_child, Doctype) and first_child.string == "html":
+        if isinstance(first_child, Doctype) and not self.context.is_xml:
             return self.render_content()
         return f'<?xml version="1.0" encoding="utf-8"?>\n{self.render_content()}'
 
