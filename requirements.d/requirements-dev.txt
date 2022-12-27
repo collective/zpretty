@@ -50,7 +50,7 @@ requests-toolbelt==0.9.1
 rfc3986==2.0.0
 rich==12.4.0
 SecretStorage==3.3.2
-setuptools==59.6.0
+setuptools==65.5.1
 six==1.16.0
 soupsieve==2.3.2.post1
 toml==0.10.2
