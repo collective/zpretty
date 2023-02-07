@@ -1,8 +1,11 @@
 # Changelog
 
-2.4.2 (unreleased)
+3.0.0 (unreleased)
 ------------------
 
+- The pre-commit hook now modifies fixes the files instead of just checking
+  if they should be fixed
+  [ale-rt]
 - Improve the check that sniffs html files
   (Fixes #89)
   [ale-rt]
