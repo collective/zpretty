@@ -182,3 +182,6 @@ class TestZpretty(TestCase):
 
     def test_text_with_markup(self):
         self.prettify("text_with_markup.md")
+
+    def test_text_file(self):
+        self.prettify("sample.txt")

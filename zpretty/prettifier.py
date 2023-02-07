@@ -112,4 +112,7 @@ class ZPrettifier(object):
         return self.original_text == self()
 
     def __call__(self):
+        if not self.root.getchildren():
+            # The parsed content is not even something that looks like an XML
+            return self.original_text
         return self.pretty_print(self.root)
