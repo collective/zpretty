@@ -3,6 +3,6 @@
   entry: zpretty
   language: python
   files: ".*.(zcml|pt|xml|html)$"
-  args: ["--check"]
+  args: ["--inplace"]
   require_serial: false
   additional_dependencies: []
