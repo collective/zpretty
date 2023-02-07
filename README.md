@@ -2,6 +2,8 @@
 
 [![image](https://coveralls.io/repos/github/collective/zpretty/badge.svg?branch=master)](https://coveralls.io/github/collective/zpretty?branch=master)
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/collective/zpretty/master.svg)](https://results.pre-commit.ci/latest/github/collective/zpretty/master)
+
 A tool to format in a **very opinionated** way HTML, XML and text
 containing XML snippets.
 
