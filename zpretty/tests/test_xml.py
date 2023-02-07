@@ -37,3 +37,6 @@ class TestZpretty(TestCase):
 
     def test_sample_dtml(self):
         self.prettify("sample_dtml.dtml")
+
+    def test_sample_txt(self):
+        self.prettify("sample.txt")
