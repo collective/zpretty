@@ -101,13 +101,14 @@ def run():
     parser = get_parser()
     config = parser.parse_args()
     encoding = config.encoding
+    errors = []
+
     for infile in config.file:
         Prettifier = choose_prettifier(config, infile)
         prettifier = Prettifier(infile, encoding=encoding)
         if config.check:
             if not prettifier.check():
-                stderr.write(f"This file would be rewritten: {infile}\n")
-                exit(1)
+                errors.append(f"This file would be rewritten: {infile}")
             continue
         prettified = prettifier()
         if config.inplace and not infile == "-":
@@ -115,6 +116,10 @@ def run():
                 f.write(prettified)
             continue
         stdout.write(prettified)
+    if errors:
+        message = "\n".join(errors)
+        stderr.write(f"{message}\n")
+        exit(1)
 
 
 if __name__ == "__main__":
