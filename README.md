@@ -63,10 +63,10 @@ Basic usage:
 ```console
 $ zpretty -h
 usage: zpretty [-h] [--encoding ENCODING] [-i] [-v] [-x] [-z] [--check]
-               [file ...]
+               [paths ...]
 
 positional arguments:
-    file                 The list of files to prettify (defaults to stdin)
+    paths                The list of paths to prettify (defaults to stdin)
 
 options:
     -h, --help           show this help message and exit
