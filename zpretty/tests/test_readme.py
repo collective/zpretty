@@ -1,6 +1,6 @@
 from pkg_resources import resource_filename
 from unittest import TestCase
-from zpretty.cli import get_parser
+from zpretty.tests.mock import MockCLIRunner
 
 import argparse
 import sys
@@ -19,7 +19,7 @@ class TestReadme(TestCase):
             readme = f.read()
             if sys.version_info < (3, 9):  # pragma: no cover
                 # Small change in the argparse output for Python >= 3.9
-                readme = readme.replace("[file ...]", "[file [file ...]]")
+                readme = readme.replace("[paths ...]", "[paths [paths ...]]")
             if sys.version_info < (3, 10):  # pragma: no cover
                 # Small change in the argparse output for Python >= 3.10
                 readme = readme.replace("options:", "optional arguments:")
@@ -30,7 +30,7 @@ class TestReadme(TestCase):
 
     def extract_usage_from_parser(self):
         """Ask the parser for the usage and indent it"""
-        parser = get_parser()
+        parser = MockCLIRunner().parser
         # This is needed to keep the 100 lines limit
         parser.formatter_class = lambda prog: argparse.HelpFormatter(prog, width=80)
         # temporarily remove the description
