@@ -1,10 +1,10 @@
 # Changelog
 
-## 3.0.5 (unreleased)
+## 3.1.0 (unreleased)
 
-
-- Nothing changed yet.
-
+- Add command line parameters to include/exclude files and folders
+  (Implements #96)
+  [ale-rt]
 
 ## 3.0.4 (2023-04-20)
 

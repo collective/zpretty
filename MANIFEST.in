@@ -1,3 +1,4 @@
 global-exclude *.pyc __pycache__ pyvenv.cfg
 graft zpretty
+graft zpretty/tests/include-excludes/.git
 include *.cfg *.txt *.md *.in LICENSE Makefile .pre-commit-config.yaml .pre-commit-hooks.yaml tox.ini pyproject.toml requirements.d/*.txt

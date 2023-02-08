@@ -7,6 +7,8 @@ from zpretty.prettifier import ZPrettifier
 from zpretty.xml import XMLPrettifier
 from zpretty.zcml import ZCMLPrettifier
 
+import re
+
 
 try:
     # Python >= 3.8
@@ -23,6 +25,12 @@ except ImportError:
 class CLIRunner:
     """A class to run zpretty from the command line"""
 
+    _default_include = r"\.(html|pt|xml|zcml)$"
+    _default_exclude = (
+        r"/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|venv|"
+        r"\.svn|\.ipynb_checkpoints|_build|buck-out|build|dist|__pypackages__)/"
+    )
+
     def __init__(self):
         self.errors = []
         self.config = self.parser.parse_args()
@@ -33,7 +41,7 @@ class CLIRunner:
         parser = ArgumentParser(
             prog="zpretty",
             description="An opinionated HTML/XML soup formatter",
-            epilog=None,
+            epilog=f"The default exclude pattern is: `{self._default_exclude}`",
         )
         parser.add_argument(
             "--encoding",
@@ -84,10 +92,53 @@ class CLIRunner:
             default=False,
         )
         parser.add_argument(
+            "--include",
+            help=(
+                f"A regular expression that matches files and "
+                f" directories that should be included on recursive searches. "
+                f"An empty value means all files are included regardless of the name. "
+                f"Use forward slashes for directories on all platforms (Windows, too). "
+                f"Exclusions are calculated first, inclusions later. "
+                f"[default: {self._default_include}]"
+            ),
+            action="store",
+            dest="include",
+            default=self._default_include,
+        )
+        parser.add_argument(
+            "--exclude",
+            help=(
+                f"A regular expression that matches files and "
+                f"directories that should be excluded on "
+                f"recursive searches. An empty value means no "
+                f"paths are excluded. Use forward slashes for "
+                f"directories on all platforms (Windows, too). "
+                f"Exclusions are calculated first, inclusions "
+                f"later. [default: {self._default_exclude}] "
+            ),
+            action="store",
+            dest="exclude",
+            default=self._default_exclude,
+        )
+
+        parser.add_argument(
+            "--extend-exclude",
+            help=(
+                "Like --exclude,  but adds additional files "
+                "and directories on top of the excluded ones. "
+                "(Useful if you simply want to add to the default)"
+            ),
+            action="store",
+            dest="extend_exclude",
+            default=None,
+        )
+        parser.add_argument(
             "paths",
             nargs="*",
             default="-",
-            help="The list of paths to prettify (defaults to stdin)",
+            help="The list of files or directory to prettify (defaults to stdin). "
+            "If a directory is passed, all files and directories matching the regular "
+            "expression passed to --include will be prettified.",
         )
         return parser
 
@@ -109,17 +160,60 @@ class CLIRunner:
     def good_paths(self):
         """Return a list of good paths"""
         good_paths = []
+
+        try:
+            exclude = re.compile(self.config.exclude)
+        except re.error:
+            exclude = re.compile(self._default_exclude)
+            self.errors.append(
+                f"Invalid regular expression for --exclude: {self.config.exclude!r}"
+            )
+
+        try:
+            extend_exclude = self.config.extend_exclude and re.compile(
+                self.config.extend_exclude
+            )
+        except re.error:
+            extend_exclude = None
+            self.errors.append(
+                f"Invalid regular expression for --extend-exclude: "
+                f"{self.config.extend_exclude!r}"
+            )
+
+        try:
+            include = re.compile(self.config.include)
+        except re.error:
+            include = re.compile(self._default_include)
+            self.errors.append(
+                f"Invalid regular expression for --include: {self.config.include!r}"
+            )
+
         for path in self.config.paths:
             # use Pathlib to check if the file exists and it is a file
             if path == "-":
                 good_paths.append(path)
                 continue
+            if exclude.match(path) or (extend_exclude and extend_exclude.match(path)):
+                continue
+
             path_instance = Path(path)
             if path_instance.is_file():
                 good_paths.append(path)
+            elif path_instance.is_dir():
+                for file in path_instance.glob("**/*"):
+                    if file.is_file():
+                        if (
+                            include.search(str(file))
+                            and not exclude.search(str(file))
+                            and not (
+                                extend_exclude and extend_exclude.search(str(file))
+                            )
+                        ):
+                            good_paths.append(str(file))
             else:
                 self.errors.append(f"Cannot open: {path}")
-        return good_paths
+
+        return sorted(good_paths)
 
     def run(self):
         """Prettify each filename passed in the command line"""
