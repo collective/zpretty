@@ -32,6 +32,7 @@ setup(
     url="https://github.com/collective/zpretty",
     license="BSD",
     packages=find_packages(),
+    python_requires=">=3.7",
     install_requires=["setuptools", "beautifulsoup4", "lxml"],
     extras_require={
         "test": ["pre-commit", "pytest-cov", "pytest"],
