@@ -6,6 +6,8 @@
 - The pre-commit hook now modifies fixes the files instead of just checking
   if they should be fixed
   [ale-rt]
+- Fix the check behavior when multiple files are passed
+  [ale-rt]
 - Improve the check that sniffs html files
   (Fixes #89)
   [ale-rt]
