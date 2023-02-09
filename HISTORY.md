@@ -3,7 +3,9 @@
 3.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix an issue with empty lines inside an attribute.
+  (Fixes #106)
+  [ale-rt]
 
 
 3.0.0 (2023-02-09)

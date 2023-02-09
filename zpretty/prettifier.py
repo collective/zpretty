@@ -19,7 +19,7 @@ class ZPrettifier(object):
     parser = "html.parser"
     builder = None
     _end_with_newline = True
-    _newlines_marker = f'new-line-{str(uuid4())}=""'
+    _newlines_marker = f"new-line-{str(uuid4())}"
     _ampersand_marker = str(uuid4())
     _cdata_marker = str(uuid4())
     _cdata_pattern = re.compile(r"<!\[CDATA\[(.*?)\]\]>", re.DOTALL)
