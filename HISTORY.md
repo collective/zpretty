@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.2 (unreleased)
+
+
+- Nothing changed yet.
+
+
 ## 3.0.1 (2023-02-09)
 
 - Fix an issue with empty lines inside an attribute.
