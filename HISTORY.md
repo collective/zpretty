@@ -1,6 +1,6 @@
 # Changelog
 
-3.0.0 (unreleased)
+3.0.0 (2023-02-09)
 ------------------
 
 - The pre-commit hook now modifies fixes the files instead of just checking
