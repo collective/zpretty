@@ -1,15 +1,12 @@
 # Changelog
 
-3.0.1 (unreleased)
-------------------
+## 3.0.1 (unreleased)
 
 - Fix an issue with empty lines inside an attribute.
   (Fixes #106)
   [ale-rt]
 
-
-3.0.0 (2023-02-09)
-------------------
+## 3.0.0 (2023-02-09)
 
 - The pre-commit hook now modifies fixes the files instead of just checking
   if they should be fixed
@@ -20,9 +17,7 @@
   (Fixes #89)
   [ale-rt]
 
-
-2.4.1 (2022-10-25)
-------------------
+## 2.4.1 (2022-10-25)
 
 - XML files with newlines between attributes are properly formatted
   (Fixes #84)
@@ -31,9 +26,7 @@
   (Fixes #85)
   [ale-rt]
 
-
-2.4.0 (2022-10-22)
-------------------
+## 2.4.0 (2022-10-22)
 
 - Prevent fiddling around with custom entity declaration (Fixes #80)
   [ale-rt]
@@ -42,57 +35,41 @@
 - Drop support for Python 3.6.
   [ale-rt]
 
-
-2.3.1 (2022-09-30)
-------------------
+## 2.3.1 (2022-09-30)
 
 - Do not try to do anything on CDATAs (Fixes #76)
   [ale-rt]
 
-
-2.3.0 (2022-09-26)
-------------------
+## 2.3.0 (2022-09-26)
 
 - Added a -v/--version option [ale-rt]
 
-
-2.3.0a4 (2022-09-24)
---------------------
+## 2.3.0a4 (2022-09-24)
 
 - Remove custom tree builder which is not used anymore [ale-rt]
 - Fix entity sustitution in XML (Fixes #48, Refs #71) [ale-rt]
 
-
-2.3.0a3 (2022-07-08)
---------------------
+## 2.3.0a3 (2022-07-08)
 
 - Do not escape entities inside the script and style tags (Fixes #57) [ale-rt]
 
-
-2.3.0a2 (2022-07-08)
---------------------
+## 2.3.0a2 (2022-07-08)
 
 - Fix release
 
-
-2.3.0a1 (2022-07-08)
---------------------
+## 2.3.0a1 (2022-07-08)
 
 - Preserve whitespace in XML documents and `pre` elements (Fixes #64) [ale-rt]
 - Improve doctype handling [ale-rt]
 - Do not kill XML documents with a doctype (Fixes #47) [ale-rt]
 - Support Python 3.10 [ale-rt]
 
-
-2.2.0 (2021-12-06)
-------------------
+## 2.2.0 (2021-12-06)
 
 - Add a `--check` command line parameter (Fixes #49) [ale-rt]
 - Now the package is `pre-commit` compatibile (Fixes #50) [ale-rt]
 
-
-2.1.0 (2021-02-12)
-------------------
+## 2.1.0 (2021-02-12)
 
 - Remove unused `autofix` method [ale-rt]
 - Do not render a spurious `=""` when new lines appear inside a tag (Refs. #35) [ale-rt]
@@ -106,16 +83,13 @@
 - Upgrade dev requirements [ale-rt]
 - Support Python 3.9 [ale-rt]
 
-
 ## 2.0.0 (2020-05-28)
 
 - Updated the list of self closing elements and boolean attributes [ale-rt]
 
-
 ## 1.0.3 (2020-05-22)
 
 - Fix unwanted newlines (#20)
-
 
 ## 1.0.2 (2019-11-03)
 
