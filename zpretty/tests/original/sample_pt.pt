@@ -16,11 +16,13 @@
         >whatever</a>)
         a<b disabled="disabled"
            href="#"
+           data-pat-plone-modal='{"actionOptions": {"disableAjaxFormSubmit":true}}'
            tal:define="
              foo python:1
 
              bar python:2;
            "
+           tal:condition='python: "I have double quotes"'
         >whatever</b>
         "<c href="#">whatever</c>"
         <pre>

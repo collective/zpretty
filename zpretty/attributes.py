@@ -19,7 +19,7 @@ class PrettyAttributes(object):
     - with properly indented and escaped values
     """
 
-    _attribute_template = '%s="%s"'
+    _attribute_template = "{name}={quote}{value}{quote}"
     _boolean_attributes_are_allowed = True
 
     _known_boolean_attributes = (
@@ -207,7 +207,13 @@ class PrettyAttributes(object):
             if not value and self.can_be_valueless(name):
                 line = name
             else:
-                line = self._attribute_template % (name, escape(value, quote=False))
+                if '"' in value:
+                    quote = "'"
+                else:
+                    quote = '"'
+                line = self._attribute_template.format(
+                    name=name, quote=quote, value=escape(value, quote=False)
+                )
             lines.append(line)
         return lines
 
