@@ -33,6 +33,9 @@ class TestZPrettyAttributess(TestCase):
         self.assertPrettifiedAttributes({"a": "1"}, 'a="1"', level=1)
         self.assertPrettifiedAttributes({"a": "1"}, 'a="1"', level=2)
 
+    def test_value_with_double_quoptes(self):
+        self.assertPrettifiedAttributes({"a": '"'}, "a='\"'")
+
     def test_many_attributes_attribute(self):
         self.assertPrettifiedAttributes({"a": "1", "b": "2"}, 'a="1"\nb="2"')
         self.assertPrettifiedAttributes(

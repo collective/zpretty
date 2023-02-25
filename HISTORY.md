@@ -2,9 +2,8 @@
 
 ## 3.0.2 (unreleased)
 
-
-- Nothing changed yet.
-
+- Fix attribute with a value containing double quotes
+  (Fixes #109)
 
 ## 3.0.1 (2023-02-09)
 
