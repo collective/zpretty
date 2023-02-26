@@ -1,3 +1,4 @@
+from pathlib import Path
 from pkg_resources import resource_filename
 from unittest import TestCase
 from zpretty.tests.mock import MockCLIRunner
@@ -13,7 +14,7 @@ class TestReadme(TestCase):
 
     def extract_usage_from_readme(self):
         """Extract the usage from the documentation"""
-        resolved_filename = resource_filename("zpretty", "../README.md")
+        resolved_filename = Path(resource_filename("zpretty", ".")) / ".." / "README.md"
 
         with open(resolved_filename) as f:
             readme = f.read()
