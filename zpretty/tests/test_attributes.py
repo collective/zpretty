@@ -36,6 +36,9 @@ class TestZPrettyAttributess(TestCase):
     def test_value_with_double_quoptes(self):
         self.assertPrettifiedAttributes({"a": '"'}, "a='\"'")
 
+    def test_transform_forbidden_characters(self):
+        self.assertPrettifiedAttributes({"a": "> < &"}, 'a="&gt; &lt; &amp;"')
+
     def test_many_attributes_attribute(self):
         self.assertPrettifiedAttributes({"a": "1", "b": "2"}, 'a="1"\nb="2"')
         self.assertPrettifiedAttributes(

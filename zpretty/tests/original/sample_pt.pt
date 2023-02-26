@@ -29,6 +29,9 @@
           Foo
             Bar
         </pre>
+        <span tal:define="
+                foo python: 1 &gt; 2 and 1 &lt; 2 and &amp;;
+              "></span>
       </metal:content-core>
     </metal:main>
     <![CDATA[

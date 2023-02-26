@@ -2,8 +2,12 @@
 
 ## 3.0.2 (unreleased)
 
+- Handle forbidden characters in attributes properly
+  (Fixes #110)
+  [ale-rt]
 - Fix attribute with a value containing double quotes
   (Fixes #109)
+  [ale-rt]
 
 ## 3.0.1 (2023-02-09)
 
