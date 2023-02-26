@@ -34,6 +34,7 @@ class ZPrettifier(object):
         """Create a prettifier instance taking the contents
         from a text or a filename
         """
+        self._entity_mapping = {}
         self.encoding = encoding
         self.filename = filename
         if self.filename:
@@ -66,6 +67,16 @@ class ZPrettifier(object):
             pass
         text = re.sub(self._cdata_pattern, self._cdata_marker, text)
         text = re.sub(self._doctype_pattern, self._doctype_marker, text)
+
+        # Get all the entities in the text and replace them with a marker
+        # The text might contain undefined entities that BeautifulSoup
+        # will strip out.
+        entities = set(re.findall(r"&[^;]+;", text))
+        for entitiy in entities:
+            marker = str(uuid4())
+            self._entity_mapping[entitiy] = marker
+            text = text.replace(entitiy, marker)
+
         return "\n".join(
             line if line.strip() else self._newlines_marker
             for line in text.splitlines()
@@ -103,6 +114,9 @@ class ZPrettifier(object):
         # Restore DocTypes
         if self._doctype:
             prettified = prettified.replace(self._doctype_marker, self._doctype)
+        # Restore entities
+        for entity, marker in self._entity_mapping.items():
+            prettified = prettified.replace(marker, entity)
         if self._end_with_newline and not prettified.endswith("\n"):
             prettified += "\n"
         return prettified
