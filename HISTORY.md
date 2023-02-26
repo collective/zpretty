@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.2 (unreleased)
+## 3.0.2 (2023-02-26)
 
 - Handle forbidden characters in attributes properly
   (Fixes #110)
