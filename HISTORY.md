@@ -3,7 +3,7 @@
 ## 3.0.3 (unreleased)
 
 - Handle HTML files with an XML preamble before the doctype.
-  (Fixes #117)
+  (Fixes #118)
   [ale-rt]
 
 ## 3.0.2 (2023-02-26)
