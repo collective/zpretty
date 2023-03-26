@@ -26,7 +26,7 @@ pathspec==0.8.1
 pep517==0.9.1
 pkginfo==1.6.1
 pluggy==0.13.1
-py==1.10.0
+py==1.11.0
 pycodestyle==2.6.0
 pycparser==2.20
 pyflakes==2.2.0
