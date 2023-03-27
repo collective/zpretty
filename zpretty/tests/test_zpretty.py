@@ -171,6 +171,20 @@ class TestZpretty(TestCase):
     def test_single_quotes_in_attrs(self):
         self.assertPrettified('<root a="\'" />', '<root a="\'"></root>\n')
 
+    def test_ampersand_in_attrs(self):
+        self.assertPrettified('<root a="&" />', '<root a="&amp;"></root>\n')
+        self.assertPrettified('<root a="foo &" />', '<root a="foo &amp;"></root>\n')
+        self.assertPrettified('<root a="& bar" />', '<root a="&amp; bar"></root>\n')
+        self.assertPrettified('<root a=";&" />', '<root a=";&amp;"></root>\n')
+        self.assertPrettified('<root a="&;" />', '<root a="&amp;;"></root>\n')
+
+    def test_escaped_ampersand_in_attrs(self):
+        self.assertPrettified('<root a="&amp;" />', '<root a="&amp;"></root>\n')
+        self.assertPrettified('<root a="foo &amp;" />', '<root a="foo &amp;"></root>\n')
+        self.assertPrettified('<root a="&amp; bar" />', '<root a="&amp; bar"></root>\n')
+        self.assertPrettified('<root a=";&amp;" />', '<root a=";&amp;"></root>\n')
+        self.assertPrettified('<root a="&amp;;" />', '<root a="&amp;;"></root>\n')
+
     def test_sample_html(self):
         self.prettify("sample_html.html")
 

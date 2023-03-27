@@ -43,7 +43,17 @@ class ZPrettifier(object):
             text = text.decode(self.encoding)
         self.original_text = text
         self.text = self._prepare_text()
-        self.soup = self.get_soup(self.text)
+        soup = self.get_soup(self.text)
+        # Workaround for https://github.com/collective/zpretty/issues/116
+        # restore the ampersands
+        # in the attributes so that bogus ones can be escaped
+        for el in soup.descendants:
+            attrs = getattr(el, "attrs", {})
+            for key, value in attrs.items():
+                if self._ampersand_marker in value:
+                    attrs[key] = value.replace(self._ampersand_marker, "&")
+
+        self.soup = soup
 
         # Cleanup all spurious self._newlines_marker attributes, see #35
         key = self._newlines_marker.partition("=")[0]

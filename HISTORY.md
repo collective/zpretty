@@ -3,8 +3,9 @@
 3.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Fix bogus ampersands in attributes
+  (Fixes #116)
+  [ale-rt]
 
 3.0.3 (2023-03-26)
 
