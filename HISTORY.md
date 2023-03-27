@@ -1,13 +1,12 @@
 # Changelog
 
-3.0.4 (unreleased)
-------------------
+## 3.0.4 (unreleased)
 
 - Fix bogus ampersands in attributes
   (Fixes #116)
   [ale-rt]
 
-3.0.3 (2023-03-26)
+## 3.0.3 (2023-03-26)
 
 - Handle HTML files with an XML preamble before the doctype.
   (Fixes #118)
