@@ -122,9 +122,3 @@ make
 ```bash
 make test
 ```
-
-# TODO
-
-- [ ] Valueless attributes are not allowed in XML
-- [ ] Attributes are aligned in a strange way if previous sibling has no spaces
-- [ ] TBD: Style attributes should be multiline
