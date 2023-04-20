@@ -4,6 +4,9 @@
 
 - Add command line parameters to include/exclude files and folders
   (Implements #96)
+  [ale-rt]  
+- Be tolerant with characters forbidden in XML when dealing with tal attributes
+  (See #125)
   [ale-rt]
 
 ## 3.0.4 (2023-04-20)

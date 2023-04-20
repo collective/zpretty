@@ -180,6 +180,26 @@ class PrettyAttributes(object):
         # restore ';;'
         return new_value.replace("<>", ";;")
 
+    def is_tal_attribute(self, name):
+        """Check if the attribute is a tal attribute"""
+        if name.startswith("tal:"):
+            return True
+        try:
+            if not self.element.context.name.startswith("tal:"):
+                return False
+        except AttributeError:
+            return False
+        if f"tal:{name}" in self._tal_attribute_order:
+            return True
+
+    def maybe_escape(self, name, value):
+        """Escape the value if needed"""
+        if self.is_tal_attribute(name):
+            # Never escape what we have in tal attributes
+            return value
+
+        return escape(value, quote=False)
+
     def can_be_valueless(self, name):
         """Check if the attribute name can be without a value"""
         if not self._boolean_attributes_are_allowed:
@@ -211,8 +231,9 @@ class PrettyAttributes(object):
                     quote = "'"
                 else:
                     quote = '"'
+
                 line = self._attribute_template.format(
-                    name=name, quote=quote, value=escape(value, quote=False)
+                    name=name, quote=quote, value=self.maybe_escape(name, value)
                 )
             lines.append(line)
         return lines
