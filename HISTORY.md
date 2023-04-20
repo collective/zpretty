@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.4 (unreleased)
+## 3.0.4 (2023-04-20)
 
 - Fix bogus ampersands in attributes
   (Fixes #116)
