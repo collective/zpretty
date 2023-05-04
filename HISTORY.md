@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.0 (unreleased)
+## 3.1.0a1 (2023-05-04)
 
 - Add command line parameters to include/exclude files and folders
   (Implements #96)
