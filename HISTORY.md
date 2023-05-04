@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0a2 (unreleased)
+
+
+- Nothing changed yet.
+
+
 ## 3.1.0a1 (2023-05-04)
 
 - Add command line parameters to include/exclude files and folders
