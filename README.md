@@ -63,21 +63,49 @@ Basic usage:
 ```console
 $ zpretty -h
 usage: zpretty [-h] [--encoding ENCODING] [-i] [-v] [-x] [-z] [--check]
+               [--include INCLUDE] [--exclude EXCLUDE]
+               [--extend-exclude EXTEND_EXCLUDE]
                [paths ...]
 
 positional arguments:
-    paths                The list of paths to prettify (defaults to stdin)
+  paths                 The list of files or directory to prettify (defaults to
+                        stdin). If a directory is passed, all files and
+                        directories matching the regular expression passed to
+                        --include will be prettified.
 
 options:
-    -h, --help           show this help message and exit
-    --encoding ENCODING  The file encoding (defaults to utf8)
-    -i, --inplace        Format files in place (overwrite existing file)
-    -v, --version        Show zpretty version number
-    -x, --xml            Treat the input file(s) as XML
-    -z, --zcml           Treat the input file(s) as XML. Follow the ZCML
+  -h, --help            show this help message and exit
+  --encoding ENCODING   The file encoding (defaults to utf8)
+  -i, --inplace         Format files in place (overwrite existing file)
+  -v, --version         Show zpretty version number
+  -x, --xml             Treat the input file(s) as XML
+  -z, --zcml            Treat the input file(s) as XML. Follow the ZCML
                         styleguide
-    --check              Return code 0 if nothing would be changed, 1 if some
+  --check               Return code 0 if nothing would be changed, 1 if some
                         files would be reformatted
+  --include INCLUDE     A regular expression that matches files and directories
+                        that should be included on recursive searches. An empty
+                        value means all files are included regardless of the
+                        name. Use forward slashes for directories on all
+                        platforms (Windows, too). Exclusions are calculated
+                        first, inclusions later. [default:
+                        \.(html|pt|xml|zcml)$]
+  --exclude EXCLUDE     A regular expression that matches files and directories
+                        that should be excluded on recursive searches. An empty
+                        value means no paths are excluded. Use forward slashes
+                        for directories on all platforms (Windows, too).
+                        Exclusions are calculated first, inclusions later.
+                        [default: /(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.no
+                        x|\.tox|\.venv|venv|\.svn|\.ipynb_checkpoints|_build|buc
+                        k-out|build|dist|__pypackages__)/]
+  --extend-exclude EXTEND_EXCLUDE
+                        Like --exclude, but adds additional files and
+                        directories on top of the excluded ones. (Useful if you
+                        simply want to add to the default)
+
+The default exclude pattern is: `/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox
+|\.tox|\.venv|venv|\.svn|\.ipynb_checkpoints|_build|buck-
+out|build|dist|__pypackages__)/`
 ```
 
 Without parameters constraining the file type (e.g. `-x`, `-z`, \...)

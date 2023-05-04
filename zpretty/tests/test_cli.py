@@ -83,3 +83,128 @@ class TestCli(TestCase):
         with mock.patch("builtins.exit", return_value=None) as mocked:
             clirunner.run()
             mocked.assert_called_once_with(1)
+
+    def test_good_paths(self):
+        """Test the good_paths property"""
+        clirunner = MockCLIRunner()
+        self.assertListEqual(clirunner.good_paths, ["-"])
+
+        clirunner = MockCLIRunner("zpretty/tests/original/sample_xml.xml")
+        self.assertListEqual(
+            clirunner.good_paths, ["zpretty/tests/original/sample_xml.xml"]
+        )
+
+        clirunner = MockCLIRunner("broken/broken.xml")
+        self.assertListEqual(clirunner.good_paths, [])
+
+        clirunner = MockCLIRunner(
+            "broken/broken.xml", "zpretty/tests/original/sample_xml.xml"
+        )
+        self.assertListEqual(
+            clirunner.good_paths, ["zpretty/tests/original/sample_xml.xml"]
+        )
+
+        clirunner = MockCLIRunner("zpretty/tests", "--include", "broken")
+        self.assertListEqual(
+            clirunner.good_paths,
+            [
+                "zpretty/tests/broken/broken.xml",
+            ],
+        )
+
+        clirunner = MockCLIRunner(
+            "zpretty/tests", "--include", "broken", "--exclude", "broken"
+        )
+        self.assertListEqual(clirunner.good_paths, [])
+
+        clirunner = MockCLIRunner(
+            "zpretty/tests/include-exclude",
+        )
+        self.assertListEqual(
+            clirunner.good_paths,
+            [
+                "zpretty/tests/include-exclude/foo/bar/bar.html",
+                "zpretty/tests/include-exclude/foo/bar/bar.pt",
+                "zpretty/tests/include-exclude/foo/bar/bar.xml",
+                "zpretty/tests/include-exclude/foo/bar/bar.zcml",
+                "zpretty/tests/include-exclude/foo/bar/foo.html",
+                "zpretty/tests/include-exclude/foo/bar/foo.pt",
+                "zpretty/tests/include-exclude/foo/bar/foo.xml",
+                "zpretty/tests/include-exclude/foo/bar/foo.zcml",
+            ],
+        )
+
+        clirunner = MockCLIRunner(
+            "zpretty/tests/include-exclude", "--extend-exclude", "bar/foo"
+        )
+        self.assertListEqual(
+            clirunner.good_paths,
+            [
+                "zpretty/tests/include-exclude/foo/bar/bar.html",
+                "zpretty/tests/include-exclude/foo/bar/bar.pt",
+                "zpretty/tests/include-exclude/foo/bar/bar.xml",
+                "zpretty/tests/include-exclude/foo/bar/bar.zcml",
+            ],
+        )
+
+        clirunner = MockCLIRunner(
+            "zpretty/tests/include-exclude",
+            "--include",
+            "pt$",
+            "--extend-exclude",
+            "bar/foo",
+        )
+        self.assertListEqual(
+            clirunner.good_paths,
+            [
+                "zpretty/tests/include-exclude/foo/bar/bar.pt",
+            ],
+        )
+
+        clirunner = MockCLIRunner("zpretty/tests/include-exclude", "--exclude", "foo")
+        self.assertListEqual(
+            clirunner.good_paths,
+            [
+                "zpretty/tests/include-exclude/.venv/bar.html",
+                "zpretty/tests/include-exclude/.venv/bar.pt",
+                "zpretty/tests/include-exclude/.venv/bar.xml",
+                "zpretty/tests/include-exclude/.venv/bar.zcml",
+                "zpretty/tests/include-exclude/venv/bar.html",
+                "zpretty/tests/include-exclude/venv/bar.pt",
+                "zpretty/tests/include-exclude/venv/bar.xml",
+                "zpretty/tests/include-exclude/venv/bar.zcml",
+            ],
+        )
+
+        clirunner = MockCLIRunner(
+            "zpretty/tests/include-exclude", "--exclude", "(foo|bar)"
+        )
+        self.assertListEqual(
+            clirunner.good_paths,
+            [],
+        )
+
+        with TemporaryDirectory() as tempdir:
+            with open(os.path.join(tempdir, "foo.pt"), "w"):
+                pass
+            clirunner = MockCLIRunner(
+                tempdir,
+                "--include",
+                "*",
+                "--exclude",
+                "+",
+                "--extend-exclude",
+                "[a-0]",
+            )
+            self.assertListEqual(
+                clirunner.good_paths,
+                [f"{tempdir}/foo.pt"],
+            )
+            self.assertListEqual(
+                clirunner.errors,
+                [
+                    "Invalid regular expression for --exclude: '+'",
+                    "Invalid regular expression for --extend-exclude: '[a-0]'",
+                    "Invalid regular expression for --include: '*'",
+                ],
+            )

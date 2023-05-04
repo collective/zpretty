@@ -1,7 +1,10 @@
 # Changelog
 
-## 3.0.5 (unreleased)
+## 3.1.0 (unreleased)
 
+- Add command line parameters to include/exclude files and folders
+  (Implements #96)
+  [ale-rt]  
 - Be tolerant with characters forbidden in XML when dealing with tal attributes
   (See #125)
   [ale-rt]
