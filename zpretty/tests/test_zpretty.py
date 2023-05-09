@@ -185,6 +185,12 @@ class TestZpretty(TestCase):
         self.assertPrettified('<root a=";&amp;" />', '<root a=";&amp;"></root>\n')
         self.assertPrettified('<root a="&amp;;" />', '<root a="&amp;;"></root>\n')
 
+    def test_ampersand_and_column_in_separate_attrs(self):
+        self.assertPrettified(
+            '<foo a="&" />\n<tal:bar b=";" />',
+            '<foo a="&amp;"></foo>\n<tal:bar b=";" />\n',
+        )
+
     def test_sample_html(self):
         self.prettify("sample_html.html")
 
