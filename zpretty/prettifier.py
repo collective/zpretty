@@ -81,12 +81,16 @@ class ZPrettifier(object):
         # Get all the entities in the text and replace them with a marker
         # The text might contain undefined entities that BeautifulSoup
         # will strip out.
-        entities = set(re.findall(r"&[^;]+;", text))
-        for entitiy in entities:
+        entities = {
+            _[0]
+            for _ in re.findall(
+                r"(&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6});)", text, re.IGNORECASE
+            )
+        }
+        for entity in entities:
             marker = str(uuid4())
-            self._entity_mapping[entitiy] = marker
-            text = text.replace(entitiy, marker)
-
+            self._entity_mapping[entity] = marker
+            text = text.replace(entity, marker)
         return "\n".join(
             line if line.strip() else self._newlines_marker
             for line in text.splitlines()
