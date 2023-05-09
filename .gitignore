@@ -7,4 +7,4 @@
 /dist/
 /htmlcov/
 /man/
-/py3/
+/.venv/
