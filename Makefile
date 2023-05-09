@@ -1,33 +1,41 @@
 .PHONY: all
-all: py3/bin/pip
+all: install
 
 .PHONY: test
 test: pre-commit pytest
 
+.venv/bin/pip:
+	python3 -m venv .venv
+
+.PHONY: install
+install: .venv/bin/pip
+	./.venv/bin/pip install -IU pip
+	./.venv/bin/pip install -IU .[development,test]
+	./.venv/bin/pip install -e .
+
 requirements := $(wildcard requirements-dev.txt requirements.d/*.txt)
-py3/bin/pip: $(requirements)
-	python3 -m venv py3
-	./py3/bin/pip install -IU pip
-	./py3/bin/pip install -IU .[development,test]
 
+.venv/bin/pre-commit: $(requirements)
+	make install
 
-./py3/bin/pre-commit: py3/bin/pip
+.venv/bin/pytest: $(requirements)
+	make install
 
 .PHONY: pre-commit
-pre-commit:
-	./py3/bin/pre-commit install
-	./py3/bin/pre-commit run --all
+pre-commit: .venv/bin/pre-commit
+	./.venv/bin/pre-commit install
+	./.venv/bin/pre-commit run --all
 
 .PHONY: pytests
-pytest: py3/bin/pip
-	./py3/bin/pytest
+pytest: .venv/bin/pytest
+	./.venv/bin/pytest
 
 .PHONY: htmlreport
-htmlreport: py3/bin/pip
-	./py3/bin/pytest --cov-report html
+htmlreport: .venv/bin/pytest
+	./.venv/bin/pytest --cov-report html
 
 .PHONY: requirements
-requirements: py3/bin/pip
-	./py3/bin/pip install -Ue .[development,test]
-	./py3/bin/pip freeze --all|egrep -v '^(pip|pkg-resources|wheel|-e|-f)' > requirements.d/requirements-dev.txt
+requirements: .venv/bin/pip
+	./.venv/bin/pip install -Ue .[development,test]
+	./.venv/bin/pip freeze --all|egrep -v '^(pip|pkg-resources|wheel|-e|-f)' > requirements.d/requirements-dev.txt
 	@git difftool -y -x "colordiff -y" requirements.d/requirements-dev.txt
