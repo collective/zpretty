@@ -10,7 +10,7 @@ def read(*rnames):
 
 setup(
     name="zpretty",
-    version="3.1.0",
+    version="3.1.1.dev0",
     description="An opinionated HTML/XML soup formatter",
     keywords=["Formatter", "HTML", "Prettifier", "Pretty print", "TAL", "XML", "ZPT"],
     long_description="\n".join((read("README.md"), read("HISTORY.md"))),
