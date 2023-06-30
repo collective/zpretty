@@ -1,10 +1,10 @@
 # Changelog
 
-## 3.1.0a3 (unreleased)
+## 3.1.0 (2023-06-30)
 
 
-- Nothing changed yet.
-
+- No changes were made from the latest alpha version
+  [ale-rt]
 
 ## 3.1.0a2 (2023-05-09)
 
