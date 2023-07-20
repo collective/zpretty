@@ -34,7 +34,7 @@ platformdirs==2.6.2
 pluggy==1.0.0
 pre-commit==3.0.4
 pycparser==2.21
-Pygments==2.14.0
+Pygments==2.15.0
 pyproject_hooks==1.0.0
 pyrepl==0.9.0
 pyroma==4.1
