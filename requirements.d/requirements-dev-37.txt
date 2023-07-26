@@ -30,7 +30,7 @@ py==1.11.0
 pycodestyle==2.6.0
 pycparser==2.20
 pyflakes==2.2.0
-Pygments==2.7.4
+Pygments==2.15.0
 pyparsing==2.4.7
 pyroma==2.6
 pytest==6.2.1
