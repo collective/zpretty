@@ -8,7 +8,7 @@ A tool to format in a **very opinionated** way HTML, XML and text
 containing XML snippets.
 
 It satisfies a primary need: decrease the pain of diffing HTML/XML.
-
+Test
 For this reason `zpretty` formats the markup following these rules of
 thumb:
 
