@@ -3,7 +3,8 @@
 ## 3.1.1 (unreleased)
 
 
-- Nothing changed yet.
+- Declare support for Python 3.12
+  [ale-rt]
 
 
 ## 3.1.0 (2023-06-30)
