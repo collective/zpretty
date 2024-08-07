@@ -51,4 +51,4 @@ urllib3==2.0.2
 virtualenv==20.25.0
 webencodings==0.5.1
 zest.releaser==8.0.0
-zipp==3.15.0
+zipp==3.19.1
