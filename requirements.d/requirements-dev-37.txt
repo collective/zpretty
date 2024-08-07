@@ -37,7 +37,7 @@ pytest==6.2.1
 pytest-cov==2.10.1
 readme-renderer==28.0
 regex==2020.11.13
-requests==2.32.2
+requests==2.31.0
 requests-toolbelt==0.9.1
 rfc3986==1.4.0
 SecretStorage==3.3.0
