@@ -15,7 +15,7 @@ repos:
           # Require for Python <= 3.7
           - importlib-metadata<5.0
   - repo: https://github.com/mgedmin/check-manifest
-    rev: "0.49"
+    rev: "0.50"
     hooks:
     -   id: check-manifest
   - repo: https://github.com/regebro/pyroma
