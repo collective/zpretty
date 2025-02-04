@@ -48,7 +48,7 @@ soupsieve==2.5
 trove-classifiers==2023.5.2
 twine==4.0.2
 urllib3==1.26.19
-virtualenv==20.25.0
+virtualenv==20.26.6
 webencodings==0.5.1
 zest.releaser==8.0.0
 zipp==3.19.1
