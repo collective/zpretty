@@ -1,9 +1,20 @@
 from bs4 import BeautifulSoup
-from pkg_resources import resource_filename
 from unittest import TestCase
 from zpretty.zcml import ZCMLAttributes
 from zpretty.zcml import ZCMLElement
 from zpretty.zcml import ZCMLPrettifier
+
+
+try:
+    from importlib.resources import files
+
+    def resource_filename(package, resource):
+        """Get the resource filename for a package and resource."""
+        return str(files(package).joinpath(resource))
+
+except ImportError:  # Python < 3.9
+    # Python < 3.9
+    from pkg_resources import resource_filename
 
 
 class TestZpretty(TestCase):

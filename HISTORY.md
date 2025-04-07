@@ -1,9 +1,8 @@
 # Changelog
 
-## 3.1.1 (unreleased)
+## 3.2.0 (unreleased)
 
-
-- Declare support for Python 3.12
+- Declare support for Python 3.13
   [ale-rt]
 
 

@@ -10,7 +10,7 @@ def read(*rnames):
 
 setup(
     name="zpretty",
-    version="3.1.1.dev0",
+    version="3.2.0.dev0",
     description="An opinionated HTML/XML soup formatter",
     keywords=["Formatter", "HTML", "Prettifier", "Pretty print", "TAL", "XML", "ZPT"],
     long_description="\n".join((read("README.md"), read("HISTORY.md"))),
@@ -26,6 +26,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3 :: Only",
     ],
     author="Alessandro Pisa",

@@ -265,8 +265,8 @@ class PrettyElement(object):
         """Render a properly indented comment"""
         doctype = f"{self.prefix}{self.context.PREFIX}{self.text}{self.context.SUFFIX}"
         if isinstance(
-            self.context.nextSibling, NavigableString
-        ) and self.context.nextSibling.startswith("\n"):
+            self.context.next_sibling, NavigableString
+        ) and self.context.next_sibling.startswith("\n"):
             doctype = doctype.rstrip()
         return doctype
 

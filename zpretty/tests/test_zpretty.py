@@ -1,6 +1,17 @@
-from pkg_resources import resource_filename
 from unittest import TestCase
 from zpretty.prettifier import ZPrettifier
+
+
+try:
+    from importlib.resources import files
+
+    def resource_filename(package, resource):
+        """Get the resource filename for a package and resource."""
+        return str(files(package).joinpath(resource))
+
+except ImportError:  # Python < 3.9
+    # Python < 3.9
+    from pkg_resources import resource_filename
 
 
 class TestZpretty(TestCase):
