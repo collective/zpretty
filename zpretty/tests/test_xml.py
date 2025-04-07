@@ -1,8 +1,19 @@
 from bs4 import BeautifulSoup
-from pkg_resources import resource_filename
 from unittest import TestCase
 from zpretty.xml import XMLElement
 from zpretty.xml import XMLPrettifier
+
+
+try:
+    from importlib.resources import files
+
+    def resource_filename(package, resource):
+        """Get the resource filename for a package and resource."""
+        return str(files(package).joinpath(resource))
+
+except ImportError:  # Python < 3.9
+    # Python < 3.9
+    from pkg_resources import resource_filename
 
 
 class TestZpretty(TestCase):

@@ -1,10 +1,21 @@
 from pathlib import Path
-from pkg_resources import resource_filename
 from unittest import TestCase
 from zpretty.tests.mock import MockCLIRunner
 
 import argparse
 import sys
+
+
+try:
+    from importlib.resources import files
+
+    def resource_filename(package, resource):
+        """Get the resource filename for a package and resource."""
+        return str(files(package).joinpath(resource))
+
+except ImportError:  # Python < 3.9
+    # Python < 3.9
+    from pkg_resources import resource_filename
 
 
 class TestReadme(TestCase):
