@@ -2,6 +2,9 @@
 
 ## 3.2.0 (unreleased)
 
+- When parsing XML files, preserve space in all the tags
+  (Fixes #169)
+  [ale-rt]
 - Declare support for Python 3.13
   [ale-rt]
 
