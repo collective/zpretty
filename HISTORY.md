@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.2 (unreleased)
+
+
+- Nothing changed yet.
+
+
 ## 3.1.1 (2025-06-23)
 
 - When parsing XML files, preserve space in all the tags
