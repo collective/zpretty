@@ -8,8 +8,16 @@
   <closeme hidden="" />
   <preserve_space> </preserve_space>
   <preserve_space>
+  </preserve_space>
+
+  <preserve_space>
 
       </preserve_space>
+
+  <preserve_space_with_content>
+    <foo>bar</foo>
+  </preserve_space_with_content>
+
   <cdata><![CDATA[ <>& ]]>
 
   </cdata>

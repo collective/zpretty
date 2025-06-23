@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from bs4.builder import LXMLTreeBuilderForXML
 from bs4.element import NavigableString
 from logging import getLogger
 from zpretty.attributes import PrettyAttributes
@@ -74,7 +75,11 @@ class XMLPrettifier(ZPrettifier):
 
         If the text is not some xml like think a dummy element will be used to wrap it.
         """
-        original_soup = BeautifulSoup(text, self.parser)
+        original_soup = BeautifulSoup(
+            text,
+            self.parser,
+            builder=LXMLTreeBuilderForXML(preserve_whitespace_tags=AnyIn()),
+        )
         if original_soup.is_xml:
             return original_soup
 
