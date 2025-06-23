@@ -135,7 +135,7 @@ There is a VSCode extension that uses `zpretty`:
 
 - [https://marketplace.visualstudio.com/items?itemName=erral.erral-zcmlLanguageConfiguration](https://marketplace.visualstudio.com/items?itemName=erral.erral-zcmlLanguageConfiguration)
 
-Thanks to @erral for the work!
+Thanks to [@erral](https://github.com/erral) for the work!
 
 # DEVELOP
 
