@@ -19,6 +19,6 @@ repos:
     hooks:
     -   id: check-manifest
   - repo: https://github.com/regebro/pyroma
-    rev: "4.2"
+    rev: "5.0"
     hooks:
     -   id: pyroma
