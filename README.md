@@ -53,8 +53,15 @@ The suggested installation method is using
 python3 -m pip install --user zpretty
 ```
 
-The latest release of `zpretty` requires Python3. If you need to use
-Python2.7 use `zpretty` 0.9.x.
+# COMPATIBILITY
+
+| Zpretty Version | Python Versions |
+| --------------- | --------------- |
+| 4               | 3.10+           |
+| 3               | 3.7 - 3.13      |
+| 2               | 3.7 - 3.11      |
+| 1               | 3.6 - 3.8       |
+| 0.9             | 2.7, 3.6 - 3.8  |
 
 # USAGE
 
