@@ -10,7 +10,7 @@ from zpretty.prettifier import ZPrettifier
 logger = getLogger(__name__)
 
 
-class AnyIn(object):
+class AnyIn:
     def __contains__(self, item):
         return True
 
@@ -29,7 +29,7 @@ class XMLAttributes(PrettyAttributes):
         """Sort ZCML attributes in a consistent way"""
         if name in self._xml_attribute_order:
             return (100 + self._xml_attribute_order.index(name), name)
-        return super(XMLAttributes, self).sort_attributes(name)
+        return super().sort_attributes(name)
 
 
 class XMLElement(PrettyElement):

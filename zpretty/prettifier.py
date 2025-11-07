@@ -12,7 +12,7 @@ import re
 logger = getLogger(__name__)
 
 
-class ZPrettifier(object):
+class ZPrettifier:
     """Wraps and renders some text that may contain xml like stuff"""
 
     pretty_element = PrettyElement

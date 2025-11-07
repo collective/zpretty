@@ -11,7 +11,7 @@ except ImportError:  # pragma: no cover
 logger = getLogger(__name__)
 
 
-class PrettyAttributes(object):
+class PrettyAttributes:
     """Render attributes in a pretty way.
 
     - one per line
