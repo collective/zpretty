@@ -33,12 +33,3 @@ pytest: .venv/bin/pytest
 .PHONY: htmlreport
 htmlreport: .venv/bin/pytest
 	./.venv/bin/pytest --cov-report html
-
-.PHONY: constraints
-constraints: .venv/bin/pip
-	./.venv/bin/pip install -Ue .[development,test]
-	./.venv/bin/pip freeze --all| \
-	  egrep -v '^(pip|pkg-resources|wheel|-e|-f)'| \
-	  sed 's/$$/; python_version>="3.9"/' \
-	  > constraints.d/constraints.txt
-	@git difftool -y -x "colordiff -y" constraints.d/constraints.txt
