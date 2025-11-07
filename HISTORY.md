@@ -1,9 +1,10 @@
 # Changelog
 
-## 3.1.2 (unreleased)
+## 4.0.0 (unreleased)
 
 
-- Nothing changed yet.
+- Declare support for Python 3.10 - 3.14
+  [ale-rt]
 
 
 ## 3.1.1 (2025-06-23)

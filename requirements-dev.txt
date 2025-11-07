@@ -1,1 +1,2 @@
--e ".[test,development]" -c constraints.txt
+-e .[test,development]
+-c constraints.txt

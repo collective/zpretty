@@ -11,9 +11,6 @@ repos:
     rev: 7.3.0
     hooks:
       - id: flake8
-        additional_dependencies:
-          # Require for Python <= 3.7
-          - importlib-metadata<5.0
   - repo: https://github.com/mgedmin/check-manifest
     rev: "0.51"
     hooks:
