@@ -35,7 +35,7 @@ def memo(f):
     return wrapped
 
 
-class PrettyElement(object):
+class PrettyElement:
     """A pretty element class that can render prettified html"""
 
     null_tag_name = "null_tag_name"
@@ -100,7 +100,7 @@ class PrettyElement(object):
             tag = '""'
         else:
             tag = self.tag
-        return "<pretty:{level}:{tag} />".format(tag=tag, level=self.level)
+        return f"<pretty:{self.level}:{tag} />"
 
     def is_comment(self):
         """Check if this element is a comment"""
