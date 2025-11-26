@@ -1,4 +1,12 @@
+from bs4.element import AttributeDict
+from bs4.element import CharsetMetaAttributeValue
 from logging import getLogger
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
+from zpretty.elements import PrettyElement
 
 
 try:
@@ -85,16 +93,20 @@ class PrettyAttributes:
         "i18n:ignore-attributes",
     )
 
-    def __init__(self, attributes, element=None):
+    def __init__(
+        self,
+        attributes: AttributeDict | dict[str, str],
+        element: PrettyElement | None = None,
+    ) -> None:
         """attributes is a dict like object"""
         self.attributes = attributes
         self.element = element
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.attributes)
 
     @property
-    def prefix(self):
+    def prefix(self) -> str:
         """Return the prefix for the attributes
 
         The returned value will be a number of spaces equal to the tag name length + 2,
@@ -108,7 +120,7 @@ class PrettyAttributes:
             return "  "
         return " " * (len(self.element.tag or "") + 2)
 
-    def sort_attributes(self, name):
+    def sort_attributes(self, name: str) -> tuple[int, str]:
         """This sorts the attribute trying to group them semantically
 
         Starting from the top:
@@ -142,7 +154,7 @@ class PrettyAttributes:
         line_joiner = "\n" + (" " * (len(name) + 2))
         return line_joiner.join(value_lines)
 
-    def format_tal_multiline(self, value):
+    def format_tal_multiline(self, value: str) -> str:
         """There are some tal specific attributes that contain ; separated
         statements.
         They are used to define variables or set other attributes.
@@ -180,7 +192,7 @@ class PrettyAttributes:
         # restore ';;'
         return new_value.replace("<>", ";;")
 
-    def is_tal_attribute(self, name):
+    def is_tal_attribute(self, name: str) -> bool | None:
         """Check if the attribute is a tal attribute"""
         if name.startswith("tal:"):
             return True
@@ -192,7 +204,9 @@ class PrettyAttributes:
         if f"tal:{name}" in self._tal_attribute_order:
             return True
 
-    def maybe_escape(self, name, value):
+    def maybe_escape(
+        self, name: str, value: CharsetMetaAttributeValue | str
+    ) -> str:
         """Escape the value if needed"""
         if self.is_tal_attribute(name):
             # Never escape what we have in tal attributes
@@ -200,7 +214,7 @@ class PrettyAttributes:
 
         return escape(value, quote=False)
 
-    def can_be_valueless(self, name):
+    def can_be_valueless(self, name: str) -> bool:
         """Check if the attribute name can be without a value"""
         if not self._boolean_attributes_are_allowed:
             return False
@@ -210,7 +224,7 @@ class PrettyAttributes:
             return True
         return False
 
-    def lines(self):
+    def lines(self) -> list[str]:
         """Take the attributes, sort them and prettify their values"""
         attributes = self.attributes
         sorted_names = sorted(attributes, key=self.sort_attributes)
@@ -238,11 +252,11 @@ class PrettyAttributes:
             lines.append(line)
         return lines
 
-    def lstrip(self):
+    def lstrip(self) -> str:
         """This returns the attributes with the left spaces removed"""
         return self().lstrip()
 
-    def __call__(self):
+    def __call__(self) -> str:
         """Render the attributes as text
 
         Render and an empty string if no attributes

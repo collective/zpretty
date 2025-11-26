@@ -6,14 +6,14 @@ from zpretty.elements import PrettyElement
 class TestPrettyElements(TestCase):
     """Test basic funtionalities of the PrettyElement class"""
 
-    def get_element(self, text, level=0):
+    def get_element(self, text: str, level: int = 0) -> PrettyElement:
         """Given a text return a PrettyElement"""
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
         return PrettyElement(soup.fake_root.next_element, level)
 
-    def test_comment(self):
+    def test_comment(self) -> None:
         el = self.get_element("<!--a-->")
         self.assertFalse(el.is_processing_instruction())
         self.assertFalse(el.is_doctype())
@@ -26,7 +26,7 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el.attributes(), "")
         self.assertEqual(el(), "<!--a-->")
 
-    def test_text_element(self):
+    def test_text_element(self) -> None:
         el = self.get_element("text<ignored_children>")
         self.assertFalse(el.is_comment())
         self.assertFalse(el.is_doctype())
@@ -39,7 +39,7 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el.attributes(), "")
         self.assertEqual(el(), "text")
 
-    def test_empty_element(self):
+    def test_empty_element(self) -> None:
         el = self.get_element("<root />")
         self.assertFalse(el.is_comment())
         self.assertFalse(el.is_doctype())
@@ -51,7 +51,7 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el.getchildren(), [])
         self.assertEqual(el.attributes(), "")
 
-    def test_empty_element_attributes(self):
+    def test_empty_element_attributes(self) -> None:
         el = self.get_element('<root class="b" />')
         self.assertFalse(el.is_comment())
         self.assertFalse(el.is_doctype())
@@ -64,7 +64,7 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el.attributes(), 'class="b"')
         self.assertEqual(el(), '<root class="b"></root>')
 
-    def test_processing_instruction(self):
+    def test_processing_instruction(self) -> None:
         el = self.get_element('<?xml version="1.0" encoding="utf-8">')
         self.assertFalse(el.is_tag())
         self.assertFalse(el.is_text())
@@ -75,7 +75,7 @@ class TestPrettyElements(TestCase):
         self.assertEqual(el.getchildren(), [])
         self.assertEqual(el.attributes(), "")
 
-    def test_doctype(self):
+    def test_doctype(self) -> None:
         el = self.get_element("<!DOCTYPE html>")
         self.assertFalse(el.is_tag())
         self.assertFalse(el.is_text())
@@ -95,7 +95,7 @@ class TestPrettyElements(TestCase):
             '"http://www.w3.org/TR/html4/strict.dtd"',
         )
 
-    def test_render_text(self):
+    def test_render_text(self) -> None:
         el = self.get_element(" a")
         self.assertEqual(el.render_text(), "\na")
         el = self.get_element(" ")
@@ -103,7 +103,7 @@ class TestPrettyElements(TestCase):
         el = self.get_element("\n")
         self.assertEqual(el.render_text(), "\n")
 
-    def test_get_parent(self):
+    def test_get_parent(self) -> None:
         el = self.get_element(" a")
         self.assertEqual(el.getparent().tag, "fake_root")
         self.assertEqual(el.getparent().getparent().tag, "soup")

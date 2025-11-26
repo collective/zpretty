@@ -3,8 +3,14 @@ from bs4.dammit import EntitySubstitution
 from bs4.element import Comment
 from bs4.element import Doctype
 from bs4.element import NavigableString
+from bs4.element import PageElement
 from bs4.element import ProcessingInstruction
+from bs4.element import Script
+from bs4.element import Stylesheet
 from bs4.element import Tag
+from collections.abc import Callable
+from typing import Optional
+from typing import Union
 from zpretty.attributes import PrettyAttributes
 from zpretty.text import endswith_whitespace
 from zpretty.text import lstrip_first_line
@@ -23,7 +29,7 @@ class OpenTagException(Exception):
         return "Known self closing tag %r is not closed" % self.el.context
 
 
-def memo(f):
+def memo(f: Callable) -> Callable:
     """Simple memoize"""
     key = "__zpretty_memo__" + f.__name__
 
@@ -79,7 +85,7 @@ class PrettyElement:
     preserve_text_whitespace_elements = ["pre"]
     skip_text_escaping_elements = ["script", "style"]
 
-    def __init__(self, context, level=0):
+    def __init__(self, context: PageElement, level: int = 0) -> None:
         """Take something a (bs4) element and an indentation level"""
         self.context = context
         self.level = level
@@ -88,7 +94,7 @@ class PrettyElement:
         """Reuse the context method"""
         return str(self.context)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Try to make evident:
 
         - the element type
@@ -102,15 +108,15 @@ class PrettyElement:
             tag = self.tag
         return f"<pretty:{self.level}:{tag} />"
 
-    def is_comment(self):
+    def is_comment(self) -> bool:
         """Check if this element is a comment"""
         return isinstance(self.context, Comment)
 
-    def is_doctype(self):
+    def is_doctype(self) -> bool:
         """Check if this element is a doctype"""
         return isinstance(self.context, Doctype)
 
-    def is_text(self):
+    def is_text(self) -> bool:
         """Check if this element is a text
 
         Also comments and processing instructions
@@ -123,11 +129,11 @@ class PrettyElement:
             return False
         return True
 
-    def is_tag(self):
+    def is_tag(self) -> bool:
         """Check if this element is a notmal tag"""
         return isinstance(self.context, Tag)
 
-    def is_self_closing(self):
+    def is_self_closing(self) -> bool:
         """Is this element self closing?"""
         if not self.is_tag():
             raise ValueError("This is not a tag")
@@ -150,15 +156,15 @@ class PrettyElement:
         # All the other elements will have an open an close tag
         return False
 
-    def is_null(self):
+    def is_null(self) -> bool:
         """We define a special tag null_tag_name to wrap text"""
         return self.context.name == self.null_tag_name
 
-    def is_soup(self):
+    def is_soup(self) -> bool:
         """Check if this element is a BeautifulSoup instance"""
         return isinstance(self.context, BeautifulSoup)
 
-    def is_processing_instruction(self):
+    def is_processing_instruction(self) -> bool:
         """Check if this element is a processing instruction like <?xml...>"""
         return isinstance(self.context, ProcessingInstruction)
 
@@ -189,12 +195,12 @@ class PrettyElement:
         return children
 
     @property
-    def tag(self):
+    def tag(self) -> str | None:
         """Return the tag name"""
         return self.context.name
 
     @property
-    def text(self):
+    def text(self) -> Comment | Stylesheet | str | Script:
         """Return the text contained in this element (if any)
 
         Convert the text characters to html entities
@@ -254,14 +260,14 @@ class PrettyElement:
         return content
 
     @property
-    def prefix(self):
+    def prefix(self) -> str:
         return self.indent * self.level
 
-    def render_comment(self):
+    def render_comment(self) -> str:
         """Render a properly indented comment"""
         return f"{self.prefix}<!--{self.text}-->"
 
-    def render_doctype(self):
+    def render_doctype(self) -> str:
         """Render a properly indented comment"""
         doctype = f"{self.prefix}{self.context.PREFIX}{self.text}{self.context.SUFFIX}"
         if isinstance(
@@ -270,11 +276,11 @@ class PrettyElement:
             doctype = doctype.rstrip()
         return doctype
 
-    def render_processing_instruction(self):
+    def render_processing_instruction(self) -> str:
         """Render a properly indented processing instruction"""
         return f"{self.prefix}<?{self.text.rstrip('?')}?>"
 
-    def render_soup(self):
+    def render_soup(self) -> str:
         first_child = next(self.context.children)
         if isinstance(first_child, Doctype) and not self.context.is_xml:
             return self.render_content()
@@ -282,7 +288,7 @@ class PrettyElement:
             return self.render_content()
         return f'<?xml version="1.0" encoding="utf-8"?>\n{self.render_content()}'
 
-    def render_text(self):
+    def render_text(self) -> str:
         """Render a properly indented text
 
         If the text starts with spaces, strip them and add a newline.
@@ -330,7 +336,7 @@ class PrettyElement:
         text = "".join(rendered_lines)
         return text
 
-    def _render_template(self, template):
+    def _render_template(self, template: str) -> str:
         return template.format(
             before_closing_multiline=self.before_closing_multiline,
             attributes=self.attributes.lstrip(),
@@ -338,7 +344,7 @@ class PrettyElement:
             tag=self.tag,
         )
 
-    def render_self_closing(self):
+    def render_self_closing(self) -> str:
         """Render a properly indented a self closing tag"""
         attributes_len = len(self.attributes)
         if attributes_len == 0:
@@ -349,7 +355,7 @@ class PrettyElement:
             template = self.self_closing_multiline_template
         return self._render_template(template)
 
-    def render_not_self_closing(self):
+    def render_not_self_closing(self) -> str:
         """Render a properly indented not self closing tag"""
         attributes_len = len(self.attributes)
         if attributes_len == 0:

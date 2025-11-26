@@ -8,19 +8,19 @@ from zpretty.text import startswith_whitespace
 class TestFunctions(TestCase):
     """Test functions used by zpretty"""
 
-    def test_lstrip_first_line_oneline(self):
+    def test_lstrip_first_line_oneline(self) -> None:
         self.assertEqual(lstrip_first_line(" a"), "a")
 
-    def test_lstrip_first_line_twolines(self):
+    def test_lstrip_first_line_twolines(self) -> None:
         self.assertEqual(lstrip_first_line(" a \n b"), ("a \n b"))
 
-    def test_rstrip_larst_line_oneline(self):
+    def test_rstrip_larst_line_oneline(self) -> None:
         self.assertEqual(rstrip_last_line("a"), "a")
 
-    def test_rstrip_larst_line_twoline(self):
+    def test_rstrip_larst_line_twoline(self) -> None:
         self.assertEqual(rstrip_last_line("a\n b "), ("a\n b"))
 
-    def test_none(self):
+    def test_none(self) -> None:
         self.assertEqual(lstrip_first_line(None), None)
         self.assertEqual(rstrip_last_line(None), None)
         self.assertFalse(endswith_whitespace(None))
