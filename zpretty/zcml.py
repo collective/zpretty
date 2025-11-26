@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 from logging import getLogger
+from typing import Tuple
+from typing import Union
 from zpretty.xml import XMLAttributes
 from zpretty.xml import XMLElement
 from zpretty.xml import XMLPrettifier
@@ -468,7 +471,17 @@ class ZCMLAttributes(XMLAttributes):
     )
 
     @property
-    def _xml_attribute_order(self):
+    def _xml_attribute_order(
+        self,
+    ) -> (
+        tuple[str, str, str, str]
+        | tuple[str, str, str, str, str, str, str]
+        | tuple[str, str, str]
+        | tuple[
+            str, str, str, str, str, str, str, str, str, str, str, str, str, str, str
+        ]
+        | tuple[str, str, str, str, str, str, str, str, str, str, str]
+    ):
         """Sort the attributes based on the element
 
         _xml_attribute_order_by_ns_and_tag comments contain references
@@ -493,7 +506,7 @@ class ZCMLAttributes(XMLAttributes):
         mapping_by_namespace = self._xml_attribute_order_by_ns_and_tag.get(ns, {})
         return mapping_by_namespace.get(name, self._xml_attribute_order_fallback)
 
-    def format_multiline(self, name, value):
+    def format_multiline(self, name: str, value: str) -> str:
         """We have two cases according if we have just one attribute or more
 
         1. single attribute
@@ -528,11 +541,11 @@ class ZCMLAttributes(XMLAttributes):
             )
         return line_joiner.join(value_lines)
 
-    def lstrip(self):
+    def lstrip(self) -> str:
         """Actually we do not want to remove the spaces"""
         return self()
 
-    def __call__(self):
+    def __call__(self) -> str:
         """Render the attributes as text
 
         Render and an empty string if no attributes
@@ -571,7 +584,7 @@ class ZCMLPrettifier(XMLPrettifier):
 
     pretty_element = ZCMLElement
 
-    def get_soup(self, text):
+    def get_soup(self, text: str) -> Tag:
         """Tries to get the soup from the given text"""
         markup = "<{null}>{text}</{null}>".format(
             null=self.pretty_element.null_tag_name, text=text

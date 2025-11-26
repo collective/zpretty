@@ -3,12 +3,13 @@ from unittest import TestCase
 from zpretty.zcml import ZCMLAttributes
 from zpretty.zcml import ZCMLElement
 from zpretty.zcml import ZCMLPrettifier
+from typing import Dict, Union
 
 
 try:
     from importlib.resources import files
 
-    def resource_filename(package, resource):
+    def resource_filename(package: str, resource: str) -> str:
         """Get the resource filename for a package and resource."""
         return str(files(package).joinpath(resource))
 
@@ -22,14 +23,14 @@ class TestZpretty(TestCase):
 
     maxDiff = None
 
-    def get_element(self, text, level=0):
+    def get_element(self, text: str, level: int=0) -> ZCMLElement:
         """Given a text return a PrettyElement"""
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
         return ZCMLElement(soup.fake_root.next_element, level)
 
-    def assertPrettifiedAttributes(self, attributes, expected, level=0):
+    def assertPrettifiedAttributes(self, attributes: Union[Dict[str, str], str], expected: str, level: int=0) -> None:
         """Check if the attributes are properly sorted and formatted"""
         if level == 0:
             el = None
@@ -39,16 +40,16 @@ class TestZpretty(TestCase):
         observed = pretty_attribute()
         self.assertEqual(observed, expected)
 
-    def test_zcml_attributes_no_attributes(self):
+    def test_zcml_attributes_no_attributes(self) -> None:
         self.assertPrettifiedAttributes(ZCMLAttributes({})(), "")
         self.assertPrettifiedAttributes({}, "", level=2)
 
-    def test_zcml_attributes_one_attributes(self):
+    def test_zcml_attributes_one_attributes(self) -> None:
         self.assertPrettifiedAttributes({"a": "1"}, 'a="1"')
         self.assertPrettifiedAttributes({"a": "1"}, 'a="1"', level=1)
         self.assertPrettifiedAttributes({"a": "1"}, 'a="1"', level=2)
 
-    def test_zcml_attributes_many_attributes(self):
+    def test_zcml_attributes_many_attributes(self) -> None:
         self.assertPrettifiedAttributes({"a": "1", "b": "2"}, '    a="1"\n    b="2"')
         self.assertPrettifiedAttributes(
             {"a": "1", "b": "2"}, '      a="1"\n      b="2"', level=1
@@ -57,7 +58,7 @@ class TestZpretty(TestCase):
             {"a": "1", "b": "2"}, '        a="1"\n        b="2"', level=2
         )
 
-    def test_zcml_self_closing_no_attributes(self):
+    def test_zcml_self_closing_no_attributes(self) -> None:
         element = self.get_element("<zcml />")
         self.assertEqual(element(), "<zcml />")
         element = self.get_element("<zcml />", 1)
@@ -65,7 +66,7 @@ class TestZpretty(TestCase):
         element = self.get_element("<zcml />", 2)
         self.assertEqual(element(), "    <zcml />")
 
-    def test_zcml_self_closing_one_attributes(self):
+    def test_zcml_self_closing_one_attributes(self) -> None:
         element = self.get_element('<zcml \n foo="bar"/>')
         self.assertEqual(element(), '<zcml foo="bar" />')
         element = self.get_element('<zcml \n foo="bar"/>', 1)
@@ -73,7 +74,7 @@ class TestZpretty(TestCase):
         element = self.get_element('<zcml \n foo="bar"/>', 2)
         self.assertEqual(element(), '    <zcml foo="bar" />')
 
-    def test_zcml_self_closing_many_attributes(self):
+    def test_zcml_self_closing_many_attributes(self) -> None:
         element = self.get_element('<zcml \n foo="bar" bar="foo"/>')
         self.assertEqual(
             element(),
@@ -111,7 +112,7 @@ class TestZpretty(TestCase):
             ),
         )
 
-    def test_for_attribute_single_attribute(self):
+    def test_for_attribute_single_attribute(self) -> None:
         element = self.get_element('<zcml \n for="foo"/>')
         self.assertEqual(element(), '<zcml for="foo" />')
         element = self.get_element('<zcml \n for="foo"/>', 1)
@@ -152,7 +153,7 @@ class TestZpretty(TestCase):
             ),
         )
 
-    def test_for_attribute_multiple_attribute(self):
+    def test_for_attribute_multiple_attribute(self) -> None:
         element = self.get_element('<zcml \n for="foo" handler="bar" />')
         self.assertEqual(
             element(),
@@ -230,7 +231,7 @@ class TestZpretty(TestCase):
             ),
         )
 
-    def prettify(self, filename):
+    def prettify(self, filename: str) -> None:
         """Run prettify on filename and check that the output is equal to
         the file content itself
         """
@@ -240,5 +241,5 @@ class TestZpretty(TestCase):
         expected = open(resolved_filename).read()
         self.assertListEqual(observed.splitlines(), expected.splitlines())
 
-    def test_zcml(self):
+    def test_zcml(self) -> None:
         self.prettify("sample.zcml")

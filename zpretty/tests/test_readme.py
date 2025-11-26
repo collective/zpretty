@@ -4,12 +4,13 @@ from zpretty.tests.mock import MockCLIRunner
 
 import argparse
 import sys
+from typing import List
 
 
 try:
     from importlib.resources import files
 
-    def resource_filename(package, resource):
+    def resource_filename(package: str, resource: str) -> str:
         """Get the resource filename for a package and resource."""
         return str(files(package).joinpath(resource))
 
@@ -23,7 +24,7 @@ class TestReadme(TestCase):
 
     maxDiff = None
 
-    def extract_usage_from_readme(self):
+    def extract_usage_from_readme(self) -> List[str]:
         """Extract the usage from the documentation"""
         resolved_filename = Path(resource_filename("zpretty", ".")) / ".." / "README.md"
 
@@ -40,7 +41,7 @@ class TestReadme(TestCase):
         # Take all the lines ignoring whitespaces
         return [x.strip() for x in readme[start:end].splitlines()]
 
-    def extract_usage_from_parser(self):
+    def extract_usage_from_parser(self) -> List[str]:
         """Ask the parser for the usage and indent it"""
         parser = MockCLIRunner().parser
         # This is needed to keep the 100 lines limit
@@ -53,7 +54,7 @@ class TestReadme(TestCase):
         # Take all the lines ignoring whitespaces
         return [x.strip() for x in parser_help.splitlines()]
 
-    def test_readme(self):
+    def test_readme(self) -> None:
         observed = self.extract_usage_from_readme()
         expected = self.extract_usage_from_parser()
         self.assertListEqual(observed, expected)

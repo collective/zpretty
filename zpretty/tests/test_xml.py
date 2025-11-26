@@ -7,7 +7,7 @@ from zpretty.xml import XMLPrettifier
 try:
     from importlib.resources import files
 
-    def resource_filename(package, resource):
+    def resource_filename(package: str, resource: str) -> str:
         """Get the resource filename for a package and resource."""
         return str(files(package).joinpath(resource))
 
@@ -21,14 +21,14 @@ class TestZpretty(TestCase):
 
     maxDiff = None
 
-    def get_element(self, text, level=0):
+    def get_element(self, text: str, level: int=0) -> XMLElement:
         """Given a text return a XMLElement"""
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
         return XMLElement(soup.fake_root.next_element, level)
 
-    def prettify(self, filename):
+    def prettify(self, filename: str) -> None:
         """Run prettify on filename and check that the output is equal to
         the file content itself
         """
@@ -38,16 +38,16 @@ class TestZpretty(TestCase):
         expected = open(resolved_filename).read()
         self.assertListEqual(observed.splitlines(), expected.splitlines())
 
-    def test_newline_between_attributes(self):
+    def test_newline_between_attributes(self) -> None:
         """See #84"""
         element = self.get_element('<one \n foo="bar"\n\n\nbar="foo"\n/>')
         self.assertEqual(element(), '<one bar="foo"\n     foo="bar"\n/>')
 
-    def test_zcml(self):
+    def test_zcml(self) -> None:
         self.prettify("sample_xml.xml")
 
-    def test_sample_dtml(self):
+    def test_sample_dtml(self) -> None:
         self.prettify("sample_dtml.dtml")
 
-    def test_sample_txt(self):
+    def test_sample_txt(self) -> None:
         self.prettify("sample.txt")

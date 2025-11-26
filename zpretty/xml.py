@@ -1,17 +1,18 @@
 from bs4 import BeautifulSoup
 from bs4.builder import LXMLTreeBuilderForXML
-from bs4.element import NavigableString
+from bs4.element import Comment, NamespacedAttribute, NavigableString
 from logging import getLogger
 from zpretty.attributes import PrettyAttributes
 from zpretty.elements import PrettyElement
 from zpretty.prettifier import ZPrettifier
+from typing import Tuple, Union
 
 
 logger = getLogger(__name__)
 
 
 class AnyIn:
-    def __contains__(self, item):
+    def __contains__(self, item: str) -> bool:
         return True
 
 
@@ -25,7 +26,7 @@ class XMLAttributes(PrettyAttributes):
     _xml_attribute_order = ()
     _tal_attribute_order = ()
 
-    def sort_attributes(self, name):
+    def sort_attributes(self, name: Union[str, NamespacedAttribute]) -> Union[Tuple[int, str], Tuple[int, NamespacedAttribute]]:
         """Sort ZCML attributes in a consistent way"""
         if name in self._xml_attribute_order:
             return (100 + self._xml_attribute_order.index(name), name)
@@ -36,7 +37,7 @@ class XMLElement(PrettyElement):
     attribute_klass = XMLAttributes
     preserve_text_whitespace_elements = AnyIn()
 
-    def is_self_closing(self):
+    def is_self_closing(self) -> bool:
         """Is this element self closing?"""
         if not self.is_tag():
             raise ValueError("This is not a tag")
@@ -44,7 +45,7 @@ class XMLElement(PrettyElement):
         return not self.getchildren()
 
     @property
-    def tag(self):
+    def tag(self) -> str:
         """Return the tag name"""
         prefix = getattr(self.context, "prefix", "")
         if not prefix:
@@ -52,7 +53,7 @@ class XMLElement(PrettyElement):
         return f"{prefix}:{self.context.name}"
 
     @property
-    def text(self):
+    def text(self) -> Union[str, Comment]:
         """Return the text contained in this element (if any)
 
         Convert the text characters to html entities
@@ -70,7 +71,7 @@ class XMLPrettifier(ZPrettifier):
     parser = "xml"
     pretty_element = XMLElement
 
-    def get_soup(self, text):
+    def get_soup(self, text: str) -> BeautifulSoup:
         """Tries to get the soup from the given test
 
         If the text is not some xml like think a dummy element will be used to wrap it.

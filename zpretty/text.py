@@ -1,4 +1,6 @@
-def startswith_whitespace(text):
+from typing import Optional
+
+def startswith_whitespace(text: Optional[str]) -> bool:
     """Check if text starts with a whitespace
 
     If text is not a string return False
@@ -8,7 +10,7 @@ def startswith_whitespace(text):
     return text[:1].isspace()
 
 
-def endswith_whitespace(text):
+def endswith_whitespace(text: Optional[str]) -> bool:
     """Check if text ends with a whitespace
 
     If text is not a string return False
@@ -18,7 +20,7 @@ def endswith_whitespace(text):
     return text[-1:].isspace()
 
 
-def lstrip_first_line(text):
+def lstrip_first_line(text: Optional[str]) -> Optional[str]:
     """lstrip only the first line of text"""
     if not text:
         return text
@@ -29,7 +31,7 @@ def lstrip_first_line(text):
     return "\n".join(lines)
 
 
-def rstrip_last_line(text):
+def rstrip_last_line(text: Optional[str]) -> Optional[str]:
     """rstrip only the last line of text"""
     if not text:
         return text

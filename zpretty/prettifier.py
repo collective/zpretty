@@ -7,6 +7,10 @@ from zpretty.elements import PrettyElement
 
 import fileinput
 import re
+from element import Tag
+from typing import Union
+from zpretty.xml import XMLElement
+from zpretty.zcml import ZCMLElement
 
 
 logger = getLogger(__name__)
@@ -30,7 +34,7 @@ class ZPrettifier:
     _cdatas = []
     _doctype = None
 
-    def __init__(self, filename="", text="", encoding="utf8"):
+    def __init__(self, filename: str="", text: str="", encoding: str="utf8") -> None:
         """Create a prettifier instance taking the contents
         from a text or a filename
         """
@@ -62,7 +66,7 @@ class ZPrettifier:
 
         self.root = self.pretty_element(self.soup, -1)
 
-    def _prepare_text(self):
+    def _prepare_text(self) -> str:
         """This tweaks the text passed to the prettifier
         to overcome some limitations of the BeautifulSoup parser
         that wants to strip what he does not understand
@@ -96,7 +100,7 @@ class ZPrettifier:
             for line in text.splitlines()
         ).replace("&", self._ampersand_marker)
 
-    def get_soup(self, text):
+    def get_soup(self, text: str) -> Union[BeautifulSoup, Tag]:
         """Tries to get the soup from the given test
 
         If the text is not some xml like think a dummy element will be used to wrap it.
@@ -115,7 +119,7 @@ class ZPrettifier:
         wrapped_soup = BeautifulSoup(markup, self.parser)
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)
 
-    def pretty_print(self, el):
+    def pretty_print(self, el: Union[XMLElement, PrettyElement, ZCMLElement]) -> str:
         """Pretty print an element indenting it based on level"""
         prettified = (
             el().replace(self._newlines_marker, "").replace(self._ampersand_marker, "&")
@@ -135,11 +139,11 @@ class ZPrettifier:
             prettified += "\n"
         return prettified
 
-    def check(self):
+    def check(self) -> bool:
         """Checks if the input object should be prettified"""
         return self.original_text == self()
 
-    def __call__(self):
+    def __call__(self) -> str:
         if not self.root.getchildren():
             # The parsed content is not even something that looks like an XML
             return self.original_text
