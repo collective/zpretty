@@ -1,21 +1,23 @@
 from bs4 import BeautifulSoup
+from typing import Dict
 from unittest import TestCase
 from zpretty.attributes import PrettyAttributes
 from zpretty.elements import PrettyElement
-from typing import Dict
 
 
 class TestZPrettyAttributess(TestCase):
     """Test zpretty"""
 
-    def get_element(self, text: str, level: int=0) -> PrettyElement:
+    def get_element(self, text: str, level: int = 0) -> PrettyElement:
         """Given a text return a PrettyElement"""
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
         return PrettyElement(soup.fake_root.next_element, level)
 
-    def assertPrettifiedAttributes(self, attributes: Dict[str, str], expected: str, level: int=0) -> None:
+    def assertPrettifiedAttributes(
+        self, attributes: dict[str, str], expected: str, level: int = 0
+    ) -> None:
         """Check if the attributes are properly sorted and formatted"""
         if level == 0:
             el = None

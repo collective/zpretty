@@ -1,11 +1,14 @@
 from bs4 import BeautifulSoup
 from bs4.builder import LXMLTreeBuilderForXML
-from bs4.element import Comment, NamespacedAttribute, NavigableString
+from bs4.element import Comment
+from bs4.element import NamespacedAttribute
+from bs4.element import NavigableString
 from logging import getLogger
+from typing import Tuple
+from typing import Union
 from zpretty.attributes import PrettyAttributes
 from zpretty.elements import PrettyElement
 from zpretty.prettifier import ZPrettifier
-from typing import Tuple, Union
 
 
 logger = getLogger(__name__)
@@ -26,7 +29,9 @@ class XMLAttributes(PrettyAttributes):
     _xml_attribute_order = ()
     _tal_attribute_order = ()
 
-    def sort_attributes(self, name: Union[str, NamespacedAttribute]) -> Union[Tuple[int, str], Tuple[int, NamespacedAttribute]]:
+    def sort_attributes(
+        self, name: str | NamespacedAttribute
+    ) -> tuple[int, str] | tuple[int, NamespacedAttribute]:
         """Sort ZCML attributes in a consistent way"""
         if name in self._xml_attribute_order:
             return (100 + self._xml_attribute_order.index(name), name)
@@ -53,7 +58,7 @@ class XMLElement(PrettyElement):
         return f"{prefix}:{self.context.name}"
 
     @property
-    def text(self) -> Union[str, Comment]:
+    def text(self) -> str | Comment:
         """Return the text contained in this element (if any)
 
         Convert the text characters to html entities

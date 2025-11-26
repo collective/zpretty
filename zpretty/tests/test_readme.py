@@ -1,10 +1,10 @@
 from pathlib import Path
+from typing import List
 from unittest import TestCase
 from zpretty.tests.mock import MockCLIRunner
 
 import argparse
 import sys
-from typing import List
 
 
 try:
@@ -24,7 +24,7 @@ class TestReadme(TestCase):
 
     maxDiff = None
 
-    def extract_usage_from_readme(self) -> List[str]:
+    def extract_usage_from_readme(self) -> list[str]:
         """Extract the usage from the documentation"""
         resolved_filename = Path(resource_filename("zpretty", ".")) / ".." / "README.md"
 
@@ -41,7 +41,7 @@ class TestReadme(TestCase):
         # Take all the lines ignoring whitespaces
         return [x.strip() for x in readme[start:end].splitlines()]
 
-    def extract_usage_from_parser(self) -> List[str]:
+    def extract_usage_from_parser(self) -> list[str]:
         """Ask the parser for the usage and indent it"""
         parser = MockCLIRunner().parser
         # This is needed to keep the 100 lines limit

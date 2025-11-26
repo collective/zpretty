@@ -1,9 +1,10 @@
 from bs4 import BeautifulSoup
+from typing import Dict
+from typing import Union
 from unittest import TestCase
 from zpretty.zcml import ZCMLAttributes
 from zpretty.zcml import ZCMLElement
 from zpretty.zcml import ZCMLPrettifier
-from typing import Dict, Union
 
 
 try:
@@ -23,14 +24,16 @@ class TestZpretty(TestCase):
 
     maxDiff = None
 
-    def get_element(self, text: str, level: int=0) -> ZCMLElement:
+    def get_element(self, text: str, level: int = 0) -> ZCMLElement:
         """Given a text return a PrettyElement"""
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
         return ZCMLElement(soup.fake_root.next_element, level)
 
-    def assertPrettifiedAttributes(self, attributes: Union[Dict[str, str], str], expected: str, level: int=0) -> None:
+    def assertPrettifiedAttributes(
+        self, attributes: dict[str, str] | str, expected: str, level: int = 0
+    ) -> None:
         """Check if the attributes are properly sorted and formatted"""
         if level == 0:
             el = None

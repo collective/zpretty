@@ -1,16 +1,21 @@
 from bs4 import BeautifulSoup
 from bs4.dammit import EntitySubstitution
-from bs4.element import PageElement, Script, Stylesheet, Comment
+from bs4.element import Comment
 from bs4.element import Doctype
 from bs4.element import NavigableString
+from bs4.element import PageElement
 from bs4.element import ProcessingInstruction
+from bs4.element import Script
+from bs4.element import Stylesheet
 from bs4.element import Tag
+from collections.abc import Callable
+from typing import Optional
+from typing import Union
 from zpretty.attributes import PrettyAttributes
 from zpretty.text import endswith_whitespace
 from zpretty.text import lstrip_first_line
 from zpretty.text import rstrip_last_line
 from zpretty.text import startswith_whitespace
-from typing import Callable, Optional, Union
 
 
 class OpenTagException(Exception):
@@ -80,7 +85,7 @@ class PrettyElement:
     preserve_text_whitespace_elements = ["pre"]
     skip_text_escaping_elements = ["script", "style"]
 
-    def __init__(self, context: PageElement, level: int=0) -> None:
+    def __init__(self, context: PageElement, level: int = 0) -> None:
         """Take something a (bs4) element and an indentation level"""
         self.context = context
         self.level = level
@@ -190,12 +195,12 @@ class PrettyElement:
         return children
 
     @property
-    def tag(self) -> Optional[str]:
+    def tag(self) -> str | None:
         """Return the tag name"""
         return self.context.name
 
     @property
-    def text(self) -> Union[Comment, Stylesheet, str, Script]:
+    def text(self) -> Comment | Stylesheet | str | Script:
         """Return the text contained in this element (if any)
 
         Convert the text characters to html entities

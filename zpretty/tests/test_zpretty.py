@@ -1,6 +1,7 @@
+from typing import Tuple
+from typing import Union
 from unittest import TestCase
 from zpretty.prettifier import ZPrettifier
-from typing import Tuple, Union
 
 
 try:
@@ -20,7 +21,12 @@ class TestZpretty(TestCase):
 
     maxDiff = None
 
-    def assertPrettified(self, original: str, expected: Union[Tuple[str, str, str, str], str, Tuple[str, str, str]], encoding: str="utf8") -> None:
+    def assertPrettified(
+        self,
+        original: str,
+        expected: tuple[str, str, str, str] | str | tuple[str, str, str],
+        encoding: str = "utf8",
+    ) -> None:
         """Check if the original html has been prettified as expected"""
         if isinstance(expected, tuple):
             expected = "\n".join(expected)

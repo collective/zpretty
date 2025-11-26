@@ -21,7 +21,7 @@ class TestZpretty(TestCase):
 
     maxDiff = None
 
-    def get_element(self, text: str, level: int=0) -> XMLElement:
+    def get_element(self, text: str, level: int = 0) -> XMLElement:
         """Given a text return a XMLElement"""
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"

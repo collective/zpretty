@@ -1,16 +1,16 @@
 from bs4 import BeautifulSoup
 from bs4.element import Doctype
 from bs4.element import ProcessingInstruction
+from element import Tag
 from logging import getLogger
+from typing import Union
 from uuid import uuid4
 from zpretty.elements import PrettyElement
+from zpretty.xml import XMLElement
+from zpretty.zcml import ZCMLElement
 
 import fileinput
 import re
-from element import Tag
-from typing import Union
-from zpretty.xml import XMLElement
-from zpretty.zcml import ZCMLElement
 
 
 logger = getLogger(__name__)
@@ -34,7 +34,9 @@ class ZPrettifier:
     _cdatas = []
     _doctype = None
 
-    def __init__(self, filename: str="", text: str="", encoding: str="utf8") -> None:
+    def __init__(
+        self, filename: str = "", text: str = "", encoding: str = "utf8"
+    ) -> None:
         """Create a prettifier instance taking the contents
         from a text or a filename
         """
@@ -100,7 +102,7 @@ class ZPrettifier:
             for line in text.splitlines()
         ).replace("&", self._ampersand_marker)
 
-    def get_soup(self, text: str) -> Union[BeautifulSoup, Tag]:
+    def get_soup(self, text: str) -> BeautifulSoup | Tag:
         """Tries to get the soup from the given test
 
         If the text is not some xml like think a dummy element will be used to wrap it.
@@ -119,7 +121,7 @@ class ZPrettifier:
         wrapped_soup = BeautifulSoup(markup, self.parser)
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)
 
-    def pretty_print(self, el: Union[XMLElement, PrettyElement, ZCMLElement]) -> str:
+    def pretty_print(self, el: XMLElement | PrettyElement | ZCMLElement) -> str:
         """Pretty print an element indenting it based on level"""
         prettified = (
             el().replace(self._newlines_marker, "").replace(self._ampersand_marker, "&")

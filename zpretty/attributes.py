@@ -1,6 +1,11 @@
+from bs4.element import AttributeDict
+from bs4.element import CharsetMetaAttributeValue
 from logging import getLogger
-from bs4.element import AttributeDict, CharsetMetaAttributeValue
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 from zpretty.elements import PrettyElement
 
 
@@ -88,7 +93,11 @@ class PrettyAttributes:
         "i18n:ignore-attributes",
     )
 
-    def __init__(self, attributes: Union[AttributeDict, Dict[str, str]], element: Optional[PrettyElement]=None) -> None:
+    def __init__(
+        self,
+        attributes: AttributeDict | dict[str, str],
+        element: PrettyElement | None = None,
+    ) -> None:
         """attributes is a dict like object"""
         self.attributes = attributes
         self.element = element
@@ -111,7 +120,7 @@ class PrettyAttributes:
             return "  "
         return " " * (len(self.element.tag or "") + 2)
 
-    def sort_attributes(self, name: str) -> Tuple[int, str]:
+    def sort_attributes(self, name: str) -> tuple[int, str]:
         """This sorts the attribute trying to group them semantically
 
         Starting from the top:
@@ -183,7 +192,7 @@ class PrettyAttributes:
         # restore ';;'
         return new_value.replace("<>", ";;")
 
-    def is_tal_attribute(self, name: str) -> Optional[bool]:
+    def is_tal_attribute(self, name: str) -> bool | None:
         """Check if the attribute is a tal attribute"""
         if name.startswith("tal:"):
             return True
@@ -195,7 +204,9 @@ class PrettyAttributes:
         if f"tal:{name}" in self._tal_attribute_order:
             return True
 
-    def maybe_escape(self, name: str, value: Union[CharsetMetaAttributeValue, str]) -> str:
+    def maybe_escape(
+        self, name: str, value: CharsetMetaAttributeValue | str
+    ) -> str:
         """Escape the value if needed"""
         if self.is_tal_attribute(name):
             # Never escape what we have in tal attributes
@@ -213,7 +224,7 @@ class PrettyAttributes:
             return True
         return False
 
-    def lines(self) -> List[str]:
+    def lines(self) -> list[str]:
         """Take the attributes, sort them and prettify their values"""
         attributes = self.attributes
         sorted_names = sorted(attributes, key=self.sort_attributes)
