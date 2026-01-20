@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from importlib.metadata import version
 from os.path import splitext
 from pathlib import Path
 from sys import stderr
@@ -10,16 +11,7 @@ from zpretty.zcml import ZCMLPrettifier
 import re
 
 
-try:
-    # Python >= 3.8
-    from importlib.metadata import version
-
-    version = version("zpretty")
-except ImportError:
-    # Python < 3.8
-    from pkg_resources import get_distribution
-
-    version = get_distribution("zpretty").version
+version = version("zpretty")
 
 
 class CLIRunner:

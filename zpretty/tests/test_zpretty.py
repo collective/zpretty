@@ -1,23 +1,13 @@
+from importlib.resources import files
 from unittest import TestCase
 from zpretty.prettifier import ZPrettifier
-
-
-try:
-    from importlib.resources import files
-
-    def resource_filename(package, resource):
-        """Get the resource filename for a package and resource."""
-        return str(files(package).joinpath(resource))
-
-except ImportError:  # Python < 3.9
-    # Python < 3.9
-    from pkg_resources import resource_filename
 
 
 class TestZpretty(TestCase):
     """Test zpretty"""
 
     maxDiff = None
+    sample_folder_path = files("zpretty.tests") / "original"
 
     def assertPrettified(self, original, expected, encoding="utf8"):
         """Check if the original html has been prettified as expected"""
@@ -32,11 +22,11 @@ class TestZpretty(TestCase):
         """Run prettify on filename and check that the output is equal to
         the file content itself
         """
-        resolved_filename = resource_filename("zpretty.tests", "original/%s" % filename)
-        prettifier = ZPrettifier(resolved_filename)
+        filename_path = self.sample_folder_path / filename
+        prettifier = ZPrettifier(filename_path)
         self.assertTrue(prettifier.check())
         observed = prettifier()
-        expected = open(resolved_filename).read()
+        expected = filename_path.read_text()
         self.assertListEqual(observed.splitlines(), expected.splitlines())
 
     def test_format_self_closing_tag(self):

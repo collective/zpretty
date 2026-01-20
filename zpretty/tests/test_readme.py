@@ -1,21 +1,8 @@
-from pathlib import Path
+from importlib.resources import files
 from unittest import TestCase
 from zpretty.tests.mock import MockCLIRunner
 
 import argparse
-import sys
-
-
-try:
-    from importlib.resources import files
-
-    def resource_filename(package, resource):
-        """Get the resource filename for a package and resource."""
-        return str(files(package).joinpath(resource))
-
-except ImportError:  # Python < 3.9
-    # Python < 3.9
-    from pkg_resources import resource_filename
 
 
 class TestReadme(TestCase):
@@ -25,16 +12,8 @@ class TestReadme(TestCase):
 
     def extract_usage_from_readme(self):
         """Extract the usage from the documentation"""
-        resolved_filename = Path(resource_filename("zpretty", ".")) / ".." / "README.md"
-
-        with open(resolved_filename) as f:
-            readme = f.read()
-            if sys.version_info < (3, 9):  # pragma: no cover
-                # Small change in the argparse output for Python >= 3.9
-                readme = readme.replace("[paths ...]", "[paths [paths ...]]")
-            if sys.version_info < (3, 10):  # pragma: no cover
-                # Small change in the argparse output for Python >= 3.10
-                readme = readme.replace("options:", "optional arguments:")
+        readme_path = files("zpretty").parent / "README.md"
+        readme = readme_path.read_text()
         start = readme.index("zpretty [")
         end = readme.index("```", start)
         # Take all the lines ignoring whitespaces
