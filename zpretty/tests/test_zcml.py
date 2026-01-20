@@ -1,26 +1,16 @@
 from bs4 import BeautifulSoup
+from importlib.resources import files
 from unittest import TestCase
 from zpretty.zcml import ZCMLAttributes
 from zpretty.zcml import ZCMLElement
 from zpretty.zcml import ZCMLPrettifier
 
 
-try:
-    from importlib.resources import files
-
-    def resource_filename(package, resource):
-        """Get the resource filename for a package and resource."""
-        return str(files(package).joinpath(resource))
-
-except ImportError:  # Python < 3.9
-    # Python < 3.9
-    from pkg_resources import resource_filename
-
-
 class TestZpretty(TestCase):
     """Test zpretty"""
 
     maxDiff = None
+    sample_folder_path = files("zpretty.tests") / "original"
 
     def get_element(self, text, level=0):
         """Given a text return a PrettyElement"""
@@ -234,10 +224,10 @@ class TestZpretty(TestCase):
         """Run prettify on filename and check that the output is equal to
         the file content itself
         """
-        resolved_filename = resource_filename("zpretty.tests", "original/%s" % filename)
-        prettifier = ZCMLPrettifier(resolved_filename)
+        filename_path = self.sample_folder_path / filename
+        prettifier = ZCMLPrettifier(filename_path)
         observed = prettifier()
-        expected = open(resolved_filename).read()
+        expected = filename_path.read_text()
         self.assertListEqual(observed.splitlines(), expected.splitlines())
 
     def test_zcml(self):

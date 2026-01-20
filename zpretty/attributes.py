@@ -1,11 +1,5 @@
+from html import escape
 from logging import getLogger
-
-
-try:
-    from html import escape
-except ImportError:  # pragma: no cover
-    # Python < 3.8
-    from cgi import escape
 
 
 logger = getLogger(__name__)

@@ -1,3 +1,4 @@
+from importlib.resources import files
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 from zpretty.prettifier import ZPrettifier
@@ -8,20 +9,10 @@ from zpretty.zcml import ZCMLPrettifier
 import os
 
 
-try:
-    from importlib.resources import files
-
-    def resource_filename(package, resource):
-        """Get the resource filename for a package and resource."""
-        return str(files(package).joinpath(resource))
-
-except ImportError:  # Python < 3.9
-    # Python < 3.9
-    from pkg_resources import resource_filename
-
-
 class TestCli(TestCase):
     """Test the cli options"""
+
+    sample_folder_path = files("zpretty.tests") / "original"
 
     def test_defaults(self):
         config = MockCLIRunner().config
@@ -41,8 +32,8 @@ class TestCli(TestCase):
         self.assertTrue(all((config.inplace, config.xml, config.zcml)))
 
     def test_file(self):
-        html = resource_filename("zpretty.tests", "original/sample_html.html")
-        xml = resource_filename("zpretty.tests", "original/sample_xml.xml")
+        html = str(self.sample_folder_path / "sample_html.html")
+        xml = str(self.sample_folder_path / "sample_xml.xml")
         config = MockCLIRunner(html, xml).config
         self.assertEqual(config.paths, [html, xml])
 
