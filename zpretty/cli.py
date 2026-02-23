@@ -10,7 +10,6 @@ from zpretty.zcml import ZCMLPrettifier
 
 import re
 
-
 version = version("zpretty")
 
 

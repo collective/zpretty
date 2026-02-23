@@ -6,7 +6,6 @@ from zpretty.attributes import PrettyAttributes
 from zpretty.elements import PrettyElement
 from zpretty.prettifier import ZPrettifier
 
-
 logger = getLogger(__name__)
 
 

@@ -8,7 +8,6 @@ from zpretty.elements import PrettyElement
 import fileinput
 import re
 
-
 logger = getLogger(__name__)
 
 
