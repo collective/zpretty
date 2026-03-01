@@ -1,7 +1,6 @@
 from html import escape
 from logging import getLogger
 
-
 logger = getLogger(__name__)
 
 

@@ -4,7 +4,6 @@ from zpretty.xml import XMLAttributes
 from zpretty.xml import XMLElement
 from zpretty.xml import XMLPrettifier
 
-
 logger = getLogger(__name__)
 
 
