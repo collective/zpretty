@@ -1,3 +1,5 @@
+TWINE_REPOSITORY ?= pypi
+
 .PHONY: all
 all: install
 
@@ -33,3 +35,13 @@ pytest: .venv/bin/pytest
 .PHONY: htmlreport
 htmlreport: .venv/bin/pytest
 	./.venv/bin/pytest --cov-report html
+
+.PHONY: release
+release:
+	@echo "Releasing to repository: $(TWINE_REPOSITORY)"
+	@echo "To release to a different repository, run \`make release TWINE_REPOSITORY=<repository>\`"
+	TWINE_REPOSITORY="$(TWINE_REPOSITORY)" uvx \
+		--from zest-releaser \
+		--with zest-releaser\[recommended\] \
+		--with zestreleaser-towncrier \
+		fullrelease

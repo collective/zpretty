@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.0 (unreleased)
+## 4.0.0 (2026-04-10)
 
 
 - Declare support for Python 3.10 - 3.14
