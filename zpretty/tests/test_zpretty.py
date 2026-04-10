@@ -140,6 +140,18 @@ class TestZpretty(TestCase):
         self.assertPrettified("<input><a /><b />", "<input /><a></a><b></b>\n")
         self.assertPrettified("<input><a /><b /></input>", "<input /><a></a><b></b>\n")
 
+    def test_title_prettifies_markup_like_text(self):
+        self.assertPrettified(
+            "<title> <i18n:translate>Sample Page</i18n:translate> </title>",
+            "<title>\n  <i18n:translate>Sample Page</i18n:translate>\n</title>\n",
+        )
+
+    def test_textarea_prettifies_markup_like_text(self):
+        self.assertPrettified(
+            '<textarea> <tal:content replace="structure view/value" /> </textarea>',
+            '<textarea>\n  <tal:content replace="structure view/value" />\n</textarea>\n',  # noqa: E501
+        )
+
     def test_element_repr(self):
         prettifier = ZPrettifier(text="")
         self.assertEqual(repr(prettifier.root), "<pretty:-1:null_tag_name />")

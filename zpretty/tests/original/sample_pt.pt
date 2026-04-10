@@ -7,6 +7,16 @@
       xml:lang="en"
       i18n:domain="plone"
 ><![CDATA[ <>& ]]>
+  <head>
+    <title>
+      <!--! Check https://github.com/collective/zpretty/issues/198 -->
+      &lt;i18n:translate&gt;
+        Should stay like this
+      &lt;/i18n:translate&gt;
+
+      <i18n:translate>Sample Page</i18n:translate>
+    </title>
+  </head>
   <body>
     <metal:main fill-slot="content-core">
       <metal:content-core define-macro="content-core">
@@ -29,6 +39,21 @@
           Foo
             Bar
         </pre>
+        <form action="#"
+              method="post"
+        >
+          <textarea name="foo">
+            <!--! Check https://github.com/collective/zpretty/issues/198 -->
+            &lt;i18n:translate&gt;
+              Should stay like this
+            &lt;/i18n:translate&gt;
+            <tal:content define="
+                           foo python: 'foo';
+                         "
+                         replace="foo"
+            />
+          </textarea>
+        </form>
         <span tal:define="
                 foo python: 1 &gt; 2 and 1 &lt; 2 and &amp;;
                 bar python: 1 > 2 and 1 < 2 and &;

@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from bs4.element import Doctype
 from bs4.element import ProcessingInstruction
+from bs4.element import Tag
 from logging import getLogger
 from uuid import uuid4
 from zpretty.elements import PrettyElement
@@ -26,6 +27,7 @@ class ZPrettifier:
     _doctype_pattern = re.compile(
         r"(<!DOCTYPE[^>[]*(\[[^]]*\])?>)", re.IGNORECASE | re.DOTALL
     )
+    _rcdata_tags = ("title", "textarea")
     _cdatas = []
     _doctype = None
 
@@ -52,6 +54,12 @@ class ZPrettifier:
                 if self._ampersand_marker in value:
                     attrs[key] = value.replace(self._ampersand_marker, "&")
 
+        if self.parser == "html.parser":
+            # Page templates are parsed with the html.parser,
+            # but can contain invalid markup inside RCDATA tags,
+            # see https://github.com/collective/zpretty/issues/198
+            self.fix_rcdata_markup(soup)
+
         self.soup = soup
 
         # Cleanup all spurious self._newlines_marker attributes, see #35
@@ -60,6 +68,43 @@ class ZPrettifier:
             el.attrs.pop(key, None)
 
         self.root = self.pretty_element(self.soup, -1)
+
+    def fix_rcdata_markup(self, soup):
+        """Parse markup-like text inside RCDATA tags as child nodes.
+
+        In page templates we might have elements inside these fields,
+        e.g. inside a <title> or <textarea>.
+        The html.parser used by BeautifulSoup escapes the markup inside these tags
+        and does not parse it as tags, but we want to prettify it as well.
+
+        This method applies a workaround for this problem,
+        by prettifying the content of these tags as if it were an XML fragment
+        and then replacing the content of the tag with the prettified version.
+
+        Then the rcdata elements content will be rendered as it is.
+        """
+        for tag in soup.find_all(self._rcdata_tags):
+            raw_content = "".join(str(node) for node in tag.contents)
+
+            null_tag_name = self.pretty_element.null_tag_name
+            fragment_soup = BeautifulSoup(
+                f"<{null_tag_name}>{raw_content}</{null_tag_name}>",
+                self.parser,
+            )
+            fragment_root = getattr(fragment_soup, null_tag_name, None)
+            if not fragment_root:
+                continue
+
+            parsed_children = list(fragment_root.children)
+            # Check if the tag contains some markup like text,
+            # if not we can skip it and avoid to mess with the content
+            if not any(isinstance(child, Tag) for child in parsed_children):
+                continue
+
+            # Replace the content of the tag with the parsed prettified children
+            tag.clear()
+            for child in parsed_children:
+                tag.append(child)
 
     def _prepare_text(self):
         """This tweaks the text passed to the prettifier
