@@ -5,6 +5,9 @@
 
 - Declare support for Python 3.10 - 3.14
   [ale-rt]
+- Do not break `title` and `textarea` in page templates.
+  (Fixes #198)
+  [ale-rt]
 
 
 ## 3.1.1 (2025-06-23)

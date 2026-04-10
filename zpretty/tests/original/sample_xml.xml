@@ -4,6 +4,10 @@
   <!ENTITY another "value 2">
 ]>
 <root>
+  <title>
+    This is a title with an entity reference: &name;
+    <subtitle>This is a subtitle with another entity reference: &another;</subtitle>
+  </title>
   <pretty a="b">1</pretty>
   <closeme hidden="" />
   <preserve_space> </preserve_space>

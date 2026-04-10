@@ -77,7 +77,19 @@ class PrettyElement:
     )
     escaper = EntitySubstitution()
     preserve_text_whitespace_elements = ["pre"]
-    skip_text_escaping_elements = ["script", "style"]
+    skip_text_escaping_elements = [
+        # Do not fiddle with the content of script tags,
+        # as it may contain html entities that we do not want to be escaped
+        "script",
+        # Do not fiddle with the content of style tags,
+        # as it may contain html entities that we do not want to be escaped
+        "style",
+        # The title and textarea tags may contain markup-like text
+        # that should that by HTML parser is escaped into text,
+        # but that we want to be rendered as markup in page templates.
+        "title",
+        "textarea",
+    ]
 
     def __init__(self, context, level=0):
         """Take something a (bs4) element and an indentation level"""
