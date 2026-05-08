@@ -43,7 +43,7 @@ class PrettyAttributes:
         "truespeed",
     )
     _multiline_prefix = "  "
-    _multiline_attributes = ()
+    _multiline_attributes = ("class",)
     _tal_multiline_attributes = (
         "attributes",
         "define",
@@ -129,11 +129,60 @@ class PrettyAttributes:
             return (900, name)
         return (200, name)
 
+    def split_outside_braces(self, value: str) -> list[str]:
+        """Empty space splitter that respects Chameleon expressions.
+
+        It splits on ` ` except for expressions within `{}`
+        """
+        parts = []
+        current = []
+        depth = 0
+
+        for char in value:
+            if char == "{":
+                depth += 1
+                current.append(char)
+            elif char == "}":
+                depth -= 1
+                current.append(char)
+            elif char == " " and depth == 0:
+                if current:
+                    parts.append("".join(current))
+                    current = []
+            else:
+                current.append(char)
+
+        if current:
+            parts.append("".join(current))
+
+        return parts
+
     def format_multiline(self, name, value):
-        """"""
-        value_lines = filter(None, value.split())
-        line_joiner = "\n" + (" " * (len(name) + 2))
-        return line_joiner.join(value_lines)
+        """Format attributes values to multiline, split on an empty space.` `
+        except for expressions within `{}`
+        """
+
+        lines = self.split_outside_braces(value)
+
+        # Don't split single-values
+        if len(lines) < 2:
+            return value
+
+        try:
+            line_prefix = self.element.prefix + self.prefix + self._multiline_prefix
+        except AttributeError:
+            line_prefix = self._multiline_prefix
+
+        # unindent at the end
+        line_prefix_end = line_prefix[:-2]
+
+        # Add line indents
+        new_value = line_prefix + f"\n{line_prefix}".join(lines)
+
+        # Line break at start and end and add end indent.
+        new_value = f"\n{new_value}\n{line_prefix_end}"
+
+        return new_value
 
     def format_tal_multiline(self, value):
         """There are some tal specific attributes that contain ; separated

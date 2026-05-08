@@ -77,3 +77,27 @@ class TestZPrettyAttributess(TestCase):
                 )
             ),
         )
+
+    def test_class_multiline(self):
+        """Class attributes with multiple values should be split."""
+        self.assertPrettifiedAttributes(
+            {"class": "class1 class2 ${python: 'class3' if True else ''} class4"},
+            "\n".join(
+                (
+                    'class="',
+                    "  class1",
+                    "  class2",
+                    "  ${python: 'class3' if True else ''}",
+                    "  class4",
+                    '"',
+                )
+            ),
+        )
+
+    def test_data_pat_singleline(self):
+        """Class with single values should not be split."""
+        self.assertPrettifiedAttributes({"class": "class1"}, 'class="class1"')
+
+    def test_data_pat_empty(self):
+        """Empty class attributes should not be split."""
+        self.assertPrettifiedAttributes({"class": ""}, 'class=""')
