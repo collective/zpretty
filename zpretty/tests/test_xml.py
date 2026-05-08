@@ -5,6 +5,10 @@ from zpretty.xml import XMLElement
 from zpretty.xml import XMLPrettifier
 
 
+class FakeConfig:
+    split_class = False
+
+
 class TestZpretty(TestCase):
     """Test zpretty"""
 
@@ -17,14 +21,14 @@ class TestZpretty(TestCase):
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
-        return XMLElement(soup.fake_root.next_element, level)
+        return XMLElement(FakeConfig(), soup.fake_root.next_element, level)
 
     def prettify(self, filename):
         """Run prettify on filename and check that the output is equal to
         the file content itself
         """
         filename_path = self.sample_folder_path / filename
-        prettifier = XMLPrettifier(filename_path)
+        prettifier = XMLPrettifier(FakeConfig(), filename_path)
         observed = prettifier()
         expected = filename_path.read_text()
         self.assertListEqual(observed.splitlines(), expected.splitlines())

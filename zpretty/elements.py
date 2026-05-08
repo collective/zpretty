@@ -91,8 +91,9 @@ class PrettyElement:
         "textarea",
     ]
 
-    def __init__(self, context, level=0):
+    def __init__(self, config, context, level=0):
         """Take something a (bs4) element and an indentation level"""
+        self.config = config
         self.context = context
         self.level = level
 
@@ -180,7 +181,7 @@ class PrettyElement:
         parent = self.context.parent
         if not parent or parent.name == BeautifulSoup.ROOT_TAG_NAME:
             return None
-        return self.__class__(parent)
+        return self.__class__(self.config, parent)
 
     @memo
     def getchildren(self):
@@ -188,7 +189,7 @@ class PrettyElement:
         children = []
         next_level = self.level + 1
         for child in getattr(self.context, "children", []):
-            child = self.__class__(child, next_level)
+            child = self.__class__(self.config, child, next_level)
             try:
                 child.is_tag() and child.is_self_closing()
             except OpenTagException:
@@ -227,7 +228,7 @@ class PrettyElement:
     def attributes(self):
         """Return the wrapped attributes"""
         attributes = getattr(self.context, "attrs", {})
-        return self.attribute_klass(attributes, self)
+        return self.attribute_klass(self.config, attributes, self)
 
     @property
     @memo

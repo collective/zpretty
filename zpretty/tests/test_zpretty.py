@@ -3,6 +3,10 @@ from unittest import TestCase
 from zpretty.prettifier import ZPrettifier
 
 
+class FakeConfig:
+    split_class = False
+
+
 class TestZpretty(TestCase):
     """Test zpretty"""
 
@@ -13,7 +17,7 @@ class TestZpretty(TestCase):
         """Check if the original html has been prettified as expected"""
         if isinstance(expected, tuple):
             expected = "\n".join(expected)
-        prettifier = ZPrettifier(text=original, encoding=encoding)
+        prettifier = ZPrettifier(FakeConfig(), text=original, encoding=encoding)
         self.assertFalse(prettifier.check())
         observed = prettifier()
         self.assertEqual(observed, expected)
@@ -23,7 +27,7 @@ class TestZpretty(TestCase):
         the file content itself
         """
         filename_path = self.sample_folder_path / filename
-        prettifier = ZPrettifier(filename_path)
+        prettifier = ZPrettifier(FakeConfig(), filename_path)
         self.assertTrue(prettifier.check())
         observed = prettifier()
         expected = filename_path.read_text()
@@ -153,7 +157,7 @@ class TestZpretty(TestCase):
         )
 
     def test_element_repr(self):
-        prettifier = ZPrettifier(text="")
+        prettifier = ZPrettifier(FakeConfig(), text="")
         self.assertEqual(repr(prettifier.root), "<pretty:-1:null_tag_name />")
 
     def test_whitelines_not_stripped(self):

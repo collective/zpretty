@@ -31,10 +31,11 @@ class ZPrettifier:
     _cdatas = []
     _doctype = None
 
-    def __init__(self, filename="", text="", encoding="utf8"):
+    def __init__(self, config, filename="", text="", encoding="utf8"):
         """Create a prettifier instance taking the contents
         from a text or a filename
         """
+        self.config = config
         self._entity_mapping = {}
         self.encoding = encoding
         self.filename = filename
@@ -67,7 +68,7 @@ class ZPrettifier:
         for el in self.soup.find_all(attrs={key: ""}):
             el.attrs.pop(key, None)
 
-        self.root = self.pretty_element(self.soup, -1)
+        self.root = self.pretty_element(config, self.soup, -1)
 
     def fix_rcdata_markup(self, soup):
         """Parse markup-like text inside RCDATA tags as child nodes.
