@@ -1,13 +1,14 @@
 # Changelog
 
-## 4.0.4 (unreleased)
+## 4.1.0 (unreleased)
 
-
-- Nothing changed yet.
-
+- Multiline values for class attributes.
+  Split multiple class attribute values into multiple lines. Keep it
+  single-lined, if there is only one value. And don't split Chameleon
+  expressions.
+  [thet]
 
 ## 4.0.3 (2026-06-17)
-
 
 - Change the builder configuration to preserve whitespace in XML documents.
   @ale-rt
