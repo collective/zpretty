@@ -204,6 +204,37 @@ class TestZpretty(TestCase):
             '<foo a="&amp;"></foo>\n<tal:bar b=";" />\n',
         )
 
+    def test_chameleon_expression_in_attribute_position(self):
+        # ${...} as a standalone attribute (dynamic attribute syntax)
+        self.assertPrettified(
+            '<input ${python:"required" if view.required else ""} />',
+            '<input ${python:"required" if view.required else ""} />\n',
+        )
+
+    def test_chameleon_expression_with_other_attributes(self):
+        self.assertPrettified(
+            '<input ${python:"required" if view.required else ""} type="text" name="foo" />',  # noqa: E501
+            '<input name="foo"\n       type="text"\n       ${python:"required" if view.required else ""}\n/>\n',  # noqa: E501
+        )
+
+    def test_chameleon_expression_in_attribute_value(self):
+        self.assertPrettified(
+            '<div class="${mycss}">hello</div>',
+            '<div class="${mycss}">hello</div>\n',
+        )
+
+    def test_chameleon_expression_in_text_content(self):
+        self.assertPrettified(
+            "<p>Hello ${name}!</p>",
+            "<p>Hello ${name}!</p>\n",
+        )
+
+    def test_chameleon_expression_nested_braces(self):
+        self.assertPrettified(
+            '<input ${python:{"key": "val"}.get("key", "")} />',
+            '<input ${python:{"key": "val"}.get("key", "")} />\n',
+        )
+
     def test_sample_html(self):
         self.prettify("sample_html.html")
 

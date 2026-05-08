@@ -30,6 +30,8 @@ class ZPrettifier:
     _rcdata_tags = ("title", "textarea")
     _cdatas = []
     _doctype = None
+    _chameleon_marker_prefix = f"data-chameleon-expr-{str(uuid4())}-"
+    _chameleon_expressions = []
 
     def __init__(self, filename="", text="", encoding="utf8"):
         """Create a prettifier instance taking the contents
@@ -106,6 +108,43 @@ class ZPrettifier:
             for child in parsed_children:
                 tag.append(child)
 
+    def _extract_chameleon_expressions(self, text):
+        """Replace ${...} Chameleon template expressions with safe markers.
+
+        BeautifulSoup's parser mangles ${...} expressions in attribute positions
+        because they contain characters invalid in HTML attribute names (spaces,
+        quotes). Replace them with data-* attribute markers before parsing and
+        restore them afterwards.
+        """
+        self._chameleon_expressions = []
+        result = []
+        i = 0
+        n = len(text)
+        while i < n:
+            if text[i] == "$" and i + 1 < n and text[i + 1] == "{":
+                depth = 1
+                j = i + 2
+                while j < n and depth > 0:
+                    if text[j] == "{":
+                        depth += 1
+                    elif text[j] == "}":
+                        depth -= 1
+                    j += 1
+                if depth == 0:
+                    expr = text[i:j]
+                    idx = len(self._chameleon_expressions)
+                    marker = f"{self._chameleon_marker_prefix}{idx}"
+                    self._chameleon_expressions.append(expr)
+                    result.append(marker)
+                    i = j
+                else:
+                    result.append(text[i])
+                    i += 1
+            else:
+                result.append(text[i])
+                i += 1
+        return "".join(result)
+
     def _prepare_text(self):
         """This tweaks the text passed to the prettifier
         to overcome some limitations of the BeautifulSoup parser
@@ -121,6 +160,7 @@ class ZPrettifier:
             pass
         text = re.sub(self._cdata_pattern, self._cdata_marker, text)
         text = re.sub(self._doctype_pattern, self._doctype_marker, text)
+        text = self._extract_chameleon_expressions(text)
 
         # Get all the entities in the text and replace them with a marker
         # The text might contain undefined entities that BeautifulSoup
@@ -175,6 +215,10 @@ class ZPrettifier:
         # Restore entities
         for entity, marker in self._entity_mapping.items():
             prettified = prettified.replace(marker, entity)
+        # Restore Chameleon template expressions
+        for idx, expr in enumerate(self._chameleon_expressions):
+            marker = f"{self._chameleon_marker_prefix}{idx}"
+            prettified = prettified.replace(marker, expr)
         if self._end_with_newline and not prettified.endswith("\n"):
             prettified += "\n"
         return prettified
