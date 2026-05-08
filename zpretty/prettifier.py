@@ -35,10 +35,11 @@ class ZPrettifier:
     _cdatas = []
     _doctype = None
 
-    def __init__(self, filename="", text="", encoding="utf8"):
+    def __init__(self, config, filename="", text="", encoding="utf8"):
         """Create a prettifier instance taking the contents
         from a text or a filename
         """
+        self.config = config
         self._entity_mapping = {}
         self.encoding = encoding
         self.filename = filename
@@ -65,7 +66,7 @@ class ZPrettifier:
             self.fix_rcdata_markup(soup)
 
         self.soup = soup
-        self.root = self.pretty_element(self.soup, -1)
+        self.root = self.pretty_element(config, self.soup, -1)
 
     @property
     def _is_html_builder(self):

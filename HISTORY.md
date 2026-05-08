@@ -2,6 +2,12 @@
 
 ## 4.1.0 (unreleased)
 
+- Add a switch for multiline class attribute values.
+  Per default class attributes are not split into multiple lines. That's what
+  most tools do and most people would expect. To split class attributes into
+  multiple lines use the `--split-class` option on the CLI.
+  [thet]
+
 - Multiline values for class attributes.
   Split multiple class attribute values into multiple lines. Keep it
   single-lined, if there is only one value. And don't split Chameleon

@@ -4,6 +4,10 @@ from zpretty.attributes import PrettyAttributes
 from zpretty.elements import PrettyElement
 
 
+class FakeConfig:
+    split_class = False
+
+
 class TestZPrettyAttributess(TestCase):
     """Test zpretty"""
 
@@ -12,15 +16,18 @@ class TestZPrettyAttributess(TestCase):
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
-        return PrettyElement(soup.fake_root.next_element, level)
+        return PrettyElement(FakeConfig(), soup.fake_root.next_element, level)
 
-    def assertPrettifiedAttributes(self, attributes, expected, level=0):
+    def assertPrettifiedAttributes(self, attributes, expected, level=0, config=None):
         """Check if the attributes are properly sorted and formatted"""
         if level == 0:
             el = None
         else:
             el = self.get_element("a", level)
-        pretty_attribute = PrettyAttributes(attributes, el)
+
+        config = config if config else FakeConfig()
+
+        pretty_attribute = PrettyAttributes(config, attributes, el)
         observed = pretty_attribute()
         self.assertEqual(observed, expected)
 
@@ -78,8 +85,17 @@ class TestZPrettyAttributess(TestCase):
             ),
         )
 
+    def test_class_multiline_no_split(self):
+        """Class attributes with multiple values should be split."""
+        self.assertPrettifiedAttributes(
+            {"class": "class1 class2 ${python: 'class3' if True else ''} class4"},
+            '''class="class1 class2 ${python: 'class3' if True else ''} class4"''',
+        )
+
     def test_class_multiline(self):
         """Class attributes with multiple values should be split."""
+        config = FakeConfig()
+        config.split_class = True
         self.assertPrettifiedAttributes(
             {"class": "class1 class2 ${python: 'class3' if True else ''} class4"},
             "\n".join(
@@ -92,12 +108,20 @@ class TestZPrettyAttributess(TestCase):
                     '"',
                 )
             ),
+            0,
+            config,
         )
 
     def test_data_pat_singleline(self):
         """Class with single values should not be split."""
-        self.assertPrettifiedAttributes({"class": "class1"}, 'class="class1"')
+        config = FakeConfig()
+        config.split_class = True
+        self.assertPrettifiedAttributes(
+            {"class": "class1"}, 'class="class1"', 0, config
+        )
 
     def test_data_pat_empty(self):
         """Empty class attributes should not be split."""
-        self.assertPrettifiedAttributes({"class": ""}, 'class=""')
+        config = FakeConfig()
+        config.split_class = True
+        self.assertPrettifiedAttributes({"class": ""}, 'class=""', 0, config)

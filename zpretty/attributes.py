@@ -43,7 +43,7 @@ class PrettyAttributes:
         "truespeed",
     )
     _multiline_prefix = "  "
-    _multiline_attributes = ("class",)
+    _multiline_attributes = ()
     _tal_multiline_attributes = (
         "attributes",
         "define",
@@ -78,10 +78,14 @@ class PrettyAttributes:
         "i18n:ignore-attributes",
     )
 
-    def __init__(self, attributes, element=None):
+    def __init__(self, config, attributes, element=None):
         """attributes is a dict like object"""
+        self.config = config
         self.attributes = attributes
         self.element = element
+
+        if self.config.split_class:
+            self._multiline_attributes += ("class",)
 
     def __len__(self):
         return len(self.attributes)

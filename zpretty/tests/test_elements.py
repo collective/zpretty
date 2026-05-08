@@ -3,6 +3,10 @@ from unittest import TestCase
 from zpretty.elements import PrettyElement
 
 
+class FakeConfig:
+    split_class = False
+
+
 class TestPrettyElements(TestCase):
     """Test basic funtionalities of the PrettyElement class"""
 
@@ -11,7 +15,7 @@ class TestPrettyElements(TestCase):
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
-        return PrettyElement(soup.fake_root.next_element, level)
+        return PrettyElement(FakeConfig(), soup.fake_root.next_element, level)
 
     def test_comment(self):
         el = self.get_element("<!--a-->")

@@ -69,8 +69,8 @@ Basic usage:
 
 ```console
 $ zpretty -h
-usage: zpretty [-h] [--encoding ENCODING] [-i] [-v] [-x] [-z] [--check]
-               [--include INCLUDE] [--exclude EXCLUDE]
+usage: zpretty [-h] [--encoding ENCODING] [-i] [-v] [-x] [-z] [--split-class]
+               [--check] [--include INCLUDE] [--exclude EXCLUDE]
                [--extend-exclude EXTEND_EXCLUDE]
                [paths ...]
 
@@ -88,6 +88,7 @@ options:
   -x, --xml             Treat the input file(s) as XML
   -z, --zcml            Treat the input file(s) as XML. Follow the ZCML
                         styleguide
+  --split-class         Split CSS class attribute values into multiple lines.
   --check               Return code 0 if nothing would be changed, 1 if some
                         files would be reformatted
   --include INCLUDE     A regular expression that matches files and directories

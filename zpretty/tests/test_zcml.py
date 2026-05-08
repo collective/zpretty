@@ -6,6 +6,10 @@ from zpretty.zcml import ZCMLElement
 from zpretty.zcml import ZCMLPrettifier
 
 
+class FakeConfig:
+    split_class = False
+
+
 class TestZpretty(TestCase):
     """Test zpretty"""
 
@@ -17,7 +21,7 @@ class TestZpretty(TestCase):
         soup = BeautifulSoup(
             "<soup><fake_root>%s</fake_root></soup>" % text, "html.parser"
         )
-        return ZCMLElement(soup.fake_root.next_element, level)
+        return ZCMLElement(FakeConfig(), soup.fake_root.next_element, level)
 
     def assertPrettifiedAttributes(self, attributes, expected, level=0):
         """Check if the attributes are properly sorted and formatted"""
@@ -25,12 +29,12 @@ class TestZpretty(TestCase):
             el = None
         else:
             el = self.get_element("foo", level)
-        pretty_attribute = ZCMLAttributes(attributes, el)
+        pretty_attribute = ZCMLAttributes(FakeConfig(), attributes, el)
         observed = pretty_attribute()
         self.assertEqual(observed, expected)
 
     def test_zcml_attributes_no_attributes(self):
-        self.assertPrettifiedAttributes(ZCMLAttributes({})(), "")
+        self.assertPrettifiedAttributes(ZCMLAttributes(FakeConfig(), {})(), "")
         self.assertPrettifiedAttributes({}, "", level=2)
 
     def test_zcml_attributes_one_attributes(self):
@@ -225,7 +229,7 @@ class TestZpretty(TestCase):
         the file content itself
         """
         filename_path = self.sample_folder_path / filename
-        prettifier = ZCMLPrettifier(filename_path)
+        prettifier = ZCMLPrettifier(FakeConfig(), filename_path)
         observed = prettifier()
         expected = filename_path.read_text()
         self.assertListEqual(observed.splitlines(), expected.splitlines())
