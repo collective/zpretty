@@ -1,10 +1,11 @@
 # Changelog
 
-## 4.0.1 (unreleased)
+## 4.1.0 (unreleased)
 
-
-- Nothing changed yet.
-
+- Multiline values for Patternslib data attributes.
+  Split multiple Patternslib data attribute values into multiple lines. Keep it
+  single-lined, if there is only one value.
+  [thet]
 
 ## 4.0.0 (2026-04-10)
 

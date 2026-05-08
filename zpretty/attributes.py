@@ -173,6 +173,53 @@ class PrettyAttributes:
         # restore ';;'
         return new_value.replace("<>", ";;")
 
+    def format_pat_multiline(self, value):
+        """Multiple values in Patternslib data-pat-PATTERNNAME attributes
+        should be formatted multiline.
+        The separator is `;`, `&&` or `&amp;&amp;` and same with the tal
+        attributes, a `;;` is a escaped semicolon.
+        """
+
+        # Temporarily replace escaped semicolon `;;` as it should not be split
+        _value = value.replace(";;", "<>")
+        # Prepare for `&&` split
+        _value = _value.replace("&&", "&&><")
+        # Prepare for `&amp;&amp;` split
+        _value = _value.replace("&amp;&amp;", "&&><")
+        # Prepare for `;` split
+        _value = _value.replace(";", ";><")
+
+        # Split
+        lines = _value.split("><")
+
+        # Strip
+        lines = [line.strip() for line in lines]
+        # Filter for empty lines
+        lines = [line for line in lines if line]
+
+        # Don't split single-values
+        if len(lines) < 2:
+            return value
+
+        try:
+            line_prefix = self.element.prefix + self.prefix + self._multiline_prefix
+        except AttributeError:
+            line_prefix = self._multiline_prefix
+
+        # unindent at the end
+        line_prefix_end = line_prefix[:-2]
+
+        # Add line indents
+        new_value = line_prefix + f"\n{line_prefix}".join(lines)
+
+        # restore ';;'
+        new_value = new_value.replace("<>", ";;")
+
+        # Line break at start and end and add end indent.
+        new_value = f"\n{new_value}\n{line_prefix_end}"
+
+        return new_value
+
     def is_tal_attribute(self, name):
         """Check if the attribute is a tal attribute"""
         if name.startswith("tal:"):
@@ -217,6 +264,9 @@ class PrettyAttributes:
                 value = self.format_multiline(name, value)
             elif name in self._tal_multiline_attributes:
                 value = self.format_tal_multiline(value)
+            # Split Patternslib data attributes.
+            elif name[:9] == "data-pat-":
+                value = self.format_pat_multiline(value)
             if not value and self.can_be_valueless(name):
                 line = name
             else:

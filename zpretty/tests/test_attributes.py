@@ -77,3 +77,31 @@ class TestZPrettyAttributess(TestCase):
                 )
             ),
         )
+
+    def test_data_pat_multiline(self):
+        """Patternslib attributes should be split."""
+        self.assertPrettifiedAttributes(
+            {"data-pat-testpattern": "a 1; b 2 && c;;3 &amp;&amp; d 4"},
+            "\n".join(
+                (
+                    'data-pat-testpattern="',
+                    "  a 1;",
+                    "  b 2 &amp;&amp;",
+                    "  c;;3 &amp;&amp;",
+                    "  d 4",
+                    '"',
+                )
+            ),
+        )
+
+    def test_data_pat_singleline(self):
+        """Patternslib data attributes with single values should not be split."""
+        self.assertPrettifiedAttributes(
+            {"data-pat-testpattern": "a 1;"}, 'data-pat-testpattern="a 1;"'
+        )
+
+    def test_data_pat_empty(self):
+        """Empty Patternslib data attributes should not be split."""
+        self.assertPrettifiedAttributes(
+            {"data-pat-testpattern": ""}, "data-pat-testpattern"
+        )
