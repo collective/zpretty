@@ -235,6 +235,17 @@ class TestZpretty(TestCase):
             '<input ${python:{"key": "val"}.get("key", "")} />\n',
         )
 
+    def test_chameleon_expression_many_expressions(self):
+        # 10+ expressions: "prefix-1" is a prefix of "prefix-10" so restoration
+        # must replace longer markers first to avoid corrupting shorter ones.
+        items = "".join(f'<li><a href="${{{i}}}">${{label{i}}}</a></li>' for i in range(12))
+        input_html = f"<ul>{items}</ul>"
+        prettifier = ZPrettifier(FakeConfig(), text=input_html)
+        result = prettifier()
+        for i in range(12):
+            self.assertIn(f'href="${{{i}}}"', result)
+            self.assertIn(f">${{label{i}}}<", result)
+
     def test_sample_html(self):
         self.prettify("sample_html.html")
 

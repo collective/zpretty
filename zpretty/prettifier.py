@@ -215,8 +215,12 @@ class ZPrettifier:
         # Restore entities
         for entity, marker in self._entity_mapping.items():
             prettified = prettified.replace(marker, entity)
-        # Restore Chameleon template expressions
-        for idx, expr in enumerate(self._chameleon_expressions):
+        # Restore Chameleon template expressions.
+        # Sort longest-index-first so that e.g. "prefix-10" is replaced before
+        # "prefix-1" (which is a prefix of "prefix-10" and would corrupt it).
+        for idx, expr in sorted(
+            enumerate(self._chameleon_expressions), key=lambda x: -len(str(x[0]))
+        ):
             marker = f"{self._chameleon_marker_prefix}{idx}"
             prettified = prettified.replace(marker, expr)
         if self._end_with_newline and not prettified.endswith("\n"):
