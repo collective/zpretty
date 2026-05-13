@@ -238,7 +238,9 @@ class TestZpretty(TestCase):
     def test_chameleon_expression_many_expressions(self):
         # 10+ expressions: "prefix-1" is a prefix of "prefix-10" so restoration
         # must replace longer markers first to avoid corrupting shorter ones.
-        items = "".join(f'<li><a href="${{{i}}}">${{label{i}}}</a></li>' for i in range(12))
+        items = "".join(
+            f'<li><a href="${{{i}}}">${{label{i}}}</a></li>' for i in range(12)
+        )
         input_html = f"<ul>{items}</ul>"
         prettifier = ZPrettifier(FakeConfig(), text=input_html)
         result = prettifier()
