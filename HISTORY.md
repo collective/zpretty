@@ -1,20 +1,26 @@
 # Changelog
 
-## 4.0.1 (unreleased)
+## 4.1.0 (unreleased)
 
+- Add a switch for multiline class attribute values.
+  Per default class attributes are not split into multiple lines. That's what
+  most tools do and most people would expect. To split class attributes into
+  multiple lines use the `--split-class` option on the CLI.
+  [thet]
 
-- Nothing changed yet.
-
+- Multiline values for class attributes.
+  Split multiple class attribute values into multiple lines. Keep it
+  single-lined, if there is only one value. And don't split Chameleon
+  expressions.
+  [thet]
 
 ## 4.0.0 (2026-04-10)
-
 
 - Declare support for Python 3.10 - 3.14
   [ale-rt]
 - Do not break `title` and `textarea` in page templates.
   (Fixes #198)
   [ale-rt]
-
 
 ## 3.1.1 (2025-06-23)
 
@@ -24,9 +30,7 @@
 - Declare support for Python 3.13
   [ale-rt]
 
-
 ## 3.1.0 (2023-06-30)
-
 
 - No changes were made from the latest alpha version
   [ale-rt]

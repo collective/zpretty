@@ -73,6 +73,13 @@ class CLIRunner:
             default=False,
         )
         parser.add_argument(
+            "--split-class",
+            help="Split CSS class attribute values into multiple lines.",
+            action="store_true",
+            dest="split_class",
+            default=False,
+        )
+        parser.add_argument(
             "--check",
             help=(
                 "Return code 0 if nothing would be changed, "
@@ -212,7 +219,7 @@ class CLIRunner:
         for path in self.good_paths:
             # use Pathlib to check if the file exists and it is a file
             Prettifier = self.choose_prettifier(path)
-            prettifier = Prettifier(path, encoding=encoding)
+            prettifier = Prettifier(self.config, path, encoding=encoding)
             if self.config.check:
                 if not prettifier.check():
                     self.errors.append(f"This file would be rewritten: {path}")
