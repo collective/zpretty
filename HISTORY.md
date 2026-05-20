@@ -2,9 +2,17 @@
 
 ## 4.0.1 (unreleased)
 
-
-- Nothing changed yet.
-
+- Support Chameleon attribute expressions.
+  Fix incorrect splitting of Chameleon attribute expressions which led to
+  broken code.
+  This HTML `<input type="text" ${python: "required" if view.required else ""} />`
+  leads now correctly to:
+  ```html
+  <input type="text"
+         ${python: "required" if view.required else ""}
+  />
+  ```
+  [thet]
 
 ## 4.0.0 (2026-04-10)
 
