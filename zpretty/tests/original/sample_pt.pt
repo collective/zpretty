@@ -47,6 +47,17 @@
                  ${'class-d' if True else ''}
                  button button-important
                  pil pil-${'blue' if True else ''}
+
+                 pat-inject
+               "
+               data-pat-inject="
+                  source: .main-content .important-stuff;
+                  target: .class-b .target
+                  &amp;&amp;
+                  source: .header #logo;
+                  target: .logo;
+                  ${'add: class-d' if True else ''}
+                  history:;
                "
           >
            okay
