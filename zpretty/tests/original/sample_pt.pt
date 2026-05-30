@@ -39,6 +39,19 @@
           Foo
             Bar
         </pre>
+        <section class="class-a">
+          <div class="
+                 class-b
+                 class-c
+
+                 ${'class-d' if True else ''}
+                 button button-important
+                 pil pil-${'blue' if True else ''}
+               "
+          >
+           okay
+          </div>
+        </section>
         <form action="#"
               method="post"
         >
