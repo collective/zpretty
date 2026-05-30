@@ -115,7 +115,8 @@ class PrettyAttributes:
         """
         if name.startswith("xmlns"):
             return (0, name)
-        if name in ("class", "id"):
+        # data-zpretty-class being the class replacement to avoid reformatting.
+        if name in ("class", "data-zpretty-class", "id"):
             return (100, name)
         if name.startswith("data"):
             return (300, name)

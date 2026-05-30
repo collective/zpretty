@@ -2,8 +2,10 @@
 
 ## 4.0.1 (unreleased)
 
-
-- Nothing changed yet.
+- keep line breaks: Do not reformat class attribute values.
+  This allows for multi-line or otherwise manually strangely formatted
+  class attributes.
+  [thet]
 
 
 ## 4.0.0 (2026-04-10)

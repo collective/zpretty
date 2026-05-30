@@ -23,6 +23,9 @@ class ZPrettifier:
     _ampersand_marker = str(uuid4())
     _cdata_marker = str(uuid4())
     _cdata_pattern = re.compile(r"<!\[CDATA\[(.*?)\]\]>", re.DOTALL)
+    _class_marker_name = "data-zpretty-class"
+    _class_marker = " data-zpretty-class="
+    _class_pattern = " class="
     _doctype_marker = f"<!DOCTYPE foo-{str(uuid4())}>"
     _doctype_pattern = re.compile(
         r"(<!DOCTYPE[^>[]*(\[[^]]*\])?>)", re.IGNORECASE | re.DOTALL
@@ -50,6 +53,14 @@ class ZPrettifier:
         # in the attributes so that bogus ones can be escaped
         for el in soup.descendants:
             attrs = getattr(el, "attrs", {})
+
+            # Restore class attributes.
+            # Beautiful soup changes the formatting of class attributes into a
+            # single-line attribute.
+            if self._class_marker_name in attrs:
+                attrs["class"] = attrs.get(self._class_marker_name)
+                del attrs[self._class_marker_name]
+
             for key, value in attrs.items():
                 if self._ampersand_marker in value:
                     attrs[key] = value.replace(self._ampersand_marker, "&")
@@ -121,6 +132,11 @@ class ZPrettifier:
             pass
         text = re.sub(self._cdata_pattern, self._cdata_marker, text)
         text = re.sub(self._doctype_pattern, self._doctype_marker, text)
+
+        # Replace class attributes.
+        # Beautiful soup changes the formatting of class attributes into a
+        # single-line attribute, which we want to prevent.
+        text = re.sub(self._class_pattern, self._class_marker, text)
 
         # Get all the entities in the text and replace them with a marker
         # The text might contain undefined entities that BeautifulSoup
