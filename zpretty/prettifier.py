@@ -69,6 +69,17 @@ class ZPrettifier:
 
         self.root = self.pretty_element(self.soup, -1)
 
+    def text2soup(self, text):
+        """Build a BeautifulSoup object preserving raw attribute values.
+
+        In particular, avoid splitting multi-valued attributes like ``class``
+        into lists so original whitespace/newlines can be preserved.
+        """
+        kwargs = {"multi_valued_attributes": None}
+        if self.builder is not None:
+            kwargs["builder"] = self.builder
+        return BeautifulSoup(text, self.parser, **kwargs)
+
     def fix_rcdata_markup(self, soup):
         """Parse markup-like text inside RCDATA tags as child nodes.
 
@@ -87,9 +98,8 @@ class ZPrettifier:
             raw_content = "".join(str(node) for node in tag.contents)
 
             null_tag_name = self.pretty_element.null_tag_name
-            fragment_soup = BeautifulSoup(
+            fragment_soup = self.text2soup(
                 f"<{null_tag_name}>{raw_content}</{null_tag_name}>",
-                self.parser,
             )
             fragment_root = getattr(fragment_soup, null_tag_name, None)
             if not fragment_root:
@@ -145,7 +155,7 @@ class ZPrettifier:
 
         If the text is not some xml like think a dummy element will be used to wrap it.
         """
-        original_soup = BeautifulSoup(text, self.parser)
+        original_soup = self.text2soup(text)
         try:
             first_el = next(original_soup.children)
         except StopIteration:
@@ -156,7 +166,7 @@ class ZPrettifier:
         markup = "<{null}>{text}</{null}>".format(
             null=self.pretty_element.null_tag_name, text=text
         )
-        wrapped_soup = BeautifulSoup(markup, self.parser)
+        wrapped_soup = self.text2soup(markup)
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)
 
     def pretty_print(self, el):

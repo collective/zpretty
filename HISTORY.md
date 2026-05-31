@@ -2,8 +2,8 @@
 
 ## 4.0.1 (unreleased)
 
-
-- Nothing changed yet.
+- Do not considere any attribute multiline,
+  so that we can preserve whitespaces if desired. @ale-rt, @thet
 
 
 ## 4.0.0 (2026-04-10)
