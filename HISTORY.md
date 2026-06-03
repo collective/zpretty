@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.1 (unreleased)
+## 4.0.1 (2026-06-03)
 
 - Do not considere any attribute multiline,
   so that we can preserve whitespaces if desired. @ale-rt, @thet
