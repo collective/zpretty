@@ -8,7 +8,7 @@ check-manifest==0.51
 cmarkgfm==2025.10.22
 colorama==0.4.6
 coverage==7.11.1
-cryptography==46.0.3
+cryptography==46.0.7
 distlib==0.4.0
 docutils==0.22.3
 filelock==3.20.0
