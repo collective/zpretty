@@ -49,7 +49,7 @@ soupsieve==2.8
 trove-classifiers==2025.9.11.17
 twine==6.2.0
 typing_extensions==4.15.0
-urllib3==2.5.0
+urllib3==2.7.0
 virtualenv==20.35.4
 wheel==0.45.1
 zest.releaser==9.6.2
