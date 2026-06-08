@@ -16,7 +16,8 @@ version = version("zpretty")
 class CLIRunner:
     """A class to run zpretty from the command line"""
 
-    _default_include = r"\.(html|pt|xml|zcml)$"
+    _xml_extensions = {".xml", ".xsd", ".xsl", ".xslt"}
+    _default_include = r"\.(html|pt|xml|xsd|xsl|xslt|zcml)$"
     _default_exclude = (
         r"/(\.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|venv|"
         r"\.svn|\.ipynb_checkpoints|_build|buck-out|build|dist|__pypackages__)/"
@@ -141,7 +142,7 @@ class CLIRunner:
         if config.xml:
             return XMLPrettifier
         ext = splitext(path)[-1].lower()
-        if ext == ".xml":
+        if ext in self._xml_extensions:
             return XMLPrettifier
         if ext == ".zcml":
             return ZCMLPrettifier
