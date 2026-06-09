@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.2 (unreleased)
+## 4.0.2 (2026-06-09)
 
 
 - Better handling of XSD and XSL files
