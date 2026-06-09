@@ -64,6 +64,9 @@ class TestCli(TestCase):
         clirunner = MockCLIRunner()
         self.assertEqual(clirunner.choose_prettifier("a.zcml"), ZCMLPrettifier)
         self.assertEqual(clirunner.choose_prettifier("a.xml"), XMLPrettifier)
+        self.assertEqual(clirunner.choose_prettifier("a.xsd"), XMLPrettifier)
+        self.assertEqual(clirunner.choose_prettifier("a.xsl"), XMLPrettifier)
+        self.assertEqual(clirunner.choose_prettifier("a.xslt"), XMLPrettifier)
         # The default one is returned if the extension is not recognized
         self.assertEqual(clirunner.choose_prettifier("a.txt"), ZPrettifier)
 
@@ -209,4 +212,18 @@ class TestCli(TestCase):
                     "Invalid regular expression for --extend-exclude: '[a-0]'",
                     "Invalid regular expression for --include: '*'",
                 ],
+            )
+
+        # XML helper extensions should be included by default in recursive scans
+        with TemporaryDirectory() as tempdir:
+            xsd = os.path.join(tempdir, "schema.xsd")
+            xslt = os.path.join(tempdir, "transform.xslt")
+            with open(xsd, "w"):
+                pass
+            with open(xslt, "w"):
+                pass
+            clirunner = MockCLIRunner(tempdir)
+            self.assertListEqual(
+                clirunner.good_paths,
+                sorted([xsd, xslt]),
             )

@@ -34,8 +34,14 @@ class TestZpretty(TestCase):
         element = self.get_element('<one \n foo="bar"\n\n\nbar="foo"\n/>')
         self.assertEqual(element(), '<one bar="foo"\n     foo="bar"\n/>')
 
-    def test_zcml(self):
+    def test_xml(self):
         self.prettify("sample_xml.xml")
+
+    def test_sample_xsd(self):
+        self.prettify("sample_xsd.xsd")
+
+    def test_sample_xsl(self):
+        self.prettify("sample_xsl.xsl")
 
     def test_sample_dtml(self):
         self.prettify("sample_dtml.dtml")

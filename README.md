@@ -96,7 +96,7 @@ options:
                         name. Use forward slashes for directories on all
                         platforms (Windows, too). Exclusions are calculated
                         first, inclusions later. [default:
-                        \.(html|pt|xml|zcml)$]
+                        \.(html|pt|xml|xsd|xsl|xslt|zcml)$]
   --exclude EXCLUDE     A regular expression that matches files and directories
                         that should be excluded on recursive searches. An empty
                         value means no paths are excluded. Use forward slashes

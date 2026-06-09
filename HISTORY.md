@@ -3,7 +3,9 @@
 ## 4.0.2 (unreleased)
 
 
-- Nothing changed yet.
+- Better handling of XSD and XSL files
+  (Fixes #227) 
+  @ale-rt
 
 
 ## 4.0.1 (2026-06-03)
