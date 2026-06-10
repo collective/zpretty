@@ -97,6 +97,12 @@ class TestZpretty(TestCase):
         self.assertIn("Whisk eggs<br />\n", observed)
         self.assertNotIn("<br />\n\n", observed)
 
+    def test_pre_stays_verbatim(self):
+        """A <pre> keeps its literal whitespace; block re-indent is XML only."""
+        original = "<pre>line one\n    line two <b>bold</b>\n  line three</pre>"
+        observed = ZPrettifier(text=original)()
+        self.assertIn("line one\n    line two <b>bold</b>\n  line three", observed)
+
     def test_nesting_with_tail(self):
         # no attributes
         self.assertPrettified(

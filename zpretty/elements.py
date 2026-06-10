@@ -77,6 +77,9 @@ class PrettyElement:
     )
     escaper = EntitySubstitution()
     preserve_text_whitespace_elements = ["pre"]
+    # Whether multi-line preserved mixed content is re-indented as a block.
+    # Off here: for HTML the only preserved element is <pre>, kept verbatim.
+    multiline_mixed_content_as_block = False
     skip_text_escaping_elements = [
         # Do not fiddle with the content of script tags,
         # as it may contain html entities that we do not want to be escaped
@@ -261,6 +264,7 @@ class PrettyElement:
         with whitespace), so a preceding <br/> needs no extra newline."""
         return not piece.strip() or startswith_whitespace(piece)
 
+    @memo
     def _preserve_content(self):
         """Render mixed content while keeping its inline flow, e.g.
         <p>see <link/> here</p>. A <br/> emits a single line break so the
@@ -280,6 +284,29 @@ class PrettyElement:
             previous_br = child.is_br()
         return "".join(preserved)
 
+    @property
+    @memo
+    def is_multiline_mixed_content(self):
+        """Whether preserved mixed content spans more than one line and so
+        should render as a block (tags on their own lines, content
+        re-indented) instead of inline. XML only; for HTML the sole preserved
+        element is <pre>, which stays verbatim."""
+        if not self.multiline_mixed_content_as_block:
+            return False
+        if not self.preserve_text_whitespace:
+            return False
+        children = self.getchildren()
+        # A single text child (e.g. <pre>...</pre>) is kept verbatim.
+        if len(children) == 1 and children[0].is_text():
+            return False
+        # Only re-indent when every element child is inline (renders on a
+        # single line). A nested multi-line child (a block element, aligned
+        # multiline attributes, ...) would lose its own indentation if the
+        # block re-indent flattened it, so such content stays verbatim.
+        if any(child.is_tag() and "\n" in child() for child in children):
+            return False
+        return "\n" in self._preserve_content()
+
     @memo
     def render_content(self):
         """Render a properly indented the contents of this element"""
@@ -288,7 +315,19 @@ class PrettyElement:
         previous_child = None
 
         if self.preserve_text_whitespace:
-            return self._preserve_content()
+            content = self._preserve_content()
+            if not self.is_multiline_mixed_content:
+                return content
+            # Multi-line mixed content reads better as a block: re-indent each
+            # line to this element's child level and drop the source's original
+            # (often irregular) indentation. The inline flow within a line is
+            # already joined by _preserve_content().
+            child_prefix = self.indent * (self.level + 1)
+            lines = []
+            for line in content.split("\n"):
+                stripped = line.strip()
+                lines.append(f"{child_prefix}{stripped}" if stripped else "")
+            return "\n".join(lines)
 
         for idx, child in enumerate(self.getchildren()):
             part = child()
@@ -418,7 +457,15 @@ class PrettyElement:
 
         text = self.text and self.render_text() or self.render_content()
 
-        if not self.preserve_text_whitespace and endswith_whitespace(text):
+        if self.is_multiline_mixed_content:
+            # Block layout: content sits on its own indented lines, with the
+            # open and close tags each on their own line.
+            if not text.startswith("\n"):
+                text = f"\n{text}"
+            if not text.endswith("\n"):
+                text = f"{text}\n"
+            close_tag_template = "{prefix}</{tag}>"
+        elif not self.preserve_text_whitespace and endswith_whitespace(text):
             if text[-1] != "\n":
                 text = f"{rstrip_last_line(text)}\n"
             close_tag_template = "{prefix}</{tag}>"

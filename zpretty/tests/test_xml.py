@@ -165,13 +165,16 @@ class TestZpretty(TestCase):
         observed = XMLPrettifier(
             text="<recipe><p>Whisk eggs<br/>then fold in flour</p></recipe>\n"
         )()
-        self.assertIn("Whisk eggs<br />\nthen fold in flour", observed)
+        self.assertIn("Whisk eggs<br />\n", observed)
         self.assertEqual(observed, XMLPrettifier(text=observed)())
 
     def test_br_does_not_double_newline(self):
         """A <br/> already followed by a line break gets no extra newline."""
         observed = XMLPrettifier(
-            text="<recipe><step>Sift the flour<br/>\n    then add sugar</step></recipe>\n"
+            text=(
+                "<recipe><step>Sift the flour<br/>\n"
+                "    then add sugar</step></recipe>\n"
+            )
         )()
         self.assertNotIn("<br />\n\n", observed)
         self.assertEqual(observed, XMLPrettifier(text=observed)())
@@ -181,3 +184,71 @@ class TestZpretty(TestCase):
         observed = XMLPrettifier(text="<recipe><p>Bake<br/></p></recipe>\n")()
         self.assertIn("<p>Bake<br /></p>", observed)
         self.assertNotIn("<br />\n", observed)
+
+    def test_multiline_recipe_step_renders_as_block(self):
+        """Multi-line mixed content renders as a block: open/close tags on
+        their own lines, content re-indented to the child level, inline flow
+        within a line preserved.
+
+        On the base branch the source indentation is kept verbatim.
+        """
+        observed = XMLPrettifier(
+            text=(
+                "<ol>\n"
+                "  <li><b>Cream butter and sugar</b><br />Beat until the mixture is\n"
+                "              pale and fluffy, about three minutes.</li>\n"
+                "</ol>\n"
+            )
+        )()
+        self.assertIn(
+            "\n".join(
+                (
+                    "  <li>",
+                    "    <b>Cream butter and sugar</b><br />",
+                    "    Beat until the mixture is",
+                    "    pale and fluffy, about three minutes.",
+                    "  </li>",
+                )
+            ),
+            observed,
+        )
+        self.assertEqual(observed, XMLPrettifier(text=observed)())
+
+    def test_singleline_mixed_content_stays_inline(self):
+        """Single-line mixed content (no <br/>) is not turned into a block."""
+        observed = XMLPrettifier(
+            text=(
+                "<recipe>\n"
+                "  <p>fold in the <ingredient>flour</ingredient> gently</p>\n"
+                "</recipe>\n"
+            )
+        )()
+        self.assertIn(
+            "<p>fold in the <ingredient>flour</ingredient> gently</p>", observed
+        )
+
+    def test_multiline_block_normalizes_source_indentation(self):
+        """Grotesque source indentation is normalized to the child indent."""
+        observed = XMLPrettifier(
+            text=(
+                "<note>\n"
+                "  <p>First line.<br />\n"
+                "                       wildly indented second line.</p>\n"
+                "</note>\n"
+            )
+        )()
+        self.assertIn("\n    wildly indented second line.\n", observed)
+        self.assertNotIn("                       wildly", observed)
+        self.assertEqual(observed, XMLPrettifier(text=observed)())
+
+    def test_br_in_single_line_becomes_block(self):
+        """A <br/> turns single-line mixed content into a block (A + B)."""
+        observed = XMLPrettifier(
+            text="<recipe>\n  <step><b>Bake</b><br />until golden</step>\n</recipe>\n"
+        )()
+        self.assertIn(
+            "\n".join(
+                ("  <step>", "    <b>Bake</b><br />", "    until golden", "  </step>")
+            ),
+            observed,
+        )

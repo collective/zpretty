@@ -30,6 +30,7 @@ class XMLAttributes(PrettyAttributes):
 class XMLElement(PrettyElement):
     attribute_klass = XMLAttributes
     preserve_text_whitespace_elements = ANY_IN
+    multiline_mixed_content_as_block = True
 
     def is_self_closing(self):
         """Is this element self closing?"""
