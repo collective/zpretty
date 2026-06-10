@@ -68,6 +68,11 @@ class XMLPrettifier(ZPrettifier):
 
     parser = "xml"
     pretty_element = XMLElement
+    # The xml builder preserves whitespace (preserve_whitespace_tags=AnyIn()), so
+    # the blank-line marker is unnecessary here; worse, a blank line in the prolog
+    # would become character data outside the root element and make the
+    # recover-mode parser silently drop the root. Keep real blank lines instead.
+    _use_newlines_marker = False
 
     def get_soup(self, text):
         """Tries to get the soup from the given test

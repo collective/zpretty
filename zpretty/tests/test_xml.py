@@ -48,3 +48,20 @@ class TestZpretty(TestCase):
 
     def test_sample_txt(self):
         self.prettify("sample.txt")
+
+    def test_prolog_blank_line_keeps_root(self):
+        """A blank line in the prolog must not make the parser drop the root.
+
+        Regression test: ``_prepare_text`` used to replace the blank line with a
+        marker that became illegal character data in the prolog, so the
+        recover-mode xml parser silently dropped the root element (data loss).
+        """
+        text = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            "<!-- a prolog comment -->\n"
+            "\n"
+            "<root><child>content</child></root>\n"
+        )
+        output = XMLPrettifier(text=text)()
+        self.assertIn("<root>", output)
+        self.assertIn("<child>content</child>", output)

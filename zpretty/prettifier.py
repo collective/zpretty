@@ -20,6 +20,10 @@ class ZPrettifier:
     builder = None
     _end_with_newline = True
     _newlines_marker = f"new-line-{str(uuid4())}"
+    # Replace blank lines with _newlines_marker before parsing so they survive the
+    # round-trip. Disabled for the xml parser, where it would corrupt the prolog
+    # (see _prepare_text and XMLPrettifier).
+    _use_newlines_marker = True
     _ampersand_marker = str(uuid4())
     _cdata_marker = str(uuid4())
     _cdata_pattern = re.compile(r"<!\[CDATA\[(.*?)\]\]>", re.DOTALL)
@@ -145,10 +149,12 @@ class ZPrettifier:
             marker = str(uuid4())
             self._entity_mapping[entity] = marker
             text = text.replace(entity, marker)
-        return "\n".join(
-            line if line.strip() else self._newlines_marker
-            for line in text.splitlines()
-        ).replace("&", self._ampersand_marker)
+        if self._use_newlines_marker:
+            text = "\n".join(
+                line if line.strip() else self._newlines_marker
+                for line in text.splitlines()
+            )
+        return text.replace("&", self._ampersand_marker)
 
     def get_soup(self, text):
         """Tries to get the soup from the given test

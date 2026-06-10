@@ -569,6 +569,10 @@ class ZCMLPrettifier(XMLPrettifier):
     """Prettify according to the ZCML style guide"""
 
     pretty_element = ZCMLElement
+    # ZCMLPrettifier wraps the input in a synthetic root (see get_soup), so it has
+    # no prolog and the blank-line marker is safe -- and needed to preserve blank
+    # lines between directives. Re-enable what XMLPrettifier turned off.
+    _use_newlines_marker = True
 
     def get_soup(self, text):
         """Tries to get the soup from the given text"""
