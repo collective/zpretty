@@ -3,7 +3,8 @@
 ## 4.0.3 (unreleased)
 
 
-- Nothing changed yet.
+- Change the builder configuration to preserve whitespace in XML documents.
+  @ale-rt
 
 
 ## 4.0.2 (2026-06-09)

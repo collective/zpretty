@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 from logging import getLogger
 from zpretty.xml import XMLAttributes
 from zpretty.xml import XMLElement
@@ -575,5 +574,5 @@ class ZCMLPrettifier(XMLPrettifier):
         markup = "<{null}>{text}</{null}>".format(
             null=self.pretty_element.null_tag_name, text=text
         )
-        wrapped_soup = BeautifulSoup(markup, self.parser)
+        wrapped_soup = self.text2soup(markup)
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)
