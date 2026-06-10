@@ -162,6 +162,10 @@ class PrettyElement:
         # All the other elements will have an open an close tag
         return False
 
+    def is_br(self):
+        """Whether this element is a <br> line break"""
+        return self.is_tag() and self.tag == "br"
+
     def is_null(self):
         """We define a special tag null_tag_name to wrap text"""
         return self.context.name == self.null_tag_name
@@ -252,22 +256,39 @@ class PrettyElement:
             return False
         return bool(child.text.strip())
 
+    def _starts_with_break(self, piece):
+        """Whether piece already begins on a new line (it is blank or starts
+        with whitespace), so a preceding <br/> needs no extra newline."""
+        return not piece.strip() or startswith_whitespace(piece)
+
+    def _preserve_content(self):
+        """Render mixed content while keeping its inline flow, e.g.
+        <p>see <link/> here</p>. A <br/> emits a single line break so the
+        break stays visible in the output."""
+        preserved = []
+        previous_br = False
+        for child in self.getchildren():
+            if child.is_text():
+                piece = child.text
+            else:
+                # Render inline elements without their leading indent so
+                # they stay within the surrounding text flow.
+                piece = child().lstrip()
+            if previous_br and not self._starts_with_break(piece):
+                preserved.append("\n")
+            preserved.append(piece)
+            previous_br = child.is_br()
+        return "".join(preserved)
+
     @memo
     def render_content(self):
         """Render a properly indented the contents of this element"""
         parts = []
         previous_part = ""
+        previous_child = None
 
         if self.preserve_text_whitespace:
-            preserved = []
-            for child in self.getchildren():
-                if child.is_text():
-                    preserved.append(child.text)
-                else:
-                    # Render inline elements without their leading indent so
-                    # they stay within the surrounding text flow.
-                    preserved.append(child().lstrip())
-            return "".join(preserved)
+            return self._preserve_content()
 
         for idx, child in enumerate(self.getchildren()):
             part = child()
@@ -277,8 +298,12 @@ class PrettyElement:
                 part = lstrip_first_line(part)
             else:
                 parts[-1] = rstrip_last_line(parts[-1])
+            if previous_child is not None and previous_child.is_br():
+                if not part.startswith("\n"):
+                    part = "\n" + self.indent * (self.level + 1) + part
             parts.append(part)
             previous_part = child()
+            previous_child = child
         content = "".join(parts)
 
         if endswith_whitespace(content):

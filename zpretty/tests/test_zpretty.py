@@ -91,6 +91,12 @@ class TestZpretty(TestCase):
         )
         self.assertPrettified("<div><p>a</p></div>", "<div><p>a</p></div>\n")
 
+    def test_br_breaks_line(self):
+        """A <br/> in HTML prose breaks the line after it."""
+        observed = ZPrettifier(text="<p>Whisk eggs<br/>then fold in flour</p>")()
+        self.assertIn("Whisk eggs<br />\n", observed)
+        self.assertNotIn("<br />\n\n", observed)
+
     def test_nesting_with_tail(self):
         # no attributes
         self.assertPrettified(

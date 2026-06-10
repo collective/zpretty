@@ -156,3 +156,28 @@ class TestZpretty(TestCase):
         observed = XMLPrettifier(text="<root>\n  <a/>\n\n  <b/>\n</root>\n")()
         self.assertIn("\n  <a />\n", observed)
         self.assertIn("  <b />", observed)
+
+    def test_br_forces_newline_after(self):
+        """A <br/> in mixed content breaks the line after it.
+
+        On the base branch <br/> stays glued to the following text.
+        """
+        observed = XMLPrettifier(
+            text="<recipe><p>Whisk eggs<br/>then fold in flour</p></recipe>\n"
+        )()
+        self.assertIn("Whisk eggs<br />\nthen fold in flour", observed)
+        self.assertEqual(observed, XMLPrettifier(text=observed)())
+
+    def test_br_does_not_double_newline(self):
+        """A <br/> already followed by a line break gets no extra newline."""
+        observed = XMLPrettifier(
+            text="<recipe><step>Sift the flour<br/>\n    then add sugar</step></recipe>\n"
+        )()
+        self.assertNotIn("<br />\n\n", observed)
+        self.assertEqual(observed, XMLPrettifier(text=observed)())
+
+    def test_br_last_child_no_trailing_blank_line(self):
+        """A trailing <br/> does not introduce a blank line before the close."""
+        observed = XMLPrettifier(text="<recipe><p>Bake<br/></p></recipe>\n")()
+        self.assertIn("<p>Bake<br /></p>", observed)
+        self.assertNotIn("<br />\n", observed)
