@@ -1,0 +1,15 @@
+# Reusable zpretty setup for GitLab CI. Usage:
+#   include:
+#     - remote: "https://raw.githubusercontent.com/collective/zpretty/<ref>/gitlab/zpretty.gitlab-ci.yml"
+#   zpretty:
+#     extends: .zpretty
+#     variables: { ZPRETTY_SPEC: "zpretty==4.0.2" }   # optional
+#     script: [zpretty --check path/to/file.xml]
+.zpretty:
+  image: "python:$ZPRETTY_PYTHON_VERSION"
+  variables:
+    ZPRETTY_PYTHON_VERSION: "3"
+    ZPRETTY_SPEC: zpretty
+  before_script:
+    - pip install "$ZPRETTY_SPEC"
+    - zpretty --version
