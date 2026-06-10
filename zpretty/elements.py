@@ -232,12 +232,30 @@ class PrettyElement:
     @property
     @memo
     def preserve_text_whitespace(self):
+        if self.tag not in self.preserve_text_whitespace_elements:
+            return False
         children = self.getchildren()
-        return (
-            self.tag in self.preserve_text_whitespace_elements
-            and len(children) == 1
-            and children[0].is_text()
-        )
+        # A single text child is preserved verbatim, e.g. <pre>...</pre>.
+        if len(children) == 1 and children[0].is_text():
+            return True
+        # Mixed content: real prose text interspersed with inline elements,
+        # e.g. <p>see <link/> here</p>. Preserve the original flow instead of
+        # reflowing each child onto its own line. Content that is only child
+        # elements separated by whitespace (or blank-line markers) still
+        # reflows as block.
+        if not any(child.is_tag() for child in children):
+            return False
+        return any(self._carries_prose_text(child) for child in children)
+
+    def _carries_prose_text(self, child):
+        """Whether child is a text node with real prose, ignoring whitespace
+        and the internal blank-line marker (which stands in for an empty line,
+        not content)."""
+        if not child.is_text():
+            return False
+        from zpretty.prettifier import ZPrettifier
+
+        return bool(child.text.replace(ZPrettifier._newlines_marker, "").strip())
 
     @memo
     def render_content(self):
@@ -246,8 +264,15 @@ class PrettyElement:
         previous_part = ""
 
         if self.preserve_text_whitespace:
+            preserved = []
             for child in self.getchildren():
-                return child.text
+                if child.is_text():
+                    preserved.append(child.text)
+                else:
+                    # Render inline elements without their leading indent so
+                    # they stay within the surrounding text flow.
+                    preserved.append(child().lstrip())
+            return "".join(preserved)
 
         for idx, child in enumerate(self.getchildren()):
             part = child()

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<recipe>
+  <section>
+    <title>Ingredients at a glance</title>
+    <p>This <cake_name /> uses <ingredient_count /> ingredients and serves <servings /> people.</p>
+    <p>Before you begin, line a tin and <todo desc="note any prep step" />.</p>
+    <p>See the <a href="#method">full method</a> for the baking times.</p>
+  </section>
+</recipe>
