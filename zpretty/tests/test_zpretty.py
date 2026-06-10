@@ -221,3 +221,23 @@ class TestZpretty(TestCase):
 
     def test_text_file(self):
         self.prettify("sample.txt")
+
+    def test_html_two_blank_lines_collapse_to_one(self):
+        """Two blank lines between HTML recipe paragraphs collapse to one."""
+        self.assertPrettified(
+            "<div><p>Preheat the oven</p>\n\n\n<p>Grease the tin</p></div>",
+            "<div><p>Preheat the oven</p>\n\n  <p>Grease the tin</p></div>\n",
+        )
+
+    def test_html_single_blank_line_is_kept(self):
+        """A single blank line between paragraphs is preserved."""
+        self.assertPrettified(
+            "<div><p>Preheat the oven</p>\n\n<p>Grease the tin</p></div>",
+            "<div><p>Preheat the oven</p>\n\n  <p>Grease the tin</p></div>\n",
+        )
+
+    def test_pre_keeps_internal_blank_lines(self):
+        """A <pre> recipe card keeps its internal blank lines verbatim."""
+        original = "<pre>Step 1: cream butter\n\n\nStep 2: add eggs</pre>"
+        observed = ZPrettifier(text=original)()
+        self.assertIn("Step 1: cream butter\n\n\nStep 2: add eggs", observed)

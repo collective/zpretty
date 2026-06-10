@@ -48,3 +48,48 @@ class TestZpretty(TestCase):
 
     def test_sample_txt(self):
         self.prettify("sample.txt")
+
+    def test_two_blank_lines_between_blocks_collapse_to_one(self):
+        """Two blank lines between sibling recipe sections collapse to one."""
+        observed = XMLPrettifier(
+            text=(
+                "<recipe>\n"
+                "  <section>Sponge</section>\n"
+                "\n"
+                "\n"
+                "  <section>Buttercream</section>\n"
+                "</recipe>\n"
+            )
+        )()
+        self.assertIn(
+            "<section>Sponge</section>\n\n  <section>Buttercream</section>",
+            observed,
+        )
+        self.assertNotIn("</section>\n\n\n", observed)
+        self.assertEqual(observed, XMLPrettifier(text=observed)())
+
+    def test_single_blank_line_between_blocks_is_kept(self):
+        """A single blank line between sections is preserved."""
+        observed = XMLPrettifier(
+            text=(
+                "<recipe>\n"
+                "  <section>Sponge</section>\n"
+                "\n"
+                "  <section>Glaze</section>\n"
+                "</recipe>\n"
+            )
+        )()
+        self.assertIn(
+            "<section>Sponge</section>\n\n  <section>Glaze</section>", observed
+        )
+
+    def test_cdata_blank_lines_stay_verbatim(self):
+        """Blank lines inside CDATA (the secret recipe) are significant."""
+        observed = XMLPrettifier(
+            text=(
+                "<recipe><method>"
+                "<![CDATA[Cream butter\n\n\nfold in flour]]>"
+                "</method></recipe>\n"
+            )
+        )()
+        self.assertIn("<![CDATA[Cream butter\n\n\nfold in flour]]>", observed)

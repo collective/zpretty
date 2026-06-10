@@ -299,7 +299,12 @@ class PrettyElement:
 
         If the text starts with spaces, strip them and add a newline.
         If the text end with spaces, strip them.
+
+        Consecutive blank lines are collapsed to a single blank line.
         """
+        from zpretty.prettifier import ZPrettifier
+
+        marker = ZPrettifier._newlines_marker
         text = self.text
         lines = text.split("\n")
         if not lines:
@@ -323,11 +328,19 @@ class PrettyElement:
         else:
             rendered_lines = [f"{lines[0]}\n"]
 
+        previous_blank = False
         for line in lines[1:-1]:
-            if not line.strip():
-                rendered_lines.append("\n")
+            if line == "" or line == marker:
+                # Collapse a run of blank/marker lines to one blank line.
+                if not previous_blank:
+                    rendered_lines.append("\n")
+                previous_blank = True
             else:
-                rendered_lines.append(f"{line.rstrip()}\n")
+                if not line.strip():
+                    rendered_lines.append("\n")
+                else:
+                    rendered_lines.append(f"{line.rstrip()}\n")
+                previous_blank = False
 
         if lines[-1].strip():
             if lines[-1].rstrip() == lines[-1]:

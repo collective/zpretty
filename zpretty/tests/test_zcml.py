@@ -232,3 +232,22 @@ class TestZpretty(TestCase):
 
     def test_zcml(self):
         self.prettify("sample.zcml")
+
+    def test_two_blank_lines_between_directives_collapse_to_one(self):
+        """Two blank lines between ZCML directives collapse to one."""
+        observed = ZCMLPrettifier(
+            text=(
+                "<configure>\n"
+                '  <include package=".oven" />\n'
+                "\n"
+                "\n"
+                '  <include package=".mixer" />\n'
+                "</configure>\n"
+            )
+        )()
+        self.assertIn(
+            '<include package=".oven" />\n\n  <include package=".mixer" />',
+            observed,
+        )
+        self.assertNotIn("/>\n\n\n", observed)
+        self.assertEqual(observed, ZCMLPrettifier(text=observed)())
