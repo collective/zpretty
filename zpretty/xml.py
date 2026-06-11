@@ -1,17 +1,12 @@
-from bs4 import BeautifulSoup
 from bs4.builder import LXMLTreeBuilderForXML
 from bs4.element import NavigableString
 from logging import getLogger
 from zpretty.attributes import PrettyAttributes
+from zpretty.constants import ANY_IN
 from zpretty.elements import PrettyElement
 from zpretty.prettifier import ZPrettifier
 
 logger = getLogger(__name__)
-
-
-class AnyIn:
-    def __contains__(self, item):
-        return True
 
 
 class XMLAttributes(PrettyAttributes):
@@ -33,7 +28,7 @@ class XMLAttributes(PrettyAttributes):
 
 class XMLElement(PrettyElement):
     attribute_klass = XMLAttributes
-    preserve_text_whitespace_elements = AnyIn()
+    preserve_text_whitespace_elements = ANY_IN
 
     def is_self_closing(self):
         """Is this element self closing?"""
@@ -66,24 +61,20 @@ class XMLElement(PrettyElement):
 class XMLPrettifier(ZPrettifier):
     """Prettify according to the ZCML style guide"""
 
-    parser = "xml"
     pretty_element = XMLElement
+    builder_class = LXMLTreeBuilderForXML
 
     def get_soup(self, text):
         """Tries to get the soup from the given text
 
         If the text is not some xml like thing a dummy element will be used to wrap it.
         """
-        original_soup = BeautifulSoup(
-            text,
-            self.parser,
-            builder=LXMLTreeBuilderForXML(preserve_whitespace_tags=AnyIn()),
-        )
+        original_soup = self.text2soup(text)
         if original_soup.is_xml:
             return original_soup
 
         markup = "<{null}>{text}</{null}>".format(
             null=self.pretty_element.null_tag_name, text=text
         )
-        wrapped_soup = BeautifulSoup(markup, self.parser)
+        wrapped_soup = self.text2soup(markup)
         return getattr(wrapped_soup, self.pretty_element.null_tag_name)

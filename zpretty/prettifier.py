@@ -1,9 +1,11 @@
 from bs4 import BeautifulSoup
+from bs4.builder import HTMLParserTreeBuilder
 from bs4.element import Doctype
 from bs4.element import ProcessingInstruction
 from bs4.element import Tag
 from logging import getLogger
 from uuid import uuid4
+from zpretty.constants import ANY_IN
 from zpretty.elements import PrettyElement
 
 import fileinput
@@ -16,10 +18,12 @@ class ZPrettifier:
     """Wraps and renders some text that may contain xml like stuff"""
 
     pretty_element = PrettyElement
-    parser = "html.parser"
-    builder = None
+    builder_class = HTMLParserTreeBuilder
+    builder_kwargs = {
+        "preserve_whitespace_tags": ANY_IN,
+        "multi_valued_attributes": None,
+    }
     _end_with_newline = True
-    _newlines_marker = f"new-line-{str(uuid4())}"
     _ampersand_marker = str(uuid4())
     _cdata_marker = str(uuid4())
     _cdata_pattern = re.compile(r"<!\[CDATA\[(.*?)\]\]>", re.DOTALL)
@@ -54,20 +58,18 @@ class ZPrettifier:
                 if self._ampersand_marker in value:
                     attrs[key] = value.replace(self._ampersand_marker, "&")
 
-        if self.parser == "html.parser":
+        if self._is_html_builder:
             # Page templates are parsed with the html.parser,
             # but can contain invalid markup inside RCDATA tags,
             # see https://github.com/collective/zpretty/issues/198
             self.fix_rcdata_markup(soup)
 
         self.soup = soup
-
-        # Cleanup all spurious self._newlines_marker attributes, see #35
-        key = self._newlines_marker.partition("=")[0]
-        for el in self.soup.find_all(attrs={key: ""}):
-            el.attrs.pop(key, None)
-
         self.root = self.pretty_element(self.soup, -1)
+
+    @property
+    def _is_html_builder(self):
+        return issubclass(self.builder_class, HTMLParserTreeBuilder)
 
     def text2soup(self, text):
         """Build a BeautifulSoup object preserving raw attribute values.
@@ -75,10 +77,7 @@ class ZPrettifier:
         In particular, avoid splitting multi-valued attributes like ``class``
         into lists so original whitespace/newlines can be preserved.
         """
-        kwargs = {"multi_valued_attributes": None}
-        if self.builder is not None:
-            kwargs["builder"] = self.builder
-        return BeautifulSoup(text, self.parser, **kwargs)
+        return BeautifulSoup(text, builder=self.builder_class(**self.builder_kwargs))
 
     def fix_rcdata_markup(self, soup):
         """Parse markup-like text inside RCDATA tags as child nodes.
@@ -145,10 +144,7 @@ class ZPrettifier:
             marker = str(uuid4())
             self._entity_mapping[entity] = marker
             text = text.replace(entity, marker)
-        return "\n".join(
-            line if line.strip() else self._newlines_marker
-            for line in text.splitlines()
-        ).replace("&", self._ampersand_marker)
+        return text.replace("&", self._ampersand_marker)
 
     def get_soup(self, text):
         """Tries to get the soup from the given test
@@ -171,9 +167,7 @@ class ZPrettifier:
 
     def pretty_print(self, el):
         """Pretty print an element indenting it based on level"""
-        prettified = (
-            el().replace(self._newlines_marker, "").replace(self._ampersand_marker, "&")
-        )
+        prettified = el().replace(self._ampersand_marker, "&")
         # Restore CDATAs
         for cdata in self._cdatas:
             prettified = prettified.replace(
