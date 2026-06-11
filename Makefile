@@ -28,7 +28,7 @@ pre-commit: .venv/bin/pre-commit
 	./.venv/bin/pre-commit install
 	./.venv/bin/pre-commit run --all
 
-.PHONY: pytests
+.PHONY: pytest
 pytest: .venv/bin/pytest
 	./.venv/bin/pytest
 
