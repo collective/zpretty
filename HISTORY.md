@@ -10,7 +10,7 @@
 
 
 - Better handling of XSD and XSL files
-  (Fixes #227) 
+  (Fixes #227)
   @ale-rt
 
 

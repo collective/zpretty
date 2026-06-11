@@ -70,9 +70,9 @@ class XMLPrettifier(ZPrettifier):
     pretty_element = XMLElement
 
     def get_soup(self, text):
-        """Tries to get the soup from the given test
+        """Tries to get the soup from the given text
 
-        If the text is not some xml like think a dummy element will be used to wrap it.
+        If the text is not some xml like thing a dummy element will be used to wrap it.
         """
         original_soup = BeautifulSoup(
             text,
