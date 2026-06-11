@@ -1,4 +1,5 @@
 from bs4.builder import LXMLTreeBuilderForXML
+from bs4.element import Comment
 from bs4.element import NavigableString
 from logging import getLogger
 from zpretty.attributes import PrettyAttributes
@@ -64,6 +65,21 @@ class XMLPrettifier(ZPrettifier):
     pretty_element = XMLElement
     builder_class = LXMLTreeBuilderForXML
 
+    def restore_comment_newlines(self, soup):
+        """Reinsert top-level newlines between comments and following tags.
+
+        lxml's XML parser can drop pure-whitespace separators in this position,
+        which merges the comment and the following tag when rendering.
+        """
+        for child in list(soup.children):
+            if not isinstance(child, Comment):
+                continue
+
+            next_sibling = child.next_sibling
+            if next_sibling is None:
+                continue
+            child.insert_after(NavigableString("\n"))
+
     def get_soup(self, text):
         """Tries to get the soup from the given text
 
@@ -71,6 +87,7 @@ class XMLPrettifier(ZPrettifier):
         """
         original_soup = self.text2soup(text)
         if original_soup.is_xml:
+            self.restore_comment_newlines(original_soup)
             return original_soup
 
         markup = "<{null}>{text}</{null}>".format(

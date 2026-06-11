@@ -5,6 +5,8 @@
 
 - Change the builder configuration to preserve whitespace in XML documents.
   @ale-rt
+- Fix possible issue with whitespaces lost around comments in XML documents.
+  @ale-rt
 
 
 ## 4.0.2 (2026-06-09)
