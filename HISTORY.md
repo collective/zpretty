@@ -7,6 +7,14 @@
   @ale-rt
 - Fix possible issue with whitespaces lost around comments in XML documents.
   @ale-rt
+- Refuse to emit XML that the recover-mode parser would silently truncate,
+  so content after the root element is no longer quietly dropped.
+  (#230)
+  @gronke
+- Write files atomically in ``--inplace`` mode so a failed run cannot leave a
+  half-written file behind.
+  (#230)
+  @gronke
 
 
 ## 4.0.2 (2026-06-09)
