@@ -136,6 +136,43 @@ To do so, add the following to your `.pre-commit-config.yaml`:
     - id: zpretty
 ```
 
+# Continuous integration
+
+## GitHub Actions
+
+This repository ships a composite action that installs `zpretty` so a
+workflow can run it:
+
+```yaml
+- uses: actions/checkout@v6
+- uses: collective/zpretty/.github/actions/zpretty@master
+- run: zpretty --check path/to/file.xml
+```
+
+The action takes two optional inputs: `spec`, a pip requirement specifier
+(a release such as `zpretty==4.0.2`, a VCS URL, or `.` to install the
+checked-out source; defaults to `zpretty`), and `python-version`
+(defaults to `3.x`).
+
+## GitLab CI/CD
+
+For GitLab there is a reusable CI/CD configuration. Include it and extend
+the `.zpretty` job it defines:
+
+```yaml
+include:
+  - remote: "https://raw.githubusercontent.com/collective/zpretty/master/gitlab/zpretty.gitlab-ci.yml"
+
+zpretty:
+  extends: .zpretty
+  script:
+    - zpretty --check path/to/file.xml
+```
+
+Set the `ZPRETTY_SPEC` variable (default `zpretty`) to change the pip
+specifier and `ZPRETTY_PYTHON_VERSION` (default `3`) to pick the Python
+image tag.
+
 # VSCode extension
 
 There is a VSCode extension that uses `zpretty`:
