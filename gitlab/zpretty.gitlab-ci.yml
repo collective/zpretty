@@ -11,5 +11,5 @@
     ZPRETTY_PYTHON_VERSION: "3"
     ZPRETTY_SPEC: zpretty
   before_script:
-    - pip install "$ZPRETTY_SPEC"
+    - python -m pip install "$ZPRETTY_SPEC"
     - zpretty --version
