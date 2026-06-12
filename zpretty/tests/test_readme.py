@@ -42,9 +42,7 @@ class TestReadme(TestCase):
         """Extract the versions pinned in the CI examples"""
         readme_path = files("zpretty").parent / "README.md"
         readme = readme_path.read_text()
-        github = re.search(
-            r"collective/zpretty/\.github/actions/zpretty@(\S+)", readme
-        )
+        github = re.search(r"collective/zpretty/\.github/actions/zpretty@(\S+)", readme)
         gitlab = re.search(
             r"collective/zpretty/([^/\s]+)/gitlab/zpretty\.gitlab-ci\.yml", readme
         )
