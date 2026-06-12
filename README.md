@@ -138,14 +138,20 @@ To do so, add the following to your `.pre-commit-config.yaml`:
 
 # Continuous integration
 
+The examples below pin `4.0.3`, the first release that ships the action
+and the template. Pinning a release keeps the formatting behavior stable
+across repeated CI runs; any other git reference (a newer tag, a commit
+SHA, or `master` to follow the development version) works as well.
+
 ## GitHub Actions
 
 This repository ships a composite action that installs `zpretty` so a
 workflow can run it:
 
 ```yaml
+# Check out the repository whose files zpretty should check
 - uses: actions/checkout@v6
-- uses: collective/zpretty/.github/actions/zpretty@master
+- uses: collective/zpretty/.github/actions/zpretty@4.0.3
 - run: zpretty --check path/to/file.xml
 ```
 
@@ -161,7 +167,7 @@ the `.zpretty` job it defines:
 
 ```yaml
 include:
-  - remote: "https://raw.githubusercontent.com/collective/zpretty/master/gitlab/zpretty.gitlab-ci.yml"
+  - remote: "https://raw.githubusercontent.com/collective/zpretty/4.0.3/gitlab/zpretty.gitlab-ci.yml"
 
 zpretty:
   extends: .zpretty
