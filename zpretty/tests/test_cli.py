@@ -1,5 +1,6 @@
 from importlib.resources import files
 from tempfile import TemporaryDirectory
+from unittest import mock
 from unittest import TestCase
 from zpretty.prettifier import ZPrettifier
 from zpretty.tests.mock import MockCLIRunner
@@ -75,9 +76,6 @@ class TestCli(TestCase):
         self.assertTrue(config.check)
 
     def test_run_check(self):
-        # XXX increase coverage by improving the mock
-        from unittest import mock
-
         clirunner = MockCLIRunner("--check", "zpretty/tests/original/sample_xml.xml")
         with mock.patch("builtins.exit", return_value=None) as mocked:
             clirunner.run()
@@ -88,6 +86,78 @@ class TestCli(TestCase):
         with mock.patch("builtins.exit", return_value=None) as mocked:
             clirunner.run()
             mocked.assert_called_once_with(1)
+
+    def test_atomic_write_replaces_file_content(self):
+        clirunner = MockCLIRunner()
+        with TemporaryDirectory() as tempdir:
+            path = os.path.join(tempdir, "sample.pt")
+            with open(path, "w", encoding="utf8") as f:
+                f.write("before")
+
+            changed = clirunner._atomic_write(path=path, text="after", encoding="utf8")
+            self.assertTrue(changed)
+
+            with open(path, encoding="utf8") as f:
+                self.assertEqual(f.read(), "after")
+
+            leftovers = [
+                name
+                for name in os.listdir(tempdir)
+                if name.startswith(".sample.pt.") and name.endswith(".tmp")
+            ]
+            self.assertListEqual(leftovers, [])
+
+    def test_atomic_write_skips_unchanged_content(self):
+        clirunner = MockCLIRunner()
+        with TemporaryDirectory() as tempdir:
+            path = os.path.join(tempdir, "sample.pt")
+            with open(path, "w", encoding="utf8") as f:
+                f.write("same")
+
+            with mock.patch("pathlib.Path.replace") as mocked_replace:
+                changed = clirunner._atomic_write(
+                    path=path, text="same", encoding="utf8"
+                )
+
+            self.assertFalse(changed)
+            mocked_replace.assert_not_called()
+
+    def test_atomic_write_cleans_up_temp_file_on_replace_error(self):
+        clirunner = MockCLIRunner()
+        with TemporaryDirectory() as tempdir:
+            path = os.path.join(tempdir, "sample.pt")
+            with open(path, "w", encoding="utf8") as f:
+                f.write("before")
+
+            with mock.patch("pathlib.Path.replace", side_effect=OSError("boom")):
+                with self.assertRaises(OSError):
+                    clirunner._atomic_write(path=path, text="after", encoding="utf8")
+
+            with open(path, encoding="utf8") as f:
+                self.assertEqual(f.read(), "before")
+
+            leftovers = [
+                name
+                for name in os.listdir(tempdir)
+                if name.startswith(".sample.pt.") and name.endswith(".tmp")
+            ]
+            self.assertListEqual(leftovers, [])
+
+    def test_atomic_write_resolves_symlink_target(self):
+        clirunner = MockCLIRunner()
+        with TemporaryDirectory() as tempdir:
+            target = os.path.join(tempdir, "target.pt")
+            link = os.path.join(tempdir, "link.pt")
+            with open(target, "w", encoding="utf8") as f:
+                f.write("before")
+            os.symlink(target, link)
+
+            changed = clirunner._atomic_write(path=link, text="after", encoding="utf8")
+
+            self.assertTrue(changed)
+            self.assertTrue(os.path.islink(link))
+            with open(target, encoding="utf8") as f:
+                self.assertEqual(f.read(), "after")
 
     def test_good_paths(self):
         """Test the good_paths property"""

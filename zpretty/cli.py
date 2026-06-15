@@ -4,10 +4,12 @@ from os.path import splitext
 from pathlib import Path
 from sys import stderr
 from sys import stdout
+from tempfile import NamedTemporaryFile
 from zpretty.prettifier import ZPrettifier
 from zpretty.xml import XMLPrettifier
 from zpretty.zcml import ZCMLPrettifier
 
+import os
 import re
 
 version = version("zpretty")
@@ -207,6 +209,45 @@ class CLIRunner:
 
         return sorted(good_paths)
 
+    def _atomic_write(self, path, text, encoding) -> bool:
+        """If needed, write the text atomically by replacing the original
+        with a synced temp file.
+
+        Returns True if the file was changed, False otherwise.
+        """
+        target = Path(path).resolve()
+        current_text = target.read_text(encoding=encoding) if target.exists() else None
+        if current_text == text:
+            # The file is already correct, so we don't need to write it.
+            return False
+
+        # Create a temporary file in the same directory as the target file,
+        # and write the new content to it.
+        with NamedTemporaryFile(
+            mode="w",
+            encoding=encoding,
+            dir=target.parent,
+            prefix=f".{target.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as tmp_file:
+            tmp_path = Path(tmp_file.name)
+            tmp_file.write(text)
+            # Ensure the content is flushed to disk before replacing the original file.
+            tmp_file.flush()
+            # On some platforms (guess which one...),
+            # flush() may not be sufficient to guarantee
+            # that the data is written to disk...
+            os.fsync(tmp_file.fileno())
+
+        try:
+            tmp_path.replace(target)
+        except Exception:
+            tmp_path.unlink(missing_ok=True)
+            raise
+
+        return True
+
     def run(self):
         """Prettify each filename passed in the command line"""
         encoding = self.config.encoding
@@ -220,8 +261,7 @@ class CLIRunner:
                 continue
             prettified = prettifier()
             if self.config.inplace and not path == "-":
-                with open(path, "w") as f:
-                    f.write(prettified)
+                self._atomic_write(path=path, text=prettified, encoding=encoding)
                 continue
             stdout.write(prettified)
 
