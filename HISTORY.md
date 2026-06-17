@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.3 (unreleased)
+## 4.0.3 (2026-06-17)
 
 
 - Change the builder configuration to preserve whitespace in XML documents.
