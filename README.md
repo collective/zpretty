@@ -136,6 +136,49 @@ To do so, add the following to your `.pre-commit-config.yaml`:
     - id: zpretty
 ```
 
+# Continuous integration
+
+The examples below pin `4.0.3`, the first release that ships the action
+and the template. Pinning a release keeps the formatting behavior stable
+across repeated CI runs; any other git reference (a newer tag, a commit
+SHA, or `master` to follow the development version) works as well.
+
+## GitHub Actions
+
+This repository ships a composite action that installs `zpretty` so a
+workflow can run it:
+
+```yaml
+# Check out the repository whose files zpretty should check
+- uses: actions/checkout@v6
+- uses: collective/zpretty/.github/actions/zpretty@4.0.3
+- run: zpretty --check path/to/file.xml
+```
+
+The action takes two optional inputs: `spec`, a pip requirement specifier
+(a release such as `zpretty==4.0.2`, a VCS URL, or `.` to install the
+checked-out source; defaults to `zpretty`), and `python-version`
+(defaults to `3.x`).
+
+## GitLab CI/CD
+
+For GitLab there is a reusable CI/CD configuration. Include it and extend
+the `.zpretty` job it defines:
+
+```yaml
+include:
+  - remote: "https://raw.githubusercontent.com/collective/zpretty/4.0.3/gitlab/zpretty.gitlab-ci.yml"
+
+zpretty:
+  extends: .zpretty
+  script:
+    - zpretty --check path/to/file.xml
+```
+
+Set the `ZPRETTY_SPEC` variable (default `zpretty`) to change the pip
+specifier and `ZPRETTY_PYTHON_VERSION` (default `3`) to pick the Python
+image tag.
+
 # VSCode extension
 
 There is a VSCode extension that uses `zpretty`:
