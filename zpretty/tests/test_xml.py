@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from importlib.resources import files
 from textwrap import dedent
 from unittest import TestCase
+from zpretty.prettifier import ContentLossError
 from zpretty.xml import XMLElement
 from zpretty.xml import XMLPrettifier
 
@@ -103,3 +104,35 @@ class TestZpretty(TestCase):
 
     def test_sample_txt(self):
         self.prettify("sample.txt")
+
+    def test_recoverable_xml_is_repaired_not_refused(self):
+        """A mismatched closing tag is repaired, not rejected.
+
+        lxml recover mode rewrites ``</frosting>`` to match ``<filling>``
+        without losing the text, and that auto-fix must keep working.
+        """
+        text = "<cake><filling>ganache</frosting></cake>"
+        observed = XMLPrettifier(text=text)()
+        self.assertIn("ganache", observed)
+        self.assertIn("<filling>ganache</filling>", observed)
+        self.assertNotIn("</frosting>", observed)
+
+    def test_truncated_xml_is_refused(self):
+        """Content after the root element is silently dropped, so we refuse."""
+        text = dedent("""\
+            <?xml version="1.0" encoding="utf-8"?>
+            <recipe>
+              <cake>Sachertorte</cake>
+            </recipe>
+            <recipe>
+              <cake>Gugelhupf</cake>
+            </recipe>
+        """)
+        with self.assertRaises(ContentLossError):
+            XMLPrettifier(text=text)()
+
+    def test_truncated_file_is_refused(self):
+        """A file that would be truncated raises rather than losing a recipe."""
+        path = self.sample_folder_path / "truncated_recipe.xml"
+        with self.assertRaises(ContentLossError):
+            XMLPrettifier(path)()
