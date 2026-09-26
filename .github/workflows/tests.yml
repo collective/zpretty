@@ -15,12 +15,12 @@ jobs:
       matrix:
         python-version:
           - "3.10"
-          - "3.11"
-          - "3.12"
-          - "3.13"
+          # - "3.12"
           - "3.14"
         os:
           - ubuntu-latest
+          - windows-latest
+          - macos-latest
     runs-on: "${{ matrix.os }}"
     steps:
       - uses: actions/checkout@v4
@@ -50,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
+        if: ${{ runner.os == 'Linux' }}
         uses: AndreMiras/coveralls-python-action@master
         with:
           parallel-finished: true
