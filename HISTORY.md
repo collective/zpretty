@@ -13,6 +13,10 @@
   @ale-rt
 - Fix possible issue with whitespaces lost around comments in XML documents.
   @ale-rt
+- Add a reusable GitHub Action and GitLab CI/CD component to set up
+  `zpretty` in CI pipelines.
+  (#232)
+  @gronke
 
 
 ## 4.0.2 (2026-06-09)
