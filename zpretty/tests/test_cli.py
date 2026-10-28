@@ -1,6 +1,7 @@
 from importlib.resources import files
 from tempfile import TemporaryDirectory
 from unittest import TestCase
+from zpretty.cli import CLIRunner
 from zpretty.prettifier import ZPrettifier
 from zpretty.tests.mock import MockCLIRunner
 from zpretty.xml import XMLPrettifier
@@ -227,3 +228,50 @@ class TestCli(TestCase):
                 clirunner.good_paths,
                 sorted([xsd, xslt]),
             )
+
+    def test_truncated_file_is_refused_and_not_overwritten(self):
+        """`zpretty -i` on truncatable XML errors out and leaves the file intact."""
+        from unittest import mock
+
+        original = (
+            '<?xml version="1.0" encoding="utf-8"?>\n'
+            "<recipe>\n  <cake>Sachertorte</cake>\n</recipe>\n"
+            "<recipe>\n  <cake>Gugelhupf</cake>\n</recipe>\n"
+        )
+        with TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "recipes.xml")
+            with open(path, "w") as f:
+                f.write(original)
+            clirunner = MockCLIRunner("-x", "-i", path)
+            with mock.patch("builtins.exit", return_value=None) as mocked:
+                clirunner.run()
+                mocked.assert_called_once_with(1)
+            with open(path) as f:
+                self.assertEqual(f.read(), original)
+            self.assertListEqual(os.listdir(tmpdir), ["recipes.xml"])
+
+    def test_atomic_write_replaces_content(self):
+        """--inplace writes are atomic and leave no temporary file behind."""
+        with TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "f.xml")
+            with open(path, "w") as f:
+                f.write("OLD")
+            CLIRunner._atomic_write(path, "NEW")
+            with open(path) as f:
+                self.assertEqual(f.read(), "NEW")
+            self.assertListEqual(os.listdir(tmpdir), ["f.xml"])
+
+    def test_atomic_write_preserves_original_on_failure(self):
+        """A failed --inplace write must leave the original file untouched."""
+        from unittest import mock
+
+        with TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "f.xml")
+            with open(path, "w") as f:
+                f.write("ORIGINAL")
+            with mock.patch("os.replace", side_effect=OSError("boom")):
+                with self.assertRaises(OSError):
+                    CLIRunner._atomic_write(path, "NEW")
+            with open(path) as f:
+                self.assertEqual(f.read(), "ORIGINAL")
+            self.assertListEqual(os.listdir(tmpdir), ["f.xml"])
