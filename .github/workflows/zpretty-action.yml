@@ -1,0 +1,22 @@
+name: zpretty action
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  self-test:
+    name: Set up zpretty from source and run it
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up zpretty from this checkout
+        uses: ./.github/actions/zpretty
+        with:
+          spec: .
+
+      - name: Smoke-test the installed zpretty
+        shell: bash
+        run: zpretty --check zpretty/tests/original/sample_xml.xml
