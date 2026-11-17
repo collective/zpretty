@@ -57,6 +57,7 @@ python3 -m pip install --user zpretty
 
 | Zpretty Version | Python Versions |
 | --------------- | --------------- |
+| 5               | 3.11+           |
 | 4               | 3.10+           |
 | 3               | 3.7 - 3.13      |
 | 2               | 3.7 - 3.11      |
