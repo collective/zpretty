@@ -2,8 +2,8 @@
 
 ## 4.0.4 (unreleased)
 
-
-- Nothing changed yet.
+- Declare support for Python 3.11 - 3.15
+  [ale-rt]
 
 
 ## 4.0.3 (2026-06-17)
