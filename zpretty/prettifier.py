@@ -4,6 +4,7 @@ from bs4.element import Doctype
 from bs4.element import ProcessingInstruction
 from bs4.element import Tag
 from logging import getLogger
+from lxml import etree
 from uuid import uuid4
 from zpretty.constants import ANY_IN
 from zpretty.elements import PrettyElement
@@ -12,6 +13,10 @@ import fileinput
 import re
 
 logger = getLogger(__name__)
+
+
+class ContentLossError(Exception):
+    """Raised when prettifying would drop content from the input."""
 
 
 class ZPrettifier:
@@ -187,8 +192,43 @@ class ZPrettifier:
         """Checks if the input object should be prettified"""
         return self.original_text == self()
 
+    # lxml flags content dropped after the document root with this error type.
+    _truncation_error = "ERR_DOCUMENT_END"
+
+    def _assert_no_content_loss(self):
+        """Refuse input that lxml's recover mode would silently truncate.
+
+        XML is parsed in recover mode, which repairs many mistakes without
+        losing anything: a mismatched or unclosed tag is simply closed for you.
+        The dangerous exception is content after the root element - lxml keeps
+        the first root and silently drops the rest. We detect exactly that case
+        so the CLI can refuse instead of emitting (or overwriting a file with) a
+        truncated document.
+        """
+        if self._is_html_builder:
+            return
+        # Only standalone documents reach this; wrapped fragments and non-XML
+        # come back as a plain tag rather than a full soup.
+        if not isinstance(self.soup, BeautifulSoup):
+            return
+        # self.text is masked already; drop the declaration (lxml rejects an
+        # encoding declaration on a str) before re-parsing.
+        text = re.sub(r"^\s*<\?xml\b[^>]*\?>\s*", "", self.text, count=1)
+        parser = etree.XMLParser(recover=True)
+        try:
+            etree.fromstring(text, parser)
+        except etree.XMLSyntaxError:
+            return
+        for error in parser.error_log:
+            if error.type_name == self._truncation_error:
+                raise ContentLossError(
+                    "content after the root element would be silently "
+                    "dropped; refusing to emit a truncated document"
+                )
+
     def __call__(self):
         if not self.root.getchildren():
             # The parsed content is not even something that looks like an XML
             return self.original_text
+        self._assert_no_content_loss()
         return self.pretty_print(self.root)
