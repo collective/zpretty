@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.4 (unreleased)
+## 5.0.0 (2026-11-27)
 
 - Declare support for Python 3.11 - 3.15
   [ale-rt]
