@@ -59,11 +59,36 @@ class XMLElement(PrettyElement):
         return self.escaper.substitute_xml(self.context.string)
 
 
+class NamespaceAwareXMLTreeBuilder(LXMLTreeBuilderForXML):
+    """Keep the namespace declarations of each element
+
+    lxml 6.2.0 passes an empty ``nsmap`` to ``start()`` while it still reports
+    every declaration through ``start_ns()`` (see #255). BeautifulSoup builds
+    the ``xmlns`` attributes from ``nsmap`` only, so we collect the
+    declarations here and use them when ``nsmap`` is empty.
+    With lxml 6.1.x ``nsmap`` is filled and is used as it is.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._pending_namespaces = []
+
+    def start_ns(self, prefix, namespace):
+        self._pending_namespaces.append((prefix, namespace))
+
+    def start(self, tag, attrib, nsmap=None):
+        pending = self._pending_namespaces
+        self._pending_namespaces = []
+        if not nsmap and pending:
+            nsmap = dict(pending)
+        super().start(tag, attrib, nsmap or {})
+
+
 class XMLPrettifier(ZPrettifier):
     """Prettify according to the ZCML style guide"""
 
     pretty_element = XMLElement
-    builder_class = LXMLTreeBuilderForXML
+    builder_class = NamespaceAwareXMLTreeBuilder
 
     def restore_comment_newlines(self, soup):
         """Reinsert top-level newlines between comments and following tags.

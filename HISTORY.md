@@ -5,6 +5,11 @@
 - Declare support for Python 3.11 - 3.15
   [ale-rt]
 
+- Keep the namespace declarations (`xmlns`, `xmlns:i18n`, ...) in XML and ZCML
+  with lxml 6.2.0, which passes an empty `nsmap` to parser targets.
+  (Fixes #255)
+  @ericof
+
 
 ## 4.0.3 (2026-06-17)
 

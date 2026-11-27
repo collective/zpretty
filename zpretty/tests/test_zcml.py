@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from importlib.resources import files
+from textwrap import dedent
 from unittest import TestCase
 from zpretty.zcml import ZCMLAttributes
 from zpretty.zcml import ZCMLElement
@@ -232,3 +233,28 @@ class TestZpretty(TestCase):
 
     def test_zcml(self):
         self.prettify("sample.zcml")
+
+    def test_namespace_declarations_are_kept(self):
+        """Regression test for #255: lxml 6.2.0 passes an empty nsmap to start()
+
+        The declarations must survive formatting, once each, including
+        the ones declared by a nested element.
+        """
+        original = dedent("""\
+            <configure xmlns="http://namespaces.zope.org/zope"
+                xmlns:i18n="http://namespaces.zope.org/i18n"
+                i18n_domain="example">
+              <include package=".browser" />
+              <outer xmlns:x="urn:x">
+                <x:inner xmlns:y="urn:y" />
+              </outer>
+            </configure>
+        """)
+        observed = ZCMLPrettifier(text=original)()
+        for declaration in (
+            'xmlns="http://namespaces.zope.org/zope"',
+            'xmlns:i18n="http://namespaces.zope.org/i18n"',
+            'xmlns:x="urn:x"',
+            'xmlns:y="urn:y"',
+        ):
+            self.assertEqual(observed.count(declaration), 1, declaration)
