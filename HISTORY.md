@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.1 (unreleased)
+
+
+- Nothing changed yet.
+
+
 ## 5.0.0 (2026-11-27)
 
 - Declare support for Python 3.11 - 3.15
